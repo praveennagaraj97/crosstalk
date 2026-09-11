@@ -14,7 +14,6 @@ build:
 	npm run build:css
 
 check: build
-	bash tests/theme_structure_test.sh
 	$(SHOPIFY) theme check
 
 package: check

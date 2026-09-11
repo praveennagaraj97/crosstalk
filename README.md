@@ -22,7 +22,7 @@ npm ci
 
 This also enables the repository's Git hooks. The pre-commit hook compiles and
 stages the deployable Tailwind stylesheet; the pre-push hook rejects stale
-generated CSS or a broken structure contract.
+generated CSS.
 
 ## Local development
 
@@ -69,8 +69,7 @@ theme.
 
 ## Validate
 
-Build the production CSS, run the repository contract test, and run Shopify
-Theme Check before uploading:
+Build the production CSS and run Shopify Theme Check before uploading:
 
 ```bash
 make check

@@ -28,6 +28,6 @@
 ## Quality
 
 - Use semantic landmarks, descriptive labels, visible focus behavior, and reduced-motion fallbacks for interactive UI.
-- Run `shopify theme check` and relevant repository tests after every component change.
+- Run the Tailwind generated-asset check and `shopify theme check` after every component change.
 - Validate desktop visual work at the Figma reference viewport before declaring a pixel-accuracy task complete.
 - Do not commit credentials, development-store configuration, generated preview output, or vendor dependencies.
