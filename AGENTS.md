@@ -26,7 +26,11 @@
 - `assets/base.css` is the Tailwind source for tokens, base rules, shared utilities, and shared keyframes.
 - `assets/theme.css` is generated, committed, and loaded by Shopify. Never edit it manually.
 - Keep non-Tailwind interaction styles small, scoped, and in the appropriate component or animation stylesheet.
-- Use `container mx-auto px-4` as the default project content container.
+- Every section's primary content wrapper must use `container mx-auto px-4`.
+- Navigation pills and other top-level section content must align to the same shared container.
+- Let the shared container determine the available content width; do not add wrapper-level `max-w-*` constraints.
+- Use `max-w-*` only for intentional design constraints such as readable copy width, media sizing, or a reference-defined composition.
+- Nested grids must fill the shared container without manual width or margin positioning that creates gaps.
 
 ## Motion and Quality
 
