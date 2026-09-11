@@ -1,0 +1,262 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "featured_product_hero": {
+      "type": "featured-product-hero",
+      "blocks": {
+        "radiance_product": {
+          "type": "product",
+          "settings": {
+            "product": "radiance-volcanic-oil",
+            "subtitle": "Restorative Night Treatment"
+          }
+        }
+      },
+      "block_order": [
+        "radiance_product"
+      ],
+      "settings": {
+        "campaign_image": "shopify://shop_images/brand-story-botanical.png",
+        "show_image_overlay": true,
+        "image_overlay_color": "#000000",
+        "image_overlay_opacity": 15,
+        "menu": "",
+        "shop_label": "Shop All",
+        "nav_label_1": "Ingredients",
+        "nav_url_1": "",
+        "nav_label_2": "Our Story",
+        "nav_url_2": "",
+        "nav_label_3": "Journal",
+        "nav_url_3": "",
+        "nav_label_4": "Contact",
+        "nav_url_4": "",
+        "search_placeholder": "Find your glow",
+        "show_marquee": true,
+        "marquee_text_color": "#a47149",
+        "marquee_background": "#ffffff",
+        "marquee_opacity": 35,
+        "marquee_speed": 30,
+        "eyebrow": "Introducing The Ritual",
+        "heading_line_1": "SMART",
+        "heading_line_2": "FORMULAS.",
+        "heading_line_3": "DAILY\nCOMFORT.",
+        "description": "<p>Experience the storytelling rhythm of earthy-luxury skincare. Seeded in science, rooted in nature.</p>",
+        "featured_product": "amaari-botanical-recovery-balm",
+        "cta_label": "Shop the Radiance Oil"
+      }
+    },
+    "featured_product_deep_dive": {
+      "type": "featured-product-deep-dive",
+      "blocks": {
+        "bio_active": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Bio-Active",
+            "text": "Oat lipids and plant ceramides cushion dryness and reinforce the moisture barrier."
+          }
+        },
+        "deep_glow": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Deep Glow",
+            "text": "Calendula and rosemary help soothe visible stress while the balm seals in softness."
+          }
+        }
+      },
+      "block_order": [
+        "bio_active",
+        "deep_glow"
+      ],
+      "settings": {
+        "featured_product": "amaari-botanical-recovery-balm",
+        "primary_image": "shopify://shop_images/hero-product-moss.png",
+        "detail_image": "shopify://shop_images/brand-story-botanical.png",
+        "detail_image_alt": "",
+        "eyebrow": "Flagship Innovation",
+        "fallback_title": "Radiance Volcanic Oil",
+        "description": "A cushion-rich botanical balm with calendula, rosemary, oat lipids, and plant ceramides. It melts into dry skin to ease visible stress, reinforce the moisture barrier, and seal in lasting comfort.",
+        "fallback_price": "$118.00",
+        "cta_label": "Shop the Radiance Oil"
+      }
+    },
+    "technology_showcase": {
+      "type": "technology-showcase",
+      "blocks": {
+        "cellular_transport": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "plus",
+            "heading": "Cellular Transport",
+            "text": "Encapsulated minerals bypass the dermal barrier for direct delivery."
+          }
+        },
+        "thermal_activation": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "minus",
+            "heading": "Thermal Activation",
+            "text": "Reactive volcanic compounds respond to natural skin temperature."
+          }
+        }
+      },
+      "block_order": [
+        "cellular_transport",
+        "thermal_activation"
+      ],
+      "settings": {
+        "product_artwork_alt": "Amaari volcanic mineral infusion bottle",
+        "eyebrow": "Technical Innovation",
+        "heading": "Botanical Barrier\nComplex",
+        "description": "Slow-infused calendula and rosemary pair with oat lipids to soften on contact and support the skin barrier without a heavy finish."
+      }
+    },
+    "instagram_feed": {
+      "type": "instagram-feed",
+      "blocks": {
+        "journal_image_1": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_2": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_3": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_4": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_5": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_6": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        }
+      },
+      "block_order": [
+        "journal_image_1",
+        "journal_image_2",
+        "journal_image_3",
+        "journal_image_4",
+        "journal_image_5",
+        "journal_image_6"
+      ],
+      "settings": {
+        "eyebrow": "On the Journal",
+        "heading": "@AmaariSkincare",
+        "instagram_url": "",
+        "open_new_tab": true
+      }
+    },
+    "brand_story_layered": {
+      "type": "brand-story-layered",
+      "settings": {
+        "heading_line_1": "Seeded in",
+        "heading_line_2": "Science",
+        "heading_line_3": "Rooted in",
+        "heading_line_4": "Nature",
+        "paragraph_1": "Comfort begins with a barrier that feels supported. This balm was created for the moments when skin asks for less—and needs more care.",
+        "paragraph_2": "Slow-infused botanicals meet replenishing lipids in a concentrated formula made to soften, soothe, and protect.",
+        "link_label": "Our Full Philosophy",
+        "link_url": "",
+        "background_color": "#5a2e2c",
+        "accent_color": "#d46c11",
+        "muted_color": "#b18a73"
+      }
+    },
+    "ritual_newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Newsletter",
+        "heading": "Join the Amaari Ritual",
+        "text": "Receive seasonal barrier-care guidance, botanical notes, and early access to restorative rituals.",
+        "email_label": "Email address",
+        "email_placeholder": "your@email.com",
+        "button_label": "Subscribe",
+        "success_message": "Welcome to the Amaari ritual.",
+        "privacy_text": "By subscribing, you agree to our privacy policy.",
+        "privacy_link": ""
+      }
+    },
+    "support_faq": {
+      "type": "support-faq",
+      "blocks": {
+        "shipping": {
+          "type": "question",
+          "settings": {
+            "question": "What is your shipping & delivery policy?",
+            "answer": "Warm a pea-sized amount between fingertips and press onto dry or stressed areas as the final step in your ritual."
+          }
+        },
+        "international": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. International shipping options and delivery estimates are shown at checkout."
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "What is the return process?",
+            "answer": "Use morning or night after water-based products, or whenever dry areas need an extra layer of comfort."
+          }
+        }
+      },
+      "block_order": [
+        "shipping",
+        "international",
+        "returns"
+      ],
+      "settings": {
+        "eyebrow": "Support",
+        "heading": "How can we help?",
+        "open_first": true,
+        "contact_heading": "Still have questions?",
+        "contact_text": "Our support team is available Monday—Friday, 9am to 6pm EST.",
+        "contact_label": "Contact Us",
+        "contact_url": ""
+      }
+    }
+  },
+  "order": [
+    "featured_product_hero",
+    "featured_product_deep_dive",
+    "technology_showcase",
+    "instagram_feed",
+    "brand_story_layered",
+    "ritual_newsletter",
+    "support_faq"
+  ]
+}

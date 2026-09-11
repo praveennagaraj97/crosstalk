@@ -1,0 +1,38 @@
+{% comment %} Component: Standard page content {% endcomment %}
+<section class="bg-background py-10 sm:py-12 lg:py-16" aria-labelledby="MainPageTitle-{{ section.id }}">
+  <div class="container mx-auto px-4" data-reveal-group>
+    <header class="border-b border-bitter-chocolate/15 pb-6 sm:pb-8">
+      <p class="text-xs font-semibold tracking-[0.24em] text-pecan-brown uppercase">
+        {{ section.settings.eyebrow | escape }}
+      </p>
+      <h1 id="MainPageTitle-{{ section.id }}" class="mt-3 font-display text-5xl leading-none text-text-brown sm:text-[4rem]">
+        {{ page.title | escape }}
+      </h1>
+    </header>
+
+    <div class="mt-6 max-w-200 text-base leading-7 text-bitter-chocolate [&_a]:font-semibold [&_a]:text-text-brown [&_a]:underline [&_a]:decoration-toasted-almond [&_a]:decoration-1 [&_a]:underline-offset-4 [&_a]:transition-colors hover:[&_a]:text-pecan-brown focus-visible:[&_a]:outline-2 focus-visible:[&_a]:outline-offset-4 focus-visible:[&_a]:outline-bitter-chocolate [&_h2]:mb-5 [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-normal [&_li]:border-b [&_li]:border-bitter-chocolate/10 [&_li]:py-3 [&_ul]:grid [&_ul]:gap-0 sm:[&_ul]:grid-cols-2 sm:[&_ul]:gap-x-8">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page content",
+  "tag": "section",
+  "class": "main-page-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Directory"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page content"
+    }
+  ]
+}
+{% endschema %}
