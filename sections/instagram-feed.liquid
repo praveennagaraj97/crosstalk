@@ -1,0 +1,94 @@
+{% liquid
+  assign instagram_url = section.settings.instagram_url
+  if instagram_url == blank
+    assign instagram_url = routes.root_url
+  endif
+%}
+
+<section class="overflow-hidden bg-[#f5ebe1] py-14 sm:py-16 lg:pt-20 lg:pb-22.5" aria-labelledby="InstagramFeed-{{ section.id }}">
+  {% comment %} Component: Journal heading {% endcomment %}
+  <div class="container mx-auto max-w-7xl px-4 sm:px-6" data-reveal-group>
+    {% if section.settings.eyebrow != blank %}
+      <p class="bg-[linear-gradient(162deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-center text-sm leading-5 font-bold tracking-[6px] text-transparent uppercase">
+        {{ section.settings.eyebrow | escape }}
+      </p>
+    {% endif %}
+    {% if section.settings.heading != blank %}
+      <h2 id="InstagramFeed-{{ section.id }}" class="mt-4 text-center font-display text-[2rem] leading-10 font-normal text-bitter-chocolate sm:text-[2.125rem] sm:leading-10.5">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {% endif %}
+  </div>
+
+  {% comment %} Component: Editorial image mosaic {% endcomment %}
+  <div class="container mx-auto mt-9 grid max-w-325.25 grid-cols-2 gap-3 px-4 sm:mt-11 sm:gap-5 sm:px-6 lg:h-160 lg:grid-cols-[311px_310px_1fr] lg:grid-rows-2 lg:px-0" data-reveal-group>
+    {% for block in section.blocks %}
+      {% liquid
+        assign fallback_asset = ''
+        assign tile_class = 'aspect-square'
+        case forloop.index
+          when 1
+            assign fallback_asset = 'instagram-feed-01.png'
+            assign tile_class = 'col-span-2 aspect-[311/420] sm:aspect-[311/360] lg:col-span-1 lg:row-span-2 lg:aspect-auto'
+          when 2
+            assign fallback_asset = 'instagram-feed-02.png'
+          when 3
+            assign fallback_asset = 'instagram-feed-03.png'
+          when 4
+            assign fallback_asset = 'instagram-feed-04.png'
+            assign tile_class = 'col-span-2 aspect-[2/1] lg:col-start-3 lg:row-start-1 lg:aspect-auto'
+          when 5
+            assign fallback_asset = 'instagram-feed-05.png'
+            assign tile_class = 'lg:col-start-3 lg:row-start-2 lg:w-[calc(50%-10px)]'
+          when 6
+            assign fallback_asset = 'instagram-feed-06.png'
+            assign tile_class = 'lg:col-start-3 lg:row-start-2 lg:ml-[calc(50%+10px)] lg:w-[calc(50%-10px)]'
+        endcase
+      %}
+      <a class="group relative min-h-0 overflow-hidden rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate {{ tile_class }}{% if forloop.index == 2 %} lg:col-start-2 lg:row-start-1{% elsif forloop.index == 3 %} lg:col-start-2 lg:row-start-2{% endif %}" href="{{ instagram_url }}"{% if section.settings.open_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %} aria-label="{{ block.settings.accessible_label | default: section.settings.heading | escape }}" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          {{ block.settings.image | image_url: width: 1400 | image_tag: class: 'size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025] group-focus-visible:scale-[1.025]', widths: '320, 480, 640, 960, 1280, 1400', sizes: '(min-width: 1024px) 640px, 50vw', loading: 'lazy', alt: block.settings.alt_text }}
+        {% else %}
+          <img class="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025] group-focus-visible:scale-[1.025]" src="{{ fallback_asset | asset_url }}" width="640" height="640" loading="lazy" alt="{{ block.settings.alt_text | escape }}">
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram journal",
+  "tag": "section",
+  "class": "instagram-feed-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "On the Journal" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "@AmaariSkincare" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram link" },
+    { "type": "checkbox", "id": "open_new_tab", "label": "Open Instagram in a new tab", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Journal image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "alt_text", "label": "Image alt text" },
+        { "type": "text", "id": "accessible_label", "label": "Link label", "default": "View Amaari on Instagram" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Instagram journal",
+    "blocks": [
+      { "type": "image" },
+      { "type": "image" },
+      { "type": "image" },
+      { "type": "image" },
+      { "type": "image" },
+      { "type": "image" }
+    ]
+  }]
+}
+{% endschema %}

@@ -61,7 +61,20 @@
       },
       "block_order": ["cellular_transport", "thermal_activation"],
       "settings": {}
+    },
+    "instagram_feed": {
+      "type": "instagram-feed",
+      "blocks": {
+        "journal_image_1": { "type": "image", "settings": {} },
+        "journal_image_2": { "type": "image", "settings": {} },
+        "journal_image_3": { "type": "image", "settings": {} },
+        "journal_image_4": { "type": "image", "settings": {} },
+        "journal_image_5": { "type": "image", "settings": {} },
+        "journal_image_6": { "type": "image", "settings": {} }
+      },
+      "block_order": ["journal_image_1", "journal_image_2", "journal_image_3", "journal_image_4", "journal_image_5", "journal_image_6"],
+      "settings": {}
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase"]
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed"]
 }
