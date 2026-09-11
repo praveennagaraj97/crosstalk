@@ -53,7 +53,7 @@
   {% endif %}
 
   {% comment %} Component: Floating navigation {% endcomment %}
-  <header class="relative z-20 mx-auto flex w-full max-w-360 items-start justify-between px-4 pt-3 lg:pr-30 lg:pl-10 lg:pt-5">
+  <header class="container relative z-20 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-5">
     <div class="flex min-h-13 items-center rounded-full border border-white/20 bg-white/10 px-4 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:min-h-17 lg:w-171 lg:px-7" data-reveal-group data-reveal-nav>
       <a class="hero-glass-interactive shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
         {% if section.settings.logo != blank %}
@@ -63,9 +63,9 @@
         {% endif %}
       </a>
 
-      <nav class="ml-12 hidden items-center gap-8 lg:flex" aria-label="Primary navigation" data-reveal-group>
+      <nav class="ml-10 hidden items-center gap-6 lg:flex" aria-label="Primary navigation" data-reveal-group>
         <details class="group relative" data-product-flyout>
-          <summary class="hero-glass-interactive cursor-pointer list-none text-base leading-6 text-white marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">{{ section.settings.shop_label | escape }}</summary>
+          <summary class="hero-glass-interactive cursor-pointer list-none whitespace-nowrap text-base leading-6 text-white marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">{{ section.settings.shop_label | escape }}</summary>
           <div class="invisible absolute top-14 -left-[137px] w-100 translate-y-2 rounded-xl border border-white/25 bg-[#77785f]/90 p-5 opacity-0 shadow-[0_16px_48px_rgb(0_0_0/18%)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:content-[''] group-open:visible group-open:translate-y-0 group-open:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100" data-flyout-panel>
             <ul class="grid list-none gap-3.5 p-0" data-flyout-list>
               {% assign product_count = 0 %}
@@ -106,7 +106,7 @@
         </details>
         {% if section.settings.menu != blank %}
           {% for link in section.settings.menu.links %}
-            <a class="hero-glass-interactive text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ link.url }}">{{ link.title | escape }}</a>
+            <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ link.url }}">{{ link.title | escape }}</a>
           {% endfor %}
         {% else %}
           {% for index in (1..4) %}
@@ -117,9 +117,9 @@
               assign nav_url = section.settings[url_key]
             %}
             {% if nav_url != blank %}
-              <a class="hero-glass-interactive text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ nav_url }}">{{ nav_label | escape }}</a>
+              <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ nav_url }}">{{ nav_label | escape }}</a>
             {% else %}
-              <span class="hero-glass-interactive text-base leading-6 text-white">{{ nav_label | escape }}</span>
+              <span class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white">{{ nav_label | escape }}</span>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -190,7 +190,7 @@
       </h1>
       {% if section.settings.description != blank %}<div class="mt-3 max-w-96 text-sm leading-6 font-normal tracking-[0.3px] text-toasted-almond lg:mt-4 lg:max-w-120 lg:text-lg lg:leading-7.5">{{ section.settings.description }}</div>{% endif %}
       {% if section.settings.cta_label != blank %}
-        <a class="chrome-action relative mt-3 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(148deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 py-3.5 text-center text-sm leading-5 font-semibold tracking-[1.2px] text-[#f4dfb8] uppercase shadow-[0_4px_6px_-1px_rgb(166_114_105/24%),inset_0_1px_1px_1px_rgb(255_255_255/35%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white lg:mt-5.5 lg:min-h-14 lg:w-72.5 lg:px-8 lg:text-base" href="{{ hero_url }}"><span class="relative z-10">{{ section.settings.cta_label | escape }}</span></a>
+        <a class="chrome-action relative mt-3 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(148deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 py-3.5 text-center text-sm leading-5 font-semibold tracking-[1.2px] text-[#f4dfb8] uppercase shadow-[0_4px_6px_-1px_rgb(166_114_105/24%),inset_0_1px_1px_1px_rgb(255_255_255/35%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white lg:mt-5.5 lg:min-h-14 lg:w-72.5 lg:px-8 lg:text-base" href="{{ hero_url }}"><span class="relative z-10 whitespace-nowrap">{{ section.settings.cta_label | escape }}</span></a>
       {% endif %}
     </div>
   </div>
@@ -218,7 +218,7 @@
     { "type": "checkbox", "id": "show_marquee", "label": "Show announcement marquee", "default": true },
     { "type": "color", "id": "marquee_text_color", "label": "Announcement text", "default": "#a47149" },
     { "type": "color", "id": "marquee_background", "label": "Announcement background", "default": "#ffffff" },
-    { "type": "range", "id": "marquee_opacity", "label": "Announcement background opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 65 },
+    { "type": "range", "id": "marquee_opacity", "label": "Announcement background opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 35 },
     { "type": "range", "id": "marquee_speed", "label": "Announcement speed", "min": 10, "max": 60, "step": 5, "unit": "s", "default": 30 },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Introducing The Ritual" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "SMART" },

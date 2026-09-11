@@ -14,7 +14,7 @@
   --color-bitter-chocolate: #5a2e2c;
   --color-text-brown: #3e2619;
 
-  --font-sans: Inter, Arial, sans-serif;
+  --font-sans: Montserrat, Arial, sans-serif;
   --font-display: Romie, "Cormorant Garamond", Georgia, serif;
 
   --animate-marquee-scroll: marquee-scroll var(--hero-marquee-duration, 30s) linear infinite;
