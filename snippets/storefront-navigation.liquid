@@ -99,7 +99,7 @@
 
   <div class="hidden min-h-17 items-center gap-3 rounded-full border px-4 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:flex xl:gap-6 xl:px-5 {{ navigation_shell_class }}">
     <form class="hero-search-interactive flex h-9 w-44 items-center gap-2 rounded-full bg-white px-4 xl:w-56" action="{{ routes.search_url }}" method="get" role="search">
-      <img class="size-5" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="20" height="20" alt="">
+      <img class="size-6" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="24" height="24" alt="">
       <label class="visually-hidden" for="NavigationSearch-{{ section.id }}">Search</label>
       <input id="NavigationSearch-{{ section.id }}" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-sm text-pecan-brown outline-none placeholder:text-toasted-almond" type="search" name="q" placeholder="{{ nav_settings.navigation_search_placeholder | default: 'Find your glow' | escape }}">
       <button class="hero-search-clear grid size-4 shrink-0 cursor-pointer place-items-center rounded-full" type="button" aria-label="Clear search" data-search-clear hidden>

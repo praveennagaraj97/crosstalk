@@ -11,7 +11,7 @@
     <h1 id="IngredientsTitle-{{ section.id }}" class="mt-4 font-display text-5xl leading-none text-text-brown sm:text-[4rem] lg:text-[4.875rem] lg:leading-[1.218]">{{ section.settings.heading | escape }}</h1>
     <p class="mx-auto mt-4 max-w-144 text-sm leading-6 tracking-[0.4px] text-bitter-chocolate sm:text-base">{{ section.settings.description | escape }}</p>
     <label class="relative mx-auto mt-7 flex h-13 max-w-131 items-center rounded-full border border-toasted-almond bg-[#f5ebe1] px-6 text-left focus-within:ring-2 focus-within:ring-toasted-almond/40">
-      <span class="mr-2 text-pecan-brown" aria-hidden="true">⌕</span>
+      <svg class="mr-3 size-6 shrink-0 text-pecan-brown" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.75" cy="10.75" r="6.75" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
       <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-sm leading-5 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
       <button class="ingredient-search-clear ml-2 grid size-7 shrink-0 place-items-center rounded-full text-text-brown" type="button" data-ingredient-search-clear hidden aria-label="Clear ingredient search">
@@ -86,8 +86,8 @@
 
     {% comment %} Component: Search and category filters {% endcomment %}
     <div class="sticky bottom-4 z-20 container mx-auto px-4 pb-4">
-      <div class="flex flex-col gap-4 rounded-2xl border border-white bg-[#f9f5f2]/95 p-4 shadow-[0_20px_50px_-20px_rgb(62_38_25/28%)] backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between lg:p-6">
-        <label class="relative flex h-10 min-w-0 items-center border-b border-[#d8d1cb] pl-10 lg:w-80">
+      <div class="flex flex-col gap-3 rounded-2xl border border-white bg-[#f9f5f2]/95 p-3 shadow-[0_20px_50px_-20px_rgb(62_38_25/28%)] backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between lg:px-4 lg:py-3">
+        <label class="relative flex h-8 min-w-0 items-center border-b border-[#d8d1cb] pl-10 lg:w-80">
           <svg class="absolute left-1 size-5 text-[#765b4d]" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.75" cy="10.75" r="6.75" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
           <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-xs tracking-[1.4px] uppercase outline-none placeholder:text-[#8f8179]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
