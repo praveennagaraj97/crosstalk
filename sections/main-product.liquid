@@ -4,6 +4,12 @@
   assign editorial_quote = product.metafields.custom.editorial_quote.value | default: section.settings.editorial_quote
   assign ingredient_items = product.metafields.custom.ingredient_highlights.value | default: product.metafields.custom.ingredients.value
   assign ingredient_blocks = section.blocks | where: 'type', 'ingredient'
+  assign standard_blocks = section.blocks | where: 'type', 'standard'
+  assign efficacy_blocks = section.blocks | where: 'type', 'efficacy'
+  assign evidence_blocks = section.blocks | where: 'type', 'evidence'
+  assign ritual_blocks = section.blocks | where: 'type', 'ritual_step'
+  assign ingredient_text_blocks = section.blocks | where: 'type', 'full_ingredients'
+  assign timeline_blocks = section.blocks | where: 'type', 'timeline'
   assign product_standards = product.metafields.custom.standards.value
   assign ritual_items = product.metafields.custom.ritual_steps.value
   assign timeline_items = product.metafields.custom.timeline_milestones.value
@@ -63,7 +69,7 @@
 
         {% unless product.has_only_default_variant %}
           {% for option in product.options_with_values %}
-            <fieldset class="order-2" data-option-group data-option-index="{{ forloop.index0 }}">
+            <fieldset class="order-2" data-option-group data-option-index="{{ forloop.index0 }}" data-reveal-group>
               <legend class="mb-3 text-xs font-medium tracking-[1.5px] uppercase">{{ section.settings.select_label }} {{ option.name | escape }}</legend>
               <div class="flex flex-wrap gap-3">
                 {% for value in option.values %}
@@ -82,7 +88,7 @@
           {% endfor %}
         {% endunless %}
 
-        <div class="order-1 flex flex-wrap items-center gap-3" data-primary-purchase>
+        <div class="order-1 flex flex-wrap items-center gap-3" data-primary-purchase data-reveal-group>
           <div class="flex h-11 items-center rounded-full border border-toasted-almond px-3" data-quantity-control>
             <button class="grid size-7 place-items-center" type="button" data-quantity-minus aria-label="Decrease quantity">−</button>
             <output class="w-8 text-center text-sm font-semibold" data-quantity-output>1</output>
@@ -96,7 +102,8 @@
       {% endform %}
 
       {% comment %} Component: Ingredient highlights {% endcomment %}
-      {% if ingredient_items != blank or ingredient_blocks.size > 0 %}<section class="mt-10" data-reveal-group>
+      {% assign show_ingredient_blocks = false %}{% for block in ingredient_blocks %}{% if block.settings.product.handle == product.handle %}{% assign show_ingredient_blocks = true %}{% endif %}{% endfor %}
+      {% if ingredient_items != blank or show_ingredient_blocks %}<section class="mt-10" data-reveal-group>
         <div class="border-b border-pecan-brown/15 pb-4"><h2 class="font-display text-3xl font-light">{{ section.settings.ingredients_heading | escape }}</h2></div>
         <div class="mt-5 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-4">
           {% if ingredient_items != blank %}
@@ -105,7 +112,7 @@
               <article class="min-w-0 text-center"><div class="mx-auto grid size-20 place-items-center overflow-hidden rounded-full bg-[#f1ddcc]">{% if ingredient_image != blank %}{{ ingredient_image | image_url: width: 240 | image_tag: class: 'size-full object-cover', loading: 'lazy', alt: ingredient.image_alt.value | default: ingredient.name.value }}{% endif %}</div><h3 class="mt-3 text-[11px] leading-4 font-bold tracking-[.65px] uppercase">{{ ingredient.name.value | default: ingredient.system.handle | escape }}</h3><p class="mt-0.5 text-[9px] leading-4 tracking-[.45px] text-bitter-chocolate uppercase">{{ ingredient.summary.value | truncatewords: 7 }}</p></article>
             {% endfor %}
           {% else %}
-            {% for block in ingredient_blocks limit: 4 %}
+            {% assign ingredient_block_index = 0 %}{% for block in ingredient_blocks %}{% if block.settings.product.handle == product.handle and ingredient_block_index < 4 %}{% assign ingredient_block_index = ingredient_block_index | plus: 1 %}
               <article class="min-w-0 text-center" {{ block.shopify_attributes }}>
                 <div class="mx-auto grid size-20 place-items-center overflow-hidden rounded-full bg-[#f1ddcc] text-bitter-chocolate">
                   {% if block.settings.image != blank %}
@@ -122,24 +129,34 @@
                 <h3 class="mt-3 text-[11px] leading-4 font-bold tracking-[.65px] uppercase">{{ block.settings.name | escape }}</h3>
                 <p class="mt-0.5 text-[9px] leading-4 tracking-[.45px] text-bitter-chocolate uppercase">{{ block.settings.summary | escape }}</p>
               </article>
-            {% endfor %}
+            {% endif %}{% endfor %}
           {% endif %}
         </div>
       </section>{% endif %}
 
       {% comment %} Component: Certifications and testing {% endcomment %}
-      {% if product_standards != blank %}<section class="mt-10 border-t border-pecan-brown/15 pt-10" data-reveal-group>
+      {% assign show_standards = false %}
+      {% for block in standard_blocks %}{% if block.settings.product == product %}{% assign show_standards = true %}{% endif %}{% endfor %}
+      {% if product_standards != blank or show_standards %}<section class="mt-10 border-t border-pecan-brown/15 pt-10" data-reveal-group>
         <p class="text-xs font-semibold tracking-[1.5px] text-bitter-chocolate uppercase">{{ section.settings.standards_eyebrow | escape }}</p>
-        <h2 class="mt-2 font-display text-4xl">{{ section.settings.standards_heading | escape }}</h2>
-        <div class="mt-7 grid grid-cols-2 gap-x-8 gap-y-7">
-          {% for standard in product_standards %}{% assign standard_icon = standard.icon.value %}<div class="flex items-center gap-2"><span class="grid size-[42px] shrink-0 place-items-center overflow-hidden rounded-full border border-toasted-almond text-sm">{% if standard_icon != blank %}{{ standard_icon | image_url: width: 84 | image_tag: class: 'size-5 object-contain', loading: 'lazy', alt: '' }}{% else %}✓{% endif %}</span><span class="text-sm">{{ standard.label.value | default: standard }}</span></div>{% endfor %}
+        <h2 class="mt-2 font-display text-[34px] leading-[42px] font-normal">{{ section.settings.standards_heading | escape }}</h2>
+        <div class="mt-7 grid grid-cols-2 gap-x-7 gap-y-6">
+          {% if product_standards != blank %}
+            {% for standard in product_standards %}{% assign standard_icon = standard.icon.value %}<div class="flex items-center gap-2"><span class="grid size-8 shrink-0 place-items-center overflow-hidden rounded-full border border-toasted-almond text-xs">{% if standard_icon != blank %}{{ standard_icon | image_url: width: 64 | image_tag: class: 'size-4 object-contain', loading: 'lazy', alt: '' }}{% else %}✓{% endif %}</span><span class="text-[11px]">{{ standard.label.value | default: standard }}</span></div>{% endfor %}
+          {% else %}
+            {% for block in standard_blocks %}{% if block.settings.product == product %}<div class="flex items-center gap-2" {{ block.shopify_attributes }}><span class="grid size-8 shrink-0 place-items-center rounded-full border border-toasted-almond text-xs" aria-hidden="true">{{ block.settings.symbol | default: '✓' }}</span><span class="text-[11px]">{{ block.settings.label | escape }}</span></div>{% endif %}{% endfor %}
+          {% endif %}
         </div>
-        {% if product.metafields.custom.standards_note.value != blank %}<p class="mt-7 text-xs leading-5 font-medium tracking-[.4px] text-pecan-brown uppercase">{{ product.metafields.custom.standards_note.value | escape }}</p>{% endif %}
+        {% assign standards_note = product.metafields.custom.standards_note.value | default: section.settings.standards_note %}
+        {% if standards_note != blank %}<p class="mt-7 text-[9px] leading-4 font-medium tracking-[.4px] text-pecan-brown uppercase">{{ standards_note | escape }}</p>{% endif %}
       </section>{% endif %}
 
       {% comment %} Component: Proven efficacy {% endcomment %}
       {% assign before_image = product.metafields.custom.before_image.value %}
       {% assign after_image = product.metafields.custom.after_image.value %}
+      {% for block in efficacy_blocks %}{% if block.settings.product == product %}{% assign before_image = before_image | default: block.settings.before_image %}{% assign after_image = after_image | default: block.settings.after_image %}{% assign efficacy_caption = product.metafields.custom.efficacy_caption.value | default: block.settings.caption %}{% endif %}{% endfor %}
+      {% assign before_image = before_image | default: product.media[3].preview_image %}
+      {% assign after_image = after_image | default: product.media[4].preview_image %}
       {% if before_image != blank and after_image != blank %}
         <section class="mt-12 border-t border-pecan-brown/15 pt-10" data-reveal-group>
           <h2 class="font-display text-[34px] leading-[42px] font-normal">{{ section.settings.efficacy_heading | escape }}</h2>
@@ -153,24 +170,31 @@
             <span class="absolute bottom-3 left-3 rounded bg-black/55 px-2 py-1 text-[8px] tracking-[.8px] text-white uppercase">{{ section.settings.before_label | escape }}</span>
             <span class="absolute right-3 bottom-3 rounded bg-black/55 px-2 py-1 text-[8px] tracking-[.8px] text-white uppercase">{{ section.settings.after_label | escape }}</span>
           </div>
-          {% if product.metafields.custom.efficacy_caption.value != blank %}<p class="mt-4 text-center text-xs leading-5 text-bitter-chocolate">{{ product.metafields.custom.efficacy_caption.value | escape }}</p>{% endif %}
+          {% if efficacy_caption != blank %}<p class="mt-4 text-center text-[11px] leading-5 text-bitter-chocolate">{{ efficacy_caption | escape }}</p>{% endif %}
         </section>
       {% endif %}
 
       {% comment %} Component: Product evidence accordions {% endcomment %}
       {% assign scientific_backing = product.metafields.custom.scientific_backing %}
       {% assign ethical_sourcing = product.metafields.custom.ethical_sourcing %}
-      {% if scientific_backing != blank or ethical_sourcing != blank or ritual_items != blank or full_ingredients != blank %}
+      {% assign show_evidence = false %}{% for block in evidence_blocks %}{% if block.settings.product == product %}{% assign show_evidence = true %}{% endif %}{% endfor %}
+      {% assign show_ritual = false %}{% for block in ritual_blocks %}{% if block.settings.product == product %}{% assign show_ritual = true %}{% endif %}{% endfor %}
+      {% assign show_full_ingredients = false %}{% for block in ingredient_text_blocks %}{% if block.settings.product == product %}{% assign show_full_ingredients = true %}{% endif %}{% endfor %}
+      {% if scientific_backing != blank or ethical_sourcing != blank or ritual_items != blank or full_ingredients != blank or show_evidence or show_ritual or show_full_ingredients %}
         <div class="mt-10 border-b border-pecan-brown/15" data-pdp-accordions>
           {% if scientific_backing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.scientific_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-5 text-sm leading-6 text-bitter-chocolate">{{ scientific_backing | metafield_tag }}</div></div></details>{% endif %}
           {% if ethical_sourcing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.sourcing_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-5 text-sm leading-6 text-bitter-chocolate">{{ ethical_sourcing | metafield_tag }}</div></div></details>{% endif %}
+          {% if scientific_backing == blank and ethical_sourcing == blank %}{% for block in evidence_blocks %}{% if block.settings.product == product %}<details class="pdp-accordion border-t border-pecan-brown/15" {{ block.shopify_attributes }}><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ block.settings.heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="rte pb-5 text-sm leading-6 text-bitter-chocolate">{{ block.settings.content }}</div></div></details>{% endif %}{% endfor %}{% endif %}
           {% if ritual_items != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-[69px] cursor-pointer list-none items-center justify-between py-6 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.application_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6"><h3 class="font-display text-[34px] leading-[42px]">{{ section.settings.ritual_heading | escape }}</h3><p class="mt-1 text-xs tracking-[1px] uppercase">{{ section.settings.ritual_subheading | escape }}</p><ol class="mt-8 grid gap-7">{% for step in ritual_items %}<li class="grid grid-cols-[2.5rem_1fr] gap-4"><span class="font-display text-[34px] leading-10">0{{ forloop.index }}</span><div><h4 class="text-lg font-medium">{{ step.heading.value | escape }}</h4><div class="mt-1 text-sm leading-6 text-bitter-chocolate">{{ step.description.value }}</div></div></li>{% endfor %}</ol></div></div></details>{% endif %}
+          {% if ritual_items == blank and show_ritual %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-[69px] cursor-pointer list-none items-center justify-between py-6 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.application_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6"><h3 class="font-display text-[34px] leading-[42px]">{{ section.settings.ritual_heading | escape }}</h3><p class="mt-1 text-xs tracking-[1px] uppercase">{{ section.settings.ritual_subheading | escape }}</p><ol class="mt-7 grid gap-6">{% assign ritual_index = 0 %}{% for block in ritual_blocks %}{% if block.settings.product == product %}{% assign ritual_index = ritual_index | plus: 1 %}<li class="grid grid-cols-[2.5rem_1fr] gap-4" {{ block.shopify_attributes }}><span class="font-display text-[30px] leading-9">0{{ ritual_index }}</span><div><h4 class="text-base font-medium">{{ block.settings.heading | escape }}</h4><div class="mt-1 text-sm leading-6 text-bitter-chocolate">{{ block.settings.description }}</div></div></li>{% endif %}{% endfor %}</ol></div></div></details>{% endif %}
           {% if full_ingredients != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-[69px] cursor-pointer list-none items-center justify-between py-6 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.full_ingredients_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6 text-sm leading-6 text-bitter-chocolate">{{ full_ingredients | metafield_tag }}</div></div></details>{% endif %}
+          {% if full_ingredients == blank %}{% for block in ingredient_text_blocks %}{% if block.settings.product == product %}<details class="pdp-accordion border-t border-pecan-brown/15" {{ block.shopify_attributes }}><summary class="flex min-h-[69px] cursor-pointer list-none items-center justify-between py-6 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.full_ingredients_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="rte pb-6 text-sm leading-6 text-bitter-chocolate">{{ block.settings.content }}</div></div></details>{% endif %}{% endfor %}{% endif %}
         </div>
       {% endif %}
 
       {% comment %} Component: Transformation timeline {% endcomment %}
-      {% if timeline_items != blank %}<section class="mt-16" data-reveal-group>
+      {% assign show_timeline = false %}{% for block in timeline_blocks %}{% if block.settings.product == product %}{% assign show_timeline = true %}{% endif %}{% endfor %}
+      {% if timeline_items != blank or show_timeline %}<section class="mt-16" data-reveal-group>
         <div class="text-center"><h2 class="font-display text-[34px] leading-[42px]">{{ section.settings.timeline_heading | escape }}</h2><span class="mx-auto mt-4 block h-0.5 w-12 bg-bitter-chocolate"></span></div>
         <div class="pdp-timeline relative mt-16 grid gap-16">
           {% for milestone in timeline_items %}
@@ -179,6 +203,7 @@
               <div><h3 class="text-lg font-medium">{{ milestone.heading.value | escape }}</h3>{% assign benefits = milestone.benefits.value %}{% if benefits != blank %}<ul class="mt-2 grid gap-1 text-sm leading-5 text-bitter-chocolate">{% for benefit in benefits %}<li class="flex gap-2"><span aria-hidden="true">•</span><span>{{ benefit | escape }}</span></li>{% endfor %}</ul>{% elsif milestone.description.value != blank %}<div class="mt-2 text-sm leading-5 text-bitter-chocolate">{{ milestone.description.value }}</div>{% endif %}</div>
             </article>
           {% endfor %}
+          {% if timeline_items == blank %}{% assign timeline_index = 0 %}{% for block in timeline_blocks %}{% if block.settings.product == product %}{% assign timeline_index = timeline_index | plus: 1 %}<article class="pdp-timeline__item grid grid-cols-2 items-center gap-12 {% if timeline_index == 2 %}is-reversed{% endif %}" {{ block.shopify_attributes }}><div class="pdp-timeline__badge justify-self-end rounded-full bg-[linear-gradient(135deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-4 py-2 text-[10px] tracking-[1px] text-white uppercase">{{ block.settings.period | escape }}</div><div><h3 class="text-lg font-medium">{{ block.settings.heading | escape }}</h3><div class="mt-2 text-sm leading-5 text-bitter-chocolate">{{ block.settings.description }}</div></div></article>{% endif %}{% endfor %}{% endif %}
         </div>
       </section>{% endif %}
 
@@ -201,7 +226,8 @@
     { "type": "text", "id": "gallery_marquee", "label": "Gallery marquee", "default": "Suitable for all skin types" },
     { "type": "text", "id": "ingredients_heading", "label": "Ingredients heading", "default": "Earth-Derived Actives" },
     { "type": "text", "id": "standards_eyebrow", "label": "Standards eyebrow", "default": "Our Standards" },
-    { "type": "text", "id": "standards_heading", "label": "Standards heading", "default": "Certifications & Testing" }
+    { "type": "text", "id": "standards_heading", "label": "Standards heading", "default": "Certifications & Testing" },
+    { "type": "textarea", "id": "standards_note", "label": "Fallback standards note", "default": "*Identical strain, formerly known as Bifidobacterium adolescentis SD-BA5-IT" }
     ,{ "type": "text", "id": "efficacy_heading", "label": "Efficacy heading", "default": "Proven Efficacy" }
     ,{ "type": "text", "id": "before_label", "label": "Before label", "default": "Day 0" }
     ,{ "type": "text", "id": "after_label", "label": "After label", "default": "Day 28" }
@@ -217,8 +243,8 @@
     {
       "type": "ingredient",
       "name": "Ingredient highlight",
-      "limit": 4,
       "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
         { "type": "image_picker", "id": "image", "label": "Image (optional)" },
         { "type": "select", "id": "icon", "label": "Fallback icon", "default": "leaf", "options": [
           { "value": "leaf", "label": "Leaf" },
@@ -228,6 +254,61 @@
         ] },
         { "type": "text", "id": "name", "label": "Name" },
         { "type": "text", "id": "summary", "label": "Benefit" }
+      ]
+    },
+    {
+      "type": "standard",
+      "name": "Product standard",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "symbol", "label": "Short symbol", "default": "✓" },
+        { "type": "text", "id": "label", "label": "Label" }
+      ]
+    },
+    {
+      "type": "efficacy",
+      "name": "Product efficacy",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "image_picker", "id": "before_image", "label": "Before image" },
+        { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "textarea", "id": "caption", "label": "Result caption" }
+      ]
+    },
+    {
+      "type": "evidence",
+      "name": "Evidence accordion",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "content", "label": "Content" }
+      ]
+    },
+    {
+      "type": "ritual_step",
+      "name": "Application step",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "full_ingredients",
+      "name": "Full ingredients",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "richtext", "id": "content", "label": "Ingredient list" }
+      ]
+    },
+    {
+      "type": "timeline",
+      "name": "Timeline milestone",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "period", "label": "Period" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "description", "label": "Description" }
       ]
     }
   ],

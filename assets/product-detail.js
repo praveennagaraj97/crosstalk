@@ -125,38 +125,49 @@
     section.querySelectorAll('.pdp-accordion').forEach((details) => {
       const summary = details.querySelector('summary');
       const body = details.querySelector('.pdp-accordion__body');
-      let animation;
+      let heightAnimation;
+      let bodyAnimation;
       let closing = false;
       if (!summary || !body) return;
       summary.addEventListener('click', (event) => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         event.preventDefault();
-        animation?.cancel();
+        heightAnimation?.cancel();
+        bodyAnimation?.cancel();
         const shouldClose = details.open && !closing;
-        const startHeight = `${details.offsetHeight}px`;
+        const startHeight = `${details.getBoundingClientRect().height}px`;
         if (!shouldClose) {
           closing = false;
           details.open = true;
+          details.classList.remove('is-closing');
         } else {
           closing = true;
           details.classList.add('is-closing');
         }
         const endHeight = shouldClose ? `${summary.offsetHeight}px` : `${summary.offsetHeight + body.scrollHeight}px`;
         details.style.overflow = 'hidden';
-        animation = details.animate({ height: [startHeight, endHeight] }, { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
-        animation.onfinish = () => {
+        heightAnimation = details.animate(
+          { height: [startHeight, endHeight] },
+          { duration: 380, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+        );
+        bodyAnimation = body.animate(
+          shouldClose
+            ? { opacity: [1, 0], transform: ['translateY(0)', 'translateY(-6px)'] }
+            : { opacity: [0, 1], transform: ['translateY(-6px)', 'translateY(0)'] },
+          { duration: shouldClose ? 220 : 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
+        );
+        heightAnimation.onfinish = () => {
           if (shouldClose) details.open = false;
           closing = false;
           details.classList.remove('is-closing');
           details.style.height = '';
           details.style.overflow = '';
-          animation = undefined;
+          bodyAnimation?.cancel();
+          heightAnimation = undefined;
+          bodyAnimation = undefined;
         };
-        animation.oncancel = () => {
-          closing = false;
-          details.classList.remove('is-closing');
-          details.style.height = '';
-          details.style.overflow = '';
+        heightAnimation.oncancel = () => {
+          details.style.height = `${details.getBoundingClientRect().height}px`;
         };
       });
     });

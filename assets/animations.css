@@ -95,10 +95,8 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .pdp-accordion__body {
-  display: grid;
-  grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 320ms cubic-bezier(.22, 1, .36, 1), opacity 220ms ease;
+  transform: translateY(-6px);
 }
 
 .pdp-accordion__body > div {
@@ -106,13 +104,13 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .pdp-accordion[open] > .pdp-accordion__body {
-  grid-template-rows: 1fr;
   opacity: 1;
+  transform: none;
 }
 
 .pdp-accordion.is-closing > .pdp-accordion__body {
-  grid-template-rows: 0fr;
   opacity: 0;
+  transform: translateY(-6px);
 }
 
 .pdp-accordion__icon {

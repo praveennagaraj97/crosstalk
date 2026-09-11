@@ -19,4 +19,6 @@ Create these product metafields in Shopify Admin under **Settings → Custom dat
 | `custom.standards_note` | Multi-line text | — |
 | `custom.timeline_milestones` | List of metaobjects | `period`, `heading`, `benefits` (list of text), optional `description` fallback |
 
-Presentation labels remain editable in the Theme Editor. Product-specific sections render only when their Shopify product metafield has content; the template does not invent storefront copy or imagery.
+Presentation labels remain editable in the Theme Editor. Metafields are the primary source and are the recommended option for larger catalogs.
+
+For setup without custom-data definitions, the Product detail section also accepts product-targeted blocks for ingredient highlights, standards, efficacy media/caption, evidence accordions, ritual steps, full ingredients, and timeline milestones. Every block requires a Shopify product selection and is rendered only for that product. These blocks are merchant content stored in the theme configuration; there is no hard-coded Liquid copy fallback. Product metafields take priority whenever both sources exist.

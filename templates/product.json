@@ -9,22 +9,90 @@
       "blocks": {
         "wild_rosehip": {
           "type": "ingredient",
-          "settings": { "icon": "leaf", "name": "Wild Rosehip", "summary": "Regeneration" }
+          "settings": { "product": "radiance-volcanic-oil", "icon": "leaf", "name": "Wild Rosehip", "summary": "Regeneration" }
         },
         "red_clay": {
           "type": "ingredient",
-          "settings": { "icon": "sparkles", "name": "Red Clay", "summary": "Mineral Balance" }
+          "settings": { "product": "radiance-volcanic-oil", "icon": "sparkles", "name": "Red Clay", "summary": "Mineral Balance" }
         },
         "squalane": {
           "type": "ingredient",
-          "settings": { "icon": "drop", "name": "Squalane", "summary": "Deep Hydration" }
+          "settings": { "product": "radiance-volcanic-oil", "icon": "drop", "name": "Squalane", "summary": "Deep Hydration" }
         },
         "vitamin_c": {
           "type": "ingredient",
-          "settings": { "icon": "radiance", "name": "Vitamin C", "summary": "Radiance Boost" }
+          "settings": { "product": "radiance-volcanic-oil", "icon": "radiance", "name": "Vitamin C", "summary": "Radiance Boost" }
+        },
+        "vegan": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "◯", "label": "Vegan" }
+        },
+        "gluten_tested": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "◎", "label": "Gluten-Tested" }
+        },
+        "dairy_tested": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "△", "label": "Dairy-Tested" }
+        },
+        "nut_tested": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "♨", "label": "Nut-Tested" }
+        },
+        "soy_tested": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "⠿", "label": "Soy-Tested" }
+        },
+        "glyphosate_tested": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "♧", "label": "Glyphosate Tested" }
+        },
+        "prop_65": {
+          "type": "standard",
+          "settings": { "product": "radiance-volcanic-oil", "symbol": "◇", "label": "Prop. 65 Compliant" }
+        },
+        "efficacy": {
+          "type": "efficacy",
+          "settings": { "product": "radiance-volcanic-oil", "caption": "98% of participants reported increased luminosity within 4 weeks." }
+        },
+        "scientific": {
+          "type": "evidence",
+          "settings": { "product": "radiance-volcanic-oil", "heading": "Scientific Backing", "content": "<p>Each active is selected for complementary barrier support, hydration, and visible radiance. Formula claims should be updated with the product’s approved study documentation.</p>" }
+        },
+        "ethical": {
+          "type": "evidence",
+          "settings": { "product": "radiance-volcanic-oil", "heading": "Ethical Sourcing", "content": "<p>Botanicals and minerals are selected through responsible sourcing partners with traceable quality standards.</p>" }
+        },
+        "ritual_prepare": {
+          "type": "ritual_step",
+          "settings": { "product": "radiance-volcanic-oil", "heading": "Prepare", "description": "<p>Begin with clean, slightly damp skin.</p>" }
+        },
+        "ritual_warm": {
+          "type": "ritual_step",
+          "settings": { "product": "radiance-volcanic-oil", "heading": "Warm", "description": "<p>Warm a few drops between your palms to awaken the formula.</p>" }
+        },
+        "ritual_press": {
+          "type": "ritual_step",
+          "settings": { "product": "radiance-volcanic-oil", "heading": "Press", "description": "<p>Press gently across the face and neck until absorbed.</p>" }
+        },
+        "full_ingredients": {
+          "type": "full_ingredients",
+          "settings": { "product": "radiance-volcanic-oil", "content": "<p>See the product packaging for the current complete ingredient list. Update this field in the Theme Editor with the approved INCI list before launch.</p>" }
+        },
+        "timeline_immediate": {
+          "type": "timeline",
+          "settings": { "product": "radiance-volcanic-oil", "period": "Immediate", "heading": "A luminous finish", "description": "<p>Skin feels cushioned and appears more radiant after application.</p>" }
+        },
+        "timeline_week_two": {
+          "type": "timeline",
+          "settings": { "product": "radiance-volcanic-oil", "period": "Week 2", "heading": "Barrier comfort", "description": "<p>Continued use supports a smoother, more comfortable-looking complexion.</p>" }
+        },
+        "timeline_week_four": {
+          "type": "timeline",
+          "settings": { "product": "radiance-volcanic-oil", "period": "Week 4", "heading": "Visible radiance", "description": "<p>Skin appears more even, resilient, and luminous with consistent use.</p>" }
         }
       },
-      "block_order": ["wild_rosehip", "red_clay", "squalane", "vitamin_c"],
+      "block_order": ["wild_rosehip", "red_clay", "squalane", "vitamin_c", "vegan", "gluten_tested", "dairy_tested", "nut_tested", "soy_tested", "glyphosate_tested", "prop_65", "efficacy", "scientific", "ethical", "ritual_prepare", "ritual_warm", "ritual_press", "full_ingredients", "timeline_immediate", "timeline_week_two", "timeline_week_four"],
       "settings": {}
     }
   },
