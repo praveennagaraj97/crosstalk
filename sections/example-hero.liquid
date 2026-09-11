@@ -1,0 +1,60 @@
+{% comment %}
+  Example hero
+  ------------
+  A section is a reusable, merchant-editable page module. Shopify renders the
+  markup below, then uses the schema to show editable controls in Theme Editor.
+{% endcomment %}
+
+<section class="example-hero" aria-labelledby="ExampleHero-{{ section.id }}">
+  <div class="page-width">
+    <p class="example-hero__eyebrow">Example section</p>
+    <h1 id="ExampleHero-{{ section.id }}">{{ section.settings.heading | escape }}</h1>
+
+    {% if section.settings.body != blank %}
+      <div class="example-hero__body rte">
+        {{ section.settings.body }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+      <a class="button" href="{{ section.settings.button_link }}">
+        {{ section.settings.button_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Example hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A small Liquid example"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>This content is editable in Shopify's Theme Editor.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Example hero"
+    }
+  ]
+}
+{% endschema %}

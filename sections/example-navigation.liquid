@@ -1,0 +1,31 @@
+{% comment %}
+  Example navigation
+  ------------------
+  These are standard storefront links. Choose the destination Pages in Theme
+  Editor so Shopify supplies their exact URLs, regardless of their handles.
+{% endcomment %}
+
+
+<nav class="example-navigation page-width" aria-label="Example navigation">
+  <a href="{{ routes.root_url }}">Home</a>
+  <a href="{{ section.settings.about_page.url | default: '/pages/about' }}">About</a>
+  <a href="{{ section.settings.contact_page.url | default: '/pages/contact' }}">Contact</a>
+</nav>
+
+{% schema %}
+{
+  "name": "Example navigation",
+  "settings": [
+    {
+      "type": "page",
+      "id": "about_page",
+      "label": "About page"
+    },
+    {
+      "type": "page",
+      "id": "contact_page",
+      "label": "Contact page"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "example_product": {
+      "type": "example-product-card",
+      "settings": {}
+    }
+  },
+  "order": ["main", "example_product"]
+}

@@ -1,0 +1,48 @@
+{% comment %}
+  Example product card
+  --------------------
+  This teaches the difference between a static section and Shopify store data.
+  Pick a product in Theme Editor; Liquid exposes it through section.settings.product.
+{% endcomment %}
+
+{% assign product = section.settings.product %}
+
+<section class="example-product-card">
+  <div class="page-width">
+    <p class="example-product-card__eyebrow">Example product card</p>
+
+    {% if product != blank %}
+      <article>
+        {% if product.featured_image != blank %}
+          {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
+        {% endif %}
+        <h2><a href="{{ product.url }}">{{ product.title | escape }}</a></h2>
+        <p>{{ product.price | money }}</p>
+        <form method="post" action="{{ routes.cart_add_url }}">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit">Add to cart</button>
+        </form>
+      </article>
+    {% else %}
+      <p>Choose a product in Theme Editor to populate this card.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Example product card",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Example product card"
+    }
+  ]
+}
+{% endschema %}

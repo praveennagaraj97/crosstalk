@@ -36,6 +36,19 @@ To use a different store for one run, override it on the command line:
 make dev STORE=your-dev-store.myshopify.com
 ```
 
+## Full development-theme upload
+
+Use this after a hot-reload sync error, or whenever you want to upload all
+local theme files to the existing Shopify development theme:
+
+```bash
+make push-dev
+```
+
+It runs Theme Check before uploading and preserves Shopify-provided remote
+files, such as the protected gift-card template. It does not publish a live
+theme.
+
 ## Validate
 
 Run Shopify Theme Check before uploading:
