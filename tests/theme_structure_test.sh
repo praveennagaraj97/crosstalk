@@ -11,7 +11,7 @@ require_file() {
 }
 
 require_text() {
-  rg -q --fixed-strings -- "$2" "$root_dir/$1" || {
+  grep -Fq -- "$2" "$root_dir/$1" || {
     echo "missing required text in $1: $2" >&2
     exit 1
   }
@@ -25,7 +25,7 @@ reject_file() {
 }
 
 reject_text() {
-  if rg -q --fixed-strings -- "$2" "$root_dir/$1"; then
+  if grep -Fq -- "$2" "$root_dir/$1"; then
     echo "unexpected text in $1: $2" >&2
     exit 1
   fi
@@ -56,7 +56,7 @@ require_file "assets/tira-logo.webp"
 require_file "assets/amazon-logo.png"
 require_file "assets/purplle-logo.svg"
 
-if find "$root_dir/assets" -mindepth 1 -type d | rg -q .; then
+if find "$root_dir/assets" -mindepth 1 -type d -print -quit | grep -q .; then
   echo "Shopify theme assets must not be stored in subfolders" >&2
   exit 1
 fi
