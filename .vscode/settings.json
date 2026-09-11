@@ -2,5 +2,5 @@
   "tailwindCSS.includeLanguages": {
     "liquid": "html"
   },
-  "tailwindCSS.experimental.configFile": "src/global.css"
+  "tailwindCSS.experimental.configFile": "assets/base.css"
 }

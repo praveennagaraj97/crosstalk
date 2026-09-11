@@ -50,7 +50,7 @@ make dev STORE=your-dev-store.myshopify.com
 
 Write Tailwind utilities directly in Liquid `class` attributes. Global design
 tokens, base rules, accessibility utilities, and animation keyframes live in
-`src/global.css`. Tailwind compiles that source into `assets/theme.css`; the
+`assets/base.css`. Tailwind compiles that source into `assets/theme.css`; the
 generated file is committed for Shopify GitHub integration and ZIP uploads and
 must not be edited by hand.
 

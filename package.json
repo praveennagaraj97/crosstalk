@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "prepare": "git config core.hooksPath .githooks",
-    "dev:css": "tailwindcss -i ./src/global.css -o ./assets/theme.css --watch",
-    "build:css": "tailwindcss -i ./src/global.css -o ./assets/theme.css --minify",
-    "check:css": "tmpfile=$(mktemp); trap 'rm -f \"$tmpfile\"' EXIT; tailwindcss -i ./src/global.css -o \"$tmpfile\" --minify && cmp -s \"$tmpfile\" ./assets/theme.css",
+    "dev:css": "tailwindcss -i ./assets/base.css -o ./assets/theme.css --watch",
+    "build:css": "tailwindcss -i ./assets/base.css -o ./assets/theme.css --minify",
+    "check:css": "tmpfile=$(mktemp); trap 'rm -f \"$tmpfile\"' EXIT; tailwindcss -i ./assets/base.css -o \"$tmpfile\" --minify && cmp -s \"$tmpfile\" ./assets/theme.css",
     "test": "bash tests/theme_structure_test.sh",
     "check": "npm run check:css && npm test"
   },
