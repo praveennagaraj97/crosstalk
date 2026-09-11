@@ -6,6 +6,8 @@
   assign fallback_product_subtitles = 'Restorative Night Treatment|Stem-Cell Repair Serum|Mineral Detoxification|Oil-to-Milk Purification|Micro-biome Balance|Dark Circle Correction' | split: '|'
   assign marquee_alpha = section.settings.marquee_opacity | divided_by: 100.0
   assign marquee_background = section.settings.marquee_background | color_modify: 'alpha', marquee_alpha
+  assign image_overlay_alpha = section.settings.image_overlay_opacity | divided_by: 100.0
+  assign image_overlay_color = section.settings.image_overlay_color | color_modify: 'alpha', image_overlay_alpha
   if hero_product != blank
     assign hero_url = hero_product.url
   endif
@@ -13,7 +15,7 @@
 
 <section
   class="relative overflow-hidden bg-[#7d8060] lg:min-h-0"
-  style="--hero-marquee-color: {{ section.settings.marquee_text_color }}; --hero-marquee-bg: {{ marquee_background }}; --hero-marquee-duration: {{ section.settings.marquee_speed }}s;"
+  style="--hero-marquee-color: {{ section.settings.marquee_text_color }}; --hero-marquee-bg: {{ marquee_background }}; --hero-marquee-duration: {{ section.settings.marquee_speed }}s; --hero-image-overlay: {{ image_overlay_color }};"
   aria-label="{{ section.settings.heading_line_1 | append: ' ' | append: section.settings.heading_line_2 | append: ' ' | append: section.settings.heading_line_3 | escape }}"
 >
   {% comment %} Component: Campaign artwork {% endcomment %}
@@ -22,7 +24,9 @@
   {% else %}
     <img class="absolute inset-0 size-full object-cover object-[45%_center] lg:object-center" src="{{ 'amaari-radiance-hero.png' | asset_url }}" width="1024" height="1024" fetchpriority="high" alt="">
   {% endif %}
-  <div class="absolute inset-0 bg-[linear-gradient(90deg,rgb(248_247_246/42%)_0%,rgb(248_247_246/10%)_48%,transparent_72%)] lg:hidden" aria-hidden="true"></div>
+  {% if section.settings.show_image_overlay %}
+    <div class="absolute inset-0 bg-(--hero-image-overlay)" data-hero-image-overlay aria-hidden="true"></div>
+  {% endif %}
 
   {% comment %} Component: Announcement marquee {% endcomment %}
   {% if section.settings.show_marquee %}
@@ -222,6 +226,9 @@
   "class": "featured-product-hero-section",
   "settings": [
     { "type": "image_picker", "id": "campaign_image", "label": "Campaign image" },
+    { "type": "checkbox", "id": "show_image_overlay", "label": "Enable image overlay", "default": true },
+    { "type": "color", "id": "image_overlay_color", "label": "Image overlay color", "default": "#000000" },
+    { "type": "range", "id": "image_overlay_opacity", "label": "Image overlay opacity", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 15 },
     { "type": "image_picker", "id": "logo", "label": "Logo" },
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
     { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },

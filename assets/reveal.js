@@ -22,9 +22,25 @@
     });
   };
 
+  const closeMobileMenu = (details) => {
+    if (!details.open || details.classList.contains('is-closing')) return;
+    if (reducedMotion.matches) {
+      details.open = false;
+      return;
+    }
+
+    details.classList.add('is-closing');
+    window.setTimeout(() => {
+      details.open = false;
+      details.classList.remove('is-closing');
+    }, 300);
+  };
+
   const closeDisclosures = (event) => {
     document.querySelectorAll('[data-product-flyout][open], [data-mobile-menu][open]').forEach((details) => {
-      if (event.type === 'keydown' || !details.contains(event.target)) details.removeAttribute('open');
+      if (event.type !== 'keydown' && details.contains(event.target)) return;
+      if (details.matches('[data-mobile-menu]')) closeMobileMenu(details);
+      else details.removeAttribute('open');
     });
   };
 
@@ -43,6 +59,17 @@
     });
     details.addEventListener('focusout', (event) => {
       if (desktop.matches && !details.contains(event.relatedTarget)) details.open = false;
+    });
+  });
+
+  document.querySelectorAll('[data-mobile-menu]').forEach((details) => {
+    const summary = details.querySelector(':scope > summary');
+    if (!summary) return;
+
+    summary.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (details.open) closeMobileMenu(details);
+      else details.open = true;
     });
   });
 
