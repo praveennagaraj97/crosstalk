@@ -15,7 +15,30 @@
       "settings": {
         "featured_product": "radiance-volcanic-oil"
       }
+    },
+    "featured_product_deep_dive": {
+      "type": "featured-product-deep-dive",
+      "blocks": {
+        "bio_active": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Bio-Active",
+            "text": "Stimulates cellular renewal at the surface level."
+          }
+        },
+        "deep_glow": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Deep Glow",
+            "text": "Instant light-reflecting minerals for a velvet finish."
+          }
+        }
+      },
+      "block_order": ["bio_active", "deep_glow"],
+      "settings": {
+        "featured_product": "radiance-volcanic-oil"
+      }
     }
   },
-  "order": ["featured_product_hero"]
+  "order": ["featured_product_hero", "featured_product_deep_dive"]
 }

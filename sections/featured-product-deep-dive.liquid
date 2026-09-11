@@ -1,0 +1,112 @@
+{% liquid
+  assign featured_product = section.settings.featured_product
+  assign product_url = routes.all_products_collection_url
+  assign product_title = section.settings.fallback_title
+  assign product_description = section.settings.description
+
+  if featured_product != blank
+    assign product_url = featured_product.url
+    assign product_title = featured_product.title
+    if product_description == blank
+      assign product_description = featured_product.description | strip_html
+    endif
+  endif
+%}
+
+<section class="overflow-hidden bg-[#f5ebe1] px-4 py-16 sm:px-6 lg:px-15 lg:pt-27.5 lg:pb-35" aria-labelledby="FeaturedProductDeepDive-{{ section.id }}">
+  <div class="container mx-auto grid max-w-360 items-center gap-16 px-4 lg:grid-cols-2 lg:gap-30 lg:px-0">
+    {% comment %} Component: Layered product imagery {% endcomment %}
+    <div class="relative mx-auto w-full max-w-150 pb-14 sm:pb-20 lg:h-157.5 lg:pb-0" data-reveal-group>
+      <div class="aspect-[4/5] w-[91%] overflow-hidden rounded-2xl shadow-[0_25px_50px_-12px_rgb(0_0_0/25%)] sm:w-[88%] lg:h-157.5 lg:w-full">
+        {% if section.settings.primary_image != blank %}
+          {{ section.settings.primary_image | image_url: width: 1400 | image_tag: class: 'size-full object-cover', widths: '600, 900, 1200, 1400', sizes: '(min-width: 1024px) 600px, 88vw', loading: 'lazy', alt: product_title }}
+        {% else %}
+          <img class="size-full object-cover" src="{{ 'radiance-volcanic-oil-product.png' | asset_url }}" width="1024" height="1024" loading="lazy" alt="{{ product_title | escape }}">
+        {% endif %}
+      </div>
+
+      <div class="absolute right-0 bottom-0 aspect-square w-[54%] overflow-hidden rounded-2xl border-8 border-[#f5ebe1] bg-white shadow-[0_20px_25px_-5px_rgb(0_0_0/10%),0_8px_10px_-6px_rgb(0_0_0/10%)] lg:-right-20 lg:-bottom-12 lg:w-[54.28%]">
+        {% if section.settings.detail_image != blank %}
+          {{ section.settings.detail_image | image_url: width: 800 | image_tag: class: 'size-full object-cover', widths: '320, 480, 640, 800', sizes: '(min-width: 1024px) 326px, 54vw', loading: 'lazy', alt: section.settings.detail_image_alt }}
+        {% else %}
+          <img class="size-full object-cover" src="{{ 'radiance-volcanic-oil-texture.png' | asset_url }}" width="1024" height="1024" loading="lazy" alt="">
+        {% endif %}
+      </div>
+    </div>
+
+    {% comment %} Component: Product details {% endcomment %}
+    <div class="min-w-0 text-text-brown lg:py-18.5" data-reveal-group>
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p class="bg-[linear-gradient(166deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[3px] text-transparent uppercase">{{ section.settings.eyebrow | escape }}</p>
+        {% endif %}
+        <h2 id="FeaturedProductDeepDive-{{ section.id }}" class="mt-4 font-display text-[2.5rem] leading-none font-normal sm:text-5xl lg:text-5xl">{{ product_title | escape }}</h2>
+      </div>
+
+      {% if product_description != blank %}
+        <p class="mt-9 max-w-128 text-base leading-6 tracking-[0.4px] text-bitter-chocolate">{{ product_description | strip_html | escape }}</p>
+      {% endif %}
+
+      <div class="mt-10 grid gap-7 border-y border-toasted-almond/20 py-8 sm:grid-cols-2 sm:gap-8">
+        {% for block in section.blocks %}
+          <div {{ block.shopify_attributes }}>
+            <h3 class="font-display text-xl leading-7">{{ block.settings.heading | escape }}</h3>
+            <p class="mt-2 text-sm leading-5 tracking-[0.4px] text-bitter-chocolate">{{ block.settings.text | escape }}</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-2xl leading-7 font-medium tracking-[1px]">
+          {% if featured_product != blank %}
+            {{ featured_product.selected_or_first_available_variant.price | money }}
+          {% else %}
+            {{ section.settings.fallback_price | escape }}
+          {% endif %}
+        </p>
+        {% if section.settings.cta_label != blank %}
+          <a class="chrome-action relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(148deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 py-4 text-center text-base leading-5 font-semibold tracking-[1.4px] text-[#f4dfb8] uppercase shadow-[0_4px_6px_-1px_rgb(166_114_105/24%),inset_0_1px_1px_1px_rgb(255_255_255/35%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate sm:px-6.5" href="{{ product_url }}">
+            <span class="relative z-10">{{ section.settings.cta_label | escape }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured product detail",
+  "tag": "section",
+  "class": "featured-product-deep-dive-section",
+  "max_blocks": 2,
+  "settings": [
+    { "type": "product", "id": "featured_product", "label": "Featured product" },
+    { "type": "image_picker", "id": "primary_image", "label": "Primary product image" },
+    { "type": "image_picker", "id": "detail_image", "label": "Detail image" },
+    { "type": "text", "id": "detail_image_alt", "label": "Detail image alt text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Flagship Innovation" },
+    { "type": "text", "id": "fallback_title", "label": "Fallback product title", "default": "Radiance Volcanic Oil" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "An ethereal fusion of cold-pressed rare botanicals and mineral-rich volcanic ash extract. Designed to restore the skin barrier while delivering an immediate, luminous glow that lasts all day." },
+    { "type": "text", "id": "fallback_price", "label": "Fallback price", "default": "$118.00" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the Radiance Oil" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Bio-Active" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Stimulates cellular renewal at the surface level." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Featured product detail",
+    "blocks": [
+      { "type": "benefit", "settings": { "heading": "Bio-Active", "text": "Stimulates cellular renewal at the surface level." } },
+      { "type": "benefit", "settings": { "heading": "Deep Glow", "text": "Instant light-reflecting minerals for a velvet finish." } }
+    ]
+  }]
+}
+{% endschema %}

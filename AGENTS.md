@@ -29,9 +29,11 @@
 
 ## Motion and Quality
 
-- Animate with restraint: short reveals, meaningful stagger, and smooth open and close states.
+- Give each section a unique but simple entrance using a restrained fade, rise, scale, or directional reveal; avoid decorative or repetitive motion.
+- Keep motion short and purposeful. Stagger repeated elements subtly and provide smooth open and close states.
 - Use the shared reveal behavior for once-only viewport entrances and CSS for simple interactions.
 - Provide one centralized `prefers-reduced-motion` fallback that keeps all content visible.
 - Use semantic landmarks, descriptive labels, keyboard support, and visible focus states.
-- After changes, rebuild CSS and run `npm run check:css`, `shopify theme check`, and relevant visual checks.
+- Do not create new test files unless the user explicitly requests them; validate changes with existing checks and tests.
+- After changes, rebuild CSS and run `npm run check:css`, `shopify theme check`, and relevant existing visual checks.
 - Never commit credentials, development-store configuration, preview output, or vendor dependencies.
