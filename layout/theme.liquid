@@ -14,6 +14,7 @@
     {{ 'animations.css' | asset_url | stylesheet_tag }}
   </head>
   <body>
+    {% section 'storefront-header' %}
     <main id="MainContent" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>

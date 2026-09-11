@@ -20,7 +20,7 @@
 <section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}" data-checkout-label="{{ section.settings.floating_checkout_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}">
   <div class="container mx-auto grid items-start gap-8 px-4 pt-5 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8 lg:pt-10">
     {% comment %} Component: Sticky product gallery {% endcomment %}
-    <div class="w-full lg:sticky lg:top-5" data-product-gallery data-reveal-group>
+    <div class="w-full" data-product-gallery data-reveal-group>
       <div class="relative aspect-[788/770] touch-pan-y overflow-hidden rounded-[20px] bg-[#eee6df] outline-none focus-visible:ring-2 focus-visible:ring-bitter-chocolate" data-gallery-stage tabindex="0" role="region" aria-label="Product gallery. Swipe or use arrow keys to change media">
         {% if product.media.size > 0 %}{% for media in product.media %}
           <div class="absolute inset-0 transition-opacity duration-300 {% unless media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}pointer-events-none opacity-0{% endunless %}" data-media-id="{{ media.id }}" {% unless media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}hidden{% endunless %}>

@@ -12,6 +12,16 @@
     assign ingredients_url = ingredients_url | append: '?product=' | append: context_product.handle
   endif
 
+  assign navigation_product_source = nav_products
+  if navigation_product_source == blank
+    assign navigation_product_source = collections.all.products
+  endif
+  assign navigation_product_count = navigation_product_source.size
+  assign navigation_product_limit = navigation_product_count
+  if navigation_product_count > 5
+    assign navigation_product_limit = 5
+  endif
+
   if surface == 'light'
     assign navigation_text_class = 'text-bitter-chocolate'
     assign navigation_shell_class = 'border-pecan-brown/25 bg-[#f6eee8]/82 shadow-[0_10px_32px_rgb(90_46_44/12%)]'
@@ -33,8 +43,8 @@
   endif
 %}
 
-<header class="storefront-navigation--{{ surface }} container relative z-30 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-5" data-storefront-navigation>
-  <div class="flex min-h-12 items-center rounded-full border px-3.5 shadow-[0_6px_24px_rgb(42_34_27/12%)] backdrop-blur-3xl lg:min-h-17 lg:px-7 {{ navigation_shell_class }}" data-reveal-group data-reveal-nav>
+<header class="storefront-navigation--{{ surface }} container relative z-30 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-4" data-storefront-navigation>
+  <div class="flex min-h-12 items-center rounded-full border px-3.5 shadow-[0_6px_24px_rgb(42_34_27/12%)] backdrop-blur-3xl lg:min-h-17 lg:px-4 xl:px-7 {{ navigation_shell_class }}" data-reveal-group data-reveal-nav>
     <a class="mobile-logo-link shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_focus_class }}" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
       {% if nav_settings.logo != blank %}
         {{ nav_settings.logo | image_url: width: 240 | image_tag: class: 'h-7 w-auto lg:h-6', widths: '120, 240', alt: shop.name }}
@@ -43,14 +53,14 @@
       {% endif %}
     </a>
 
-    <nav class="relative ml-10 hidden items-center gap-6 lg:flex {{ navigation_text_class }}" aria-label="Primary navigation" data-navigation-links>
+    <nav class="relative ml-5 hidden items-center gap-1 lg:flex xl:ml-8 xl:gap-3 {{ navigation_text_class }}" aria-label="Primary navigation" data-navigation-links>
       <span class="storefront-nav-bubble" data-navigation-bubble aria-hidden="true"></span>
       <details class="storefront-nav-link group relative z-10 px-3 py-2 {% if active_nav == 'shop' %}is-active{% endif %}" data-product-flyout data-navigation-item {% if active_nav == 'shop' %}data-navigation-active{% endif %}>
         <summary class="cursor-pointer list-none whitespace-nowrap text-base leading-6 marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_focus_class }}">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</summary>
         <div class="invisible absolute top-12 -left-34.25 w-100 translate-y-2 rounded-xl border p-5 opacity-0 shadow-[0_16px_48px_rgb(62_38_25/20%)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:content-[''] group-open:visible group-open:translate-y-0 group-open:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 {{ navigation_flyout_class }}">
           <ul class="grid list-none gap-3.5 p-0" data-flyout-list>
-            {% if nav_products != blank %}
-              {% for nav_product in nav_products %}
+            {% if navigation_product_source != blank %}
+              {% for nav_product in navigation_product_source limit: navigation_product_limit %}
                 <li><a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_flyout_focus_class }}" href="{{ nav_product.url }}">
                   {% if nav_product.featured_image != blank %}{{ nav_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: nav_product.title }}{% endif %}
                   <span class="font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>
@@ -67,11 +77,11 @@
                 {% endif %}
               {% endfor %}
             {% endif %}
-            <li><a class="block rounded-lg py-2 text-sm {{ navigation_flyout_secondary_class }}" href="{{ routes.all_products_collection_url }}">View all products</a></li>
+            {% if navigation_product_count > 5 %}<li><a class="block rounded-lg py-2 text-sm {{ navigation_flyout_secondary_class }}" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}
           </ul>
         </div>
       </details>
-      <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-navigation-item {% if active_nav == 'ingredients' %}data-navigation-active aria-current="page"{% endif %}>Ingredients</a>
+      <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-navigation-item data-ingredients-link {% if active_nav == 'ingredients' %}data-navigation-active aria-current="page"{% endif %}>Ingredients</a>
       {% if nav_settings.menu != blank %}
         {% for link in nav_settings.menu.links %}
           {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current %}is-active{% endif %}" href="{{ link.url }}" data-navigation-item {% if link.current %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
@@ -87,9 +97,9 @@
     </nav>
   </div>
 
-  <div class="hidden min-h-17 items-center gap-6 rounded-full border px-5 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:flex {{ navigation_shell_class }}">
-    <form class="hero-search-interactive flex h-9 w-56 items-center gap-2 rounded-full bg-white px-4" action="{{ routes.search_url }}" method="get" role="search">
-      <img class="size-3.5" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="14" height="14" alt="">
+  <div class="hidden min-h-17 items-center gap-3 rounded-full border px-4 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:flex xl:gap-6 xl:px-5 {{ navigation_shell_class }}">
+    <form class="hero-search-interactive flex h-9 w-44 items-center gap-2 rounded-full bg-white px-4 xl:w-56" action="{{ routes.search_url }}" method="get" role="search">
+      <img class="size-5" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="20" height="20" alt="">
       <label class="visually-hidden" for="NavigationSearch-{{ section.id }}">Search</label>
       <input id="NavigationSearch-{{ section.id }}" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-sm text-pecan-brown outline-none placeholder:text-toasted-almond" type="search" name="q" placeholder="{{ nav_settings.navigation_search_placeholder | default: 'Find your glow' | escape }}">
       <button class="hero-search-clear grid size-4 shrink-0 cursor-pointer place-items-center rounded-full" type="button" aria-label="Clear search" data-search-clear hidden>
@@ -106,8 +116,8 @@
       <summary class="hero-icon-interactive grid size-10 cursor-pointer list-none place-items-center rounded-full bg-white/90 text-pecan-brown marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 {{ navigation_focus_class }}" aria-label="Menu"><span class="mobile-menu-icon" aria-hidden="true"><span></span><span></span></span></summary>
       <div class="absolute top-13 right-0 w-[min(21rem,calc(100vw-2rem))] origin-top-right rounded-2xl border p-3 shadow-[0_18px_48px_rgb(35_30_23/24%)] backdrop-blur-2xl {{ navigation_mobile_panel_class }}" data-mobile-panel>
         <nav aria-label="Mobile navigation"><ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
-          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'shop' %}is-active{% endif %}" href="{{ routes.all_products_collection_url }}" {% if active_nav == 'shop' %}aria-current="page"{% endif %}>{{ nav_settings.shop_label | default: 'Shop All' | escape }}</a></li>
-          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" {% if active_nav == 'ingredients' %}aria-current="page"{% endif %}>Ingredients</a></li>
+          <li class="rounded-xl border border-current/10 px-3 py-2.5"><details><summary class="list-none text-sm font-medium marker:hidden">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</summary><ul class="mt-2 grid list-none gap-1.5 border-l border-current/20 pl-3">{% for nav_product in navigation_product_source limit: navigation_product_limit %}<li><a class="block py-1 text-xs leading-5" href="{{ nav_product.url }}">{{ nav_product.title | escape }}</a></li>{% endfor %}{% if navigation_product_count > 5 %}<li><a class="block py-1 text-xs leading-5" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}</ul></details></li>
+          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-ingredients-link {% if active_nav == 'ingredients' %}aria-current="page"{% endif %}>Ingredients</a></li>
           {% if nav_settings.menu != blank %}{% for link in nav_settings.menu.links %}{% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current %}is-active{% endif %}" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endunless %}{% endfor %}{% endif %}
           <li class="mt-1 border-t border-current/15 pt-1"><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.search_url }}">Search</a></li>
         </ul></nav>

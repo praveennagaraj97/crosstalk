@@ -1,6 +1,16 @@
 (() => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  const syncNavigationProductContext = () => {
+    const handle = document.querySelector('[data-navigation-product-handle]')?.dataset.navigationProductHandle;
+    if (!handle) return;
+    document.querySelectorAll('[data-ingredients-link]').forEach((link) => {
+      const url = new URL(link.href, window.location.origin);
+      url.searchParams.set('product', handle);
+      link.href = `${url.pathname}${url.search}`;
+    });
+  };
+
   const reveal = (root = document) => {
     const groups = root.querySelectorAll('[data-reveal-group]:not([data-reveal-ready])');
 
@@ -77,6 +87,7 @@
     });
   };
 
+  syncNavigationProductContext();
   reveal();
   initializeNavigationBubbles();
 

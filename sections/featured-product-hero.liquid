@@ -1,21 +1,8 @@
 {% liquid
   assign hero_product = section.settings.featured_product
   assign hero_url = routes.all_products_collection_url
-  assign fallback_product_images = 'hero-product-radiance.png|hero-product-moss.png|hero-product-clay.png|hero-product-clay.png|hero-product-radiance.png|hero-product-moss.png' | split: '|'
-  assign fallback_product_titles = 'Radiance Volcanic Oil|Moss Cell Rejuvenator|Earthbound Clay Mask|Sap Cleansing Balm|Dune Hydrating Mist|Arctic Eye Elixir' | split: '|'
-  assign fallback_product_subtitles = 'Restorative Night Treatment|Stem-Cell Repair Serum|Mineral Detoxification|Oil-to-Milk Purification|Micro-biome Balance|Dark Circle Correction' | split: '|'
-  assign marquee_alpha = section.settings.marquee_opacity | divided_by: 100.0
-  assign marquee_background = section.settings.marquee_background | color_modify: 'alpha', marquee_alpha
   assign image_overlay_alpha = section.settings.image_overlay_opacity | divided_by: 100.0
   assign image_overlay_color = section.settings.image_overlay_color | color_modify: 'alpha', image_overlay_alpha
-  assign ingredients_page = pages[section.settings.ingredients_page]
-  if ingredients_page == blank
-    assign ingredients_page = pages['ingredients']
-  endif
-  assign ingredients_url = ingredients_page.url
-  if hero_product != blank and ingredients_url != blank
-    assign ingredients_url = ingredients_url | append: '?product=' | append: hero_product.handle
-  endif
   if hero_product != blank
     assign hero_url = hero_product.url
   endif
@@ -23,7 +10,8 @@
 
 <section
   class="relative overflow-hidden bg-[#7d8060] lg:min-h-0"
-  style="--hero-marquee-color: {{ section.settings.marquee_text_color }}; --hero-marquee-bg: {{ marquee_background }}; --hero-marquee-duration: {{ section.settings.marquee_speed }}s; --hero-image-overlay: {{ image_overlay_color }};"
+  data-navigation-product-handle="{{ hero_product.handle | escape }}"
+  style="--hero-image-overlay: {{ image_overlay_color }};"
   aria-label="{{ section.settings.heading_line_1 | append: ' ' | append: section.settings.heading_line_2 | append: ' ' | append: section.settings.heading_line_3 | escape }}"
 >
   {% comment %} Component: Campaign artwork {% endcomment %}
@@ -36,182 +24,8 @@
     <div class="absolute inset-0 bg-(--hero-image-overlay)" data-hero-image-overlay aria-hidden="true"></div>
   {% endif %}
 
-  {% comment %} Component: Announcement marquee {% endcomment %}
-  {% if section.settings.show_marquee %}
-    <div class="relative z-30 h-8 overflow-hidden border-b border-white/30 bg-(--hero-marquee-bg) text-(--hero-marquee-color) shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px] lg:h-10" aria-label="Promotions">
-      {% capture marquee_items %}
-        {% assign announcement_count = 0 %}
-        {% for block in section.blocks %}
-          {% if block.type == 'announcement' %}
-            {% assign announcement_count = announcement_count | plus: 1 %}
-            <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 font-normal tracking-[0.4px] lg:text-base lg:leading-6" {{ block.shopify_attributes }}>
-              <span>{{ block.settings.text | escape }}</span>
-              <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
-            </span>
-          {% endif %}
-        {% endfor %}
-        {% if announcement_count == 0 %}
-          <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 font-normal tracking-[0.4px]"><span>New product drop in 6hrs</span><span class="size-1 rounded-full bg-current"></span></span>
-          <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 font-normal tracking-[0.4px]"><span>Suitable for all skin types</span><span class="size-1 rounded-full bg-current"></span></span>
-          <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 font-normal tracking-[0.4px]"><span>First time users get 10% OFF</span><span class="size-1 rounded-full bg-current"></span></span>
-          <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 font-normal tracking-[0.4px]"><span>Promo code FIRST10</span><span class="size-1 rounded-full bg-current"></span></span>
-        {% endif %}
-      {% endcapture %}
-      <div class="marquee-track flex h-full w-max items-center" tabindex="0">
-        <div class="flex shrink-0 items-center gap-8 pr-8">{{ marquee_items }}</div>
-        <div class="marquee-copy flex shrink-0 items-center gap-8 pr-8" aria-hidden="true">{{ marquee_items }}</div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% comment %} Component: Floating navigation {% endcomment %}
-  <header class="container relative z-20 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-5">
-    <div class="flex min-h-12 items-center rounded-full border border-white/40 bg-white/30 px-3.5 shadow-[0_6px_24px_rgb(42_34_27/12%)] backdrop-blur-3xl lg:min-h-17 lg:w-171 lg:border-white/20 lg:bg-white/10 lg:px-7 lg:shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)]" data-reveal-group data-reveal-nav>
-      <a class="mobile-logo-link hero-glass-interactive shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
-        {% if section.settings.logo != blank %}
-          {{ section.settings.logo | image_url: width: 240 | image_tag: class: 'h-7 w-auto lg:h-6', widths: '120, 240', alt: shop.name }}
-        {% else %}
-          <img class="h-7 w-auto lg:h-6" src="{{ 'I198-7557-44-4636.svg' | asset_url }}" width="98" height="24" alt="{{ shop.name | escape }}">
-        {% endif %}
-      </a>
-
-      <nav class="ml-10 hidden items-center gap-6 lg:flex" aria-label="Primary navigation" data-reveal-group>
-        <details class="group relative" data-product-flyout>
-          <summary class="hero-glass-interactive cursor-pointer list-none whitespace-nowrap text-base leading-6 text-white marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">{{ section.settings.shop_label | escape }}</summary>
-          <div class="invisible absolute top-14 -left-34.25 w-100 translate-y-2 rounded-xl border border-white/25 bg-[#77785f]/90 p-5 opacity-0 shadow-[0_16px_48px_rgb(0_0_0/18%)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:content-[''] group-open:visible group-open:translate-y-0 group-open:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100" data-flyout-panel>
-            <ul class="grid list-none gap-3.5 p-0" data-flyout-list>
-              {% assign product_count = 0 %}
-              {% for block in section.blocks %}
-                {% if block.type == 'product' and block.settings.product != blank %}
-                  {% assign product_count = product_count | plus: 1 %}
-                  {% assign menu_product = block.settings.product %}
-                  <li {{ block.shopify_attributes }}>
-                    <a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ menu_product.url }}">
-                      {% if menu_product.featured_image != blank %}
-                        {{ menu_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: menu_product.title }}
-                      {% else %}
-                        <span class="size-16 shrink-0 rounded-lg bg-white/10" aria-hidden="true"></span>
-                      {% endif %}
-                      <span>
-                        <span class="block font-display text-lg leading-6 text-white group-hover/item:text-toasted-almond">{{ menu_product.title | escape }}</span>
-                        {% if block.settings.subtitle != blank %}<span class="block text-[13px] leading-5 text-white/65">{{ block.settings.subtitle | escape }}</span>{% endif %}
-                      </span>
-                    </a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-              {% if product_count == 0 %}
-                {% for fallback_title in fallback_product_titles %}
-                  <li>
-                    <a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ routes.all_products_collection_url }}">
-                      <img class="size-16 shrink-0 rounded-lg object-cover" src="{{ fallback_product_images[forloop.index0] | asset_url }}" width="64" height="64" loading="lazy" alt="">
-                      <span>
-                        <span class="block font-display text-lg leading-6 text-white group-hover/item:text-toasted-almond">{{ fallback_title }}</span>
-                        <span class="block text-[13px] leading-5 text-white/65">{{ fallback_product_subtitles[forloop.index0] }}</span>
-                      </span>
-                    </a>
-                  </li>
-                {% endfor %}
-              {% endif %}
-            </ul>
-          </div>
-        </details>
-        {% if section.settings.menu != blank %}
-          {% for link in section.settings.menu.links %}
-            <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ link.url }}">{{ link.title | escape }}</a>
-          {% endfor %}
-        {% else %}
-          {% for index in (1..4) %}
-            {% liquid
-              assign label_key = 'nav_label_' | append: index
-              assign url_key = 'nav_url_' | append: index
-              assign nav_label = section.settings[label_key]
-              assign nav_url = section.settings[url_key]
-            %}
-            {% if index == 1 and ingredients_url != blank %}
-              <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ ingredients_url }}">{{ nav_label | escape }}</a>
-            {% elsif nav_url != blank %}
-              <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ nav_url }}">{{ nav_label | escape }}</a>
-            {% else %}
-              <span class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white">{{ nav_label | escape }}</span>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      </nav>
-    </div>
-
-    <div class="hidden min-h-17 items-center gap-6 rounded-full border border-white/20 bg-white/10 px-5 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:flex" data-reveal-group data-reveal-nav>
-      <form class="hero-search-interactive flex h-9 w-56 items-center gap-2 rounded-full bg-white px-4" action="{{ routes.search_url }}" method="get" role="search">
-        <img class="size-3.5" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="14" height="14" alt="">
-        <label class="visually-hidden" for="HeroSearch-{{ section.id }}">Search</label>
-        <input id="HeroSearch-{{ section.id }}" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-sm text-pecan-brown outline-none placeholder:text-toasted-almond" type="search" name="q" placeholder="{{ section.settings.search_placeholder | escape }}">
-        <button class="hero-search-clear grid size-4 shrink-0 cursor-pointer place-items-center rounded-full" type="button" aria-label="Clear search" data-search-clear hidden>
-          <img class="size-3" src="{{ 'hero-search-close.svg' | asset_url }}" width="12" height="12" alt="">
-        </button>
-      </form>
-      <a class="hero-icon-interactive grid size-9 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-white" href="{{ routes.cart_url }}" aria-label="Cart">
-        <img class="h-5.5 w-4.5" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="18" height="22" alt="">
-      </a>
-      {% if shop.customer_accounts_enabled %}
-        <a class="hero-icon-interactive grid size-10 place-items-center rounded-full bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" href="{{ routes.account_url }}" aria-label="Account">
-          <img class="size-4.5" src="{{ 'I198-7557-540-5886.svg' | asset_url }}" width="18" height="18" alt="">
-        </a>
-      {% endif %}
-    </div>
-
-    <div class="flex items-center gap-1 rounded-full border border-white/25 bg-white/15 p-1 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:hidden" data-mobile-actions data-reveal-group>
-      <a class="hero-icon-interactive grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" href="{{ routes.cart_url }}" aria-label="Cart">
-        <img class="h-5 w-4" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="16" height="20" alt="">
-      </a>
-
-      <details class="group relative" data-mobile-menu>
-        <summary class="hero-icon-interactive grid size-10 cursor-pointer list-none place-items-center rounded-full bg-white/90 text-pecan-brown marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Menu">
-          <span class="mobile-menu-icon" aria-hidden="true"><span></span><span></span></span>
-        </summary>
-        <div class="absolute top-13 right-0 w-[min(21rem,calc(100vw-2rem))] origin-top-right rounded-2xl border border-white/30 bg-[#676950]/92 p-3 text-white shadow-[0_18px_48px_rgb(35_30_23/24%)] backdrop-blur-2xl" data-mobile-panel>
-        <nav aria-label="Mobile navigation">
-          <ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
-            <li class="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
-              <details class="group/products">
-                <summary class="hero-glass-interactive cursor-pointer list-none text-sm leading-5 font-medium marker:hidden">{{ section.settings.shop_label | escape }}</summary>
-                <ul class="mt-2 grid list-none gap-1.5 border-l border-white/20 pl-3">
-                  {% assign mobile_product_count = 0 %}
-                  {% for block in section.blocks %}
-                    {% if block.type == 'product' and block.settings.product != blank %}
-                      {% assign mobile_product_count = mobile_product_count | plus: 1 %}
-                      <li><a class="hero-glass-interactive block py-1 text-xs leading-5 text-white/80" href="{{ block.settings.product.url }}">{{ block.settings.product.title | escape }}</a></li>
-                    {% endif %}
-                  {% endfor %}
-                  {% if mobile_product_count == 0 %}<li><a class="hero-glass-interactive block py-1 text-xs leading-5 text-white/80" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}
-                </ul>
-              </details>
-            </li>
-            {% if section.settings.menu != blank %}
-              {% for link in section.settings.menu.links %}<li><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}
-            {% else %}
-              {% for index in (1..4) %}
-                {% liquid
-                  assign label_key = 'nav_label_' | append: index
-                  assign url_key = 'nav_url_' | append: index
-                  assign nav_label = section.settings[label_key]
-                  assign nav_url = section.settings[url_key]
-                %}
-                <li>
-                  {% if index == 1 and ingredients_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ ingredients_url }}">{{ nav_label | escape }}</a>{% elsif nav_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ nav_url }}">{{ nav_label | escape }}</a>{% else %}<span class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5">{{ nav_label | escape }}</span>{% endif %}
-                </li>
-              {% endfor %}
-            {% endif %}
-            <li class="mt-1 border-t border-white/15 pt-1"><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ routes.search_url }}">Search</a></li>
-            {% if shop.customer_accounts_enabled %}<li><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ routes.account_url }}">Account</a></li>{% endif %}
-          </ul>
-        </nav>
-        </div>
-      </details>
-    </div>
-  </header>
-
   {% comment %} Component: Campaign content {% endcomment %}
-  <div class="container relative z-10 mx-auto flex w-full px-4 pt-12 pb-12 lg:pt-9 lg:pb-12">
+  <div class="container relative z-10 mx-auto flex w-full px-4 pt-30 pb-12 lg:pt-34 lg:pb-12">
     <div class="max-w-88 lg:max-w-120" data-reveal-group>
       {% if section.settings.eyebrow != blank %}
         <p class="inline-flex rounded-full border border-toasted-almond px-2.5 py-1.5 text-[10px] leading-3 font-semibold tracking-[0.9px] text-toasted-almond uppercase lg:px-3 lg:py-2 lg:text-xs lg:leading-3.5">{{ section.settings.eyebrow | escape }}</p>
@@ -239,24 +53,6 @@
     { "type": "checkbox", "id": "show_image_overlay", "label": "Enable image overlay", "default": true },
     { "type": "color", "id": "image_overlay_color", "label": "Image overlay color", "default": "#000000" },
     { "type": "range", "id": "image_overlay_opacity", "label": "Image overlay opacity", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 15 },
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "link_list", "id": "menu", "label": "Navigation menu" },
-    { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
-    { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
-    { "type": "text", "id": "nav_label_1", "label": "Navigation item 1 label", "default": "Ingredients" },
-    { "type": "url", "id": "nav_url_1", "label": "Navigation item 1 link" },
-    { "type": "text", "id": "nav_label_2", "label": "Navigation item 2 label", "default": "Our Story" },
-    { "type": "url", "id": "nav_url_2", "label": "Navigation item 2 link" },
-    { "type": "text", "id": "nav_label_3", "label": "Navigation item 3 label", "default": "Journal" },
-    { "type": "url", "id": "nav_url_3", "label": "Navigation item 3 link" },
-    { "type": "text", "id": "nav_label_4", "label": "Navigation item 4 label", "default": "Contact" },
-    { "type": "url", "id": "nav_url_4", "label": "Navigation item 4 link" },
-    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Find your glow" },
-    { "type": "checkbox", "id": "show_marquee", "label": "Show announcement marquee", "default": true },
-    { "type": "color", "id": "marquee_text_color", "label": "Announcement text", "default": "#a47149" },
-    { "type": "color", "id": "marquee_background", "label": "Announcement background", "default": "#ffffff" },
-    { "type": "range", "id": "marquee_opacity", "label": "Announcement background opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 35 },
-    { "type": "range", "id": "marquee_speed", "label": "Announcement speed", "min": 10, "max": 60, "step": 5, "unit": "s", "default": 30 },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Introducing The Ritual" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "SMART" },
     { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "FORMULAS." },
@@ -265,18 +61,6 @@
     { "type": "product", "id": "featured_product", "label": "Featured product" },
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the Radiance Oil" }
   ],
-  "blocks": [
-    { "type": "announcement", "name": "Announcement", "limit": 6, "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "New product drop in 6hrs" }] },
-    { "type": "product", "name": "Product menu item", "limit": 6, "settings": [{ "type": "product", "id": "product", "label": "Product" }, { "type": "text", "id": "subtitle", "label": "Subtitle" }] }
-  ],
-  "presets": [{
-    "name": "Featured product hero",
-    "blocks": [
-      { "type": "announcement", "settings": { "text": "New product drop in 6hrs" } },
-      { "type": "announcement", "settings": { "text": "Suitable for all skin types" } },
-      { "type": "announcement", "settings": { "text": "First time users get 10% OFF" } },
-      { "type": "announcement", "settings": { "text": "Promo code FIRST10" } }
-    ]
-  }]
+  "presets": [{ "name": "Featured product hero" }]
 }
 {% endschema %}

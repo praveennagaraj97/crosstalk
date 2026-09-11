@@ -1,9 +1,5 @@
 {
   "sections": {
-    "header": {
-      "type": "storefront-header",
-      "settings": {}
-    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -96,5 +92,5 @@
       "settings": {}
     }
   },
-  "order": ["header", "main"]
+  "order": ["main"]
 }

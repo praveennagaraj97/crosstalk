@@ -11,39 +11,11 @@
   "sections": {
     "featured_product_hero": {
       "type": "featured-product-hero",
-      "blocks": {
-        "radiance_product": {
-          "type": "product",
-          "settings": {
-            "product": "radiance-volcanic-oil",
-            "subtitle": "Restorative Night Treatment"
-          }
-        }
-      },
-      "block_order": [
-        "radiance_product"
-      ],
       "settings": {
         "campaign_image": "shopify://shop_images/brand-story-botanical.png",
         "show_image_overlay": true,
         "image_overlay_color": "#000000",
         "image_overlay_opacity": 15,
-        "menu": "",
-        "shop_label": "Shop All",
-        "nav_label_1": "Ingredients",
-        "nav_url_1": "",
-        "nav_label_2": "Our Story",
-        "nav_url_2": "",
-        "nav_label_3": "Journal",
-        "nav_url_3": "",
-        "nav_label_4": "Contact",
-        "nav_url_4": "",
-        "search_placeholder": "Find your glow",
-        "show_marquee": true,
-        "marquee_text_color": "#a47149",
-        "marquee_background": "#ffffff",
-        "marquee_opacity": 35,
-        "marquee_speed": 30,
         "eyebrow": "Introducing The Ritual",
         "heading_line_1": "SMART",
         "heading_line_2": "FORMULAS.",

@@ -2,9 +2,7 @@
   "sections": {
     "main": {
       "type": "navigation-test-page",
-      "settings": {
-        "products": ["radiance-volcanic-oil", "amaari-botanical-recovery-balm"]
-      }
+      "settings": {}
     }
   },
   "order": [

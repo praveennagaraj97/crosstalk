@@ -1,4 +1,25 @@
 /* Interaction: navigation glass feedback */
+.global-storefront-header-section {
+  display: contents;
+}
+
+.global-storefront-header-shell {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: transparent;
+}
+
+.global-storefront-header-shell--overlay {
+  margin-bottom: -4.5rem;
+}
+
+@media (min-width: 64rem) {
+  .global-storefront-header-shell--overlay {
+    margin-bottom: -6.25rem;
+  }
+}
+
 .hero-glass-interactive {
   position: relative;
   isolation: isolate;
