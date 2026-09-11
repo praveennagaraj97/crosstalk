@@ -1,20 +1,18 @@
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign collection_label = product.metafields.custom.collection_label.value | default: section.settings.collection_label
-  assign editorial_quote = product.metafields.custom.editorial_quote.value | default: product.description | strip_html | truncatewords: 28
-  assign ingredient_items = product.metafields.custom.ingredient_highlights.value
-  assign ritual_items = product.metafields.custom.ritual_steps.value
-  assign timeline_items = product.metafields.custom.timeline_milestones.value
-  assign ingredient_page = pages[section.settings.ingredients_page]
+  assign editorial_quote = product.metafields.custom.editorial_quote.value | default: section.settings.editorial_quote
+  assign ingredient_items = product.metafields.custom.ingredient_highlights.value | default: product.metafields.custom.ingredients.value
+  assign product_standards = product.metafields.custom.standards.value
   assign primary_form_id = 'ProductForm-' | append: section.id
 %}
 
-<section class="bg-background pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}">
-  <div class="container mx-auto grid items-start gap-10 px-4 pt-10 lg:grid-cols-[minmax(0,788px)_minmax(0,1fr)] lg:gap-12 lg:pt-14">
+<section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}">
+  <div class="container mx-auto grid items-start gap-8 px-4 pt-5 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8 lg:pt-10">
     {% comment %} Component: Sticky product gallery {% endcomment %}
-    <div class="lg:sticky lg:top-5" data-product-gallery data-reveal-group>
+    <div class="w-full lg:sticky lg:top-5" data-product-gallery data-reveal-group>
       <div class="relative aspect-[788/770] overflow-hidden rounded-[20px] bg-[#eee6df]" data-gallery-stage>
-        {% if product.media.size > 1 %}{% for media in product.media %}
+        {% if product.media.size > 0 %}{% for media in product.media %}
           <div class="absolute inset-0 transition-opacity duration-300 {% unless media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}pointer-events-none opacity-0{% endunless %}" data-media-id="{{ media.id }}" {% unless media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}hidden{% endunless %}>
             {% case media.media_type %}
               {% when 'image' %}
@@ -24,9 +22,7 @@
               {% when 'model' %}{{ media | model_viewer_tag: image_size: '1200x', reveal: 'interaction', toggleable: true, class: 'size-full' }}
             {% endcase %}
           </div>
-        {% endfor %}{% else %}
-          <div class="absolute inset-0" data-media-id="figma-main"><img class="size-full object-cover" src="{{ 'pdp-47-6647.jpg' | asset_url }}" width="788" height="730" alt="{{ product.title | escape }}"></div>
-        {% endif %}
+        {% endfor %}{% else %}<div class="grid size-full place-items-center text-sm text-bitter-chocolate/60">{{ 'product-1' | placeholder_svg_tag: 'size-full' }}</div>{% endif %}
         <div class="absolute inset-x-0 bottom-0 overflow-hidden bg-[#5a2e2c]/90 py-2.5 text-white backdrop-blur-lg" aria-hidden="true">
           <div class="pdp-marquee flex w-max gap-10 whitespace-nowrap text-[10px] font-semibold tracking-[2.5px] uppercase">
             {% for i in (1..8) %}<span>{{ section.settings.gallery_marquee | escape }}</span>{% endfor %}
@@ -36,131 +32,118 @@
       {% if product.media.size > 1 %}
         <div class="mt-4 grid grid-cols-4 gap-4" role="list" aria-label="Product media">
           {% for media in product.media limit: 4 %}
-            <button class="aspect-[185/137] overflow-hidden rounded-[20px] border-2 bg-[#eee6df] transition {% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}border-bitter-chocolate{% else %}border-transparent opacity-70 hover:opacity-100{% endif %}" type="button" data-gallery-thumb="{{ media.id }}" aria-label="Show media {{ forloop.index }}" aria-pressed="{% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}true{% else %}false{% endif %}">
+            <button class="aspect-[185/137] overflow-hidden rounded-[20px] border-2 bg-[#eee6df] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-bitter-chocolate {% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}border-bitter-chocolate{% else %}border-transparent opacity-70 hover:opacity-100{% endif %}" type="button" data-gallery-thumb="{{ media.id }}" aria-label="Show media {{ forloop.index }}" aria-pressed="{% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}true{% else %}false{% endif %}">
               {{ media.preview_image | image_url: width: 420 | image_tag: class: 'size-full object-cover', widths: '180, 300, 420', loading: 'lazy', alt: media.alt | default: product.title }}
             </button>
           {% endfor %}
-        </div>
-      {% else %}
-        <div class="mt-4 grid grid-cols-4 gap-4" role="list" aria-label="Product gallery previews">
-          {% assign fallback_thumbnails = '47-6650.jpg|47-6653.jpg|47-6656.jpg|551-9976.jpg' | split: '|' %}
-          {% for thumbnail in fallback_thumbnails %}{% capture thumbnail_asset %}pdp-{{ thumbnail }}{% endcapture %}<div class="aspect-[185/137] overflow-hidden rounded-[20px] opacity-80"><img class="size-full object-cover" src="{{ thumbnail_asset | asset_url }}" width="185" height="137" alt=""></div>{% endfor %}
         </div>
       {% endif %}
     </div>
 
     {% comment %} Component: Product purchase and editorial content {% endcomment %}
     <div class="min-w-0" data-product-content>
-      <div data-reveal-group>
-        <p class="text-xs font-semibold tracking-[1.5px] text-bitter-chocolate uppercase">{{ collection_label | escape }}</p>
-        <h1 class="mt-2 font-display text-5xl leading-none text-text-brown lg:text-[4rem]">{{ product.title | escape }}</h1>
-        <div class="mt-3 flex items-center gap-4">
-          <span class="font-display text-2xl" data-product-price>{{ current_variant.price | money }}</span>
+      <div class="grid gap-4" data-reveal-group>
+        {% if collection_label != blank %}<p class="text-xs font-semibold leading-[15px] tracking-[1px] text-bitter-chocolate uppercase">{{ collection_label | escape }}</p>{% endif %}
+        <h1 class="font-display text-[40px] leading-none font-normal text-text-brown lg:text-[48px]">{{ product.title | escape }}</h1>
+        <div class="flex items-center gap-4">
+          <span class="text-xl font-medium tracking-[1px]" data-product-price>{{ current_variant.price | money }}</span>
           <s class="text-sm text-bitter-chocolate/55" data-compare-price {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
         </div>
-        <p class="mt-5 text-base leading-7 text-bitter-chocolate">{{ editorial_quote }}</p>
+        {% if editorial_quote != blank %}<p class="pb-2 text-base leading-7 italic text-bitter-chocolate">“{{ editorial_quote | remove: '“' | remove: '”' | remove: '"' }}”</p>{% endif %}
+        {% if product.description != blank %}<div class="rte text-sm leading-6 text-bitter-chocolate/85" data-product-description>{{ product.description }}</div>{% endif %}
       </div>
 
-      {% form 'product', product, id: primary_form_id, class: 'mt-7 grid gap-7', data-product-form: '' %}
+      {% form 'product', product, id: primary_form_id, class: 'mt-4 grid gap-8', data-product-form: '' %}
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
         <input type="hidden" name="quantity" value="1" data-form-quantity>
 
         {% unless product.has_only_default_variant %}
           {% for option in product.options_with_values %}
-            <fieldset data-option-group data-option-index="{{ forloop.index0 }}">
-              <legend class="mb-3 text-xs font-semibold tracking-[1.5px] uppercase">{{ section.settings.select_label }} {{ option.name | escape }}</legend>
+            <fieldset class="order-2" data-option-group data-option-index="{{ forloop.index0 }}">
+              <legend class="mb-3 text-xs font-medium tracking-[1.5px] uppercase">{{ section.settings.select_label }} {{ option.name | escape }}</legend>
               <div class="flex flex-wrap gap-3">
                 {% for value in option.values %}
                   {% assign option_selected = false %}
                   {% if value == option.selected_value %}{% assign option_selected = true %}{% endif %}
                   {% assign option_downcase = option.name | downcase %}
-                  <button class="pdp-option min-h-12 rounded-full border-2 px-7 text-sm font-semibold tracking-[1px] uppercase {% if option_selected %}is-selected border-bitter-chocolate bg-pecan-brown/5{% else %}border-toasted-almond text-bitter-chocolate{% endif %}" type="button" data-option-value="{{ value | escape }}" aria-pressed="{{ option_selected }}">
-                    {% if option_downcase contains 'color' or option_downcase contains 'colour' or option_downcase contains 'shade' %}<span class="mr-2 inline-block size-4 rounded-full border border-black/10 align-[-2px]" style="background: {{ value | handleize }}" aria-hidden="true"></span>{% endif %}{{ value | escape }}
-                  </button>
+                  {% if option_downcase contains 'color' or option_downcase contains 'colour' or option_downcase contains 'shade' %}
+                    {% assign swatch_color = value.swatch.color | default: '#c9a68e' %}
+                    <button class="pdp-option pdp-swatch grid justify-items-center gap-1.5 text-[11px] tracking-[.8px] uppercase {% if option_selected %}is-selected{% endif %}" type="button" data-option-value="{{ value | escape }}" aria-pressed="{{ option_selected }}"><span class="grid size-11 place-items-center rounded-full border-2 {% if option_selected %}border-bitter-chocolate{% else %}border-transparent{% endif %}" data-swatch-ring><span class="size-8 rounded-full border border-pecan-brown/30" style="background-color: {{ swatch_color }}" aria-hidden="true"></span></span><span>{{ value | escape }}</span></button>
+                  {% else %}
+                    <button class="pdp-option min-h-12 min-w-28 rounded-full border-2 px-6 text-xs font-semibold tracking-[1px] uppercase {% if option_selected %}is-selected border-bitter-chocolate bg-pecan-brown/5{% else %}border-toasted-almond text-bitter-chocolate{% endif %}" type="button" data-option-value="{{ value | escape }}" aria-pressed="{{ option_selected }}">{{ value | escape }}</button>
+                  {% endif %}
                 {% endfor %}
               </div>
             </fieldset>
           {% endfor %}
         {% endunless %}
 
-        <div class="flex flex-wrap items-center gap-3" data-primary-purchase>
-          <div class="flex h-12 items-center rounded-full border border-toasted-almond px-4" data-quantity-control>
+        <div class="order-1 flex flex-wrap items-center gap-3" data-primary-purchase>
+          <div class="flex h-11 items-center rounded-full border border-toasted-almond px-3" data-quantity-control>
             <button class="grid size-7 place-items-center" type="button" data-quantity-minus aria-label="Decrease quantity">−</button>
             <output class="w-8 text-center text-sm font-semibold" data-quantity-output>1</output>
             <button class="grid size-7 place-items-center" type="button" data-quantity-plus aria-label="Increase quantity">+</button>
           </div>
-          <button class="grid size-12 shrink-0 cursor-not-allowed place-items-center rounded-full border-2 border-bitter-chocolate/70 text-xl" type="button" disabled aria-label="Wishlist unavailable" title="Wishlist coming soon">♡</button>
-          <button class="chrome-action relative h-12 min-w-36 flex-1 overflow-hidden rounded-full border-2 border-bitter-chocolate bg-transparent px-5 text-xs font-bold tracking-[1.2px] text-bitter-chocolate uppercase disabled:cursor-not-allowed disabled:opacity-50" type="submit" name="add" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}><span data-add-label>{% if current_variant.available %}{{ section.settings.add_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span></button>
+          <button class="grid size-11 shrink-0 cursor-not-allowed place-items-center rounded-full border-2 border-bitter-chocolate/70 text-lg" type="button" disabled aria-label="Wishlist unavailable" title="Wishlist coming soon">♡</button>
+          <button class="chrome-action relative h-11 min-w-32 flex-1 overflow-hidden rounded-full border-2 border-bitter-chocolate bg-transparent px-4 text-[10px] font-bold tracking-[1.1px] text-bitter-chocolate uppercase disabled:cursor-not-allowed disabled:opacity-50" type="submit" name="add" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}><span data-add-label>{% if current_variant.available %}{{ section.settings.add_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span></button>
           <div class="shopify-payment-button-wrap min-w-36 flex-1">{{ form | payment_button }}</div>
         </div>
-        <p class="text-xs tracking-[1.2px] text-bitter-chocolate uppercase" data-inventory-status>{% if current_variant.available %}● {{ section.settings.in_stock_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</p>
+        <p class="sr-only" data-inventory-status>{% if current_variant.available %}{{ section.settings.in_stock_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</p>
       {% endform %}
 
       {% comment %} Component: Ingredient highlights {% endcomment %}
-      <section class="mt-10" data-reveal-group>
-        <div class="flex items-end justify-between gap-4"><h2 class="font-display text-4xl">{{ section.settings.ingredients_heading | escape }}</h2>{% if ingredient_page != blank %}<a class="text-xs font-semibold tracking-[1.3px] uppercase underline-offset-4 hover:underline" href="{{ ingredient_page.url }}?product={{ product.handle | url_encode }}">{{ section.settings.ingredients_link | escape }}</a>{% endif %}</div>
-        <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+      {% if ingredient_items != blank %}<section class="mt-10" data-reveal-group>
+        <div class="border-b border-pecan-brown/15 pb-4"><h2 class="font-display text-3xl font-light">{{ section.settings.ingredients_heading | escape }}</h2></div>
+        <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {% for ingredient in ingredient_items limit: 4 %}
-            <article class="text-center"><div class="mx-auto size-20 overflow-hidden rounded-full bg-[#eee6df]">{% if ingredient.image.value != blank %}{{ ingredient.image.value | image_url: width: 240 | image_tag: class: 'size-full object-cover', loading: 'lazy', alt: ingredient.name.value }}{% endif %}</div><h3 class="mt-3 font-display text-lg">{{ ingredient.name.value | default: ingredient.system.handle | escape }}</h3><p class="mt-1 text-xs leading-5 text-bitter-chocolate">{{ ingredient.summary.value | truncatewords: 10 }}</p></article>
-          {% else %}
-            {% assign fallback_ingredients = section.settings.fallback_ingredients | split: '|' %}{% assign ingredient_symbols = '◇|✦|◉|✺' | split: '|' %}{% assign ingredient_benefits = 'Regeneration|Mineral Balance|Deep Hydration|Radiance Boost' | split: '|' %}{% for item in fallback_ingredients %}<article class="text-center"><div class="mx-auto grid size-20 place-items-center rounded-full bg-[#e86705] text-3xl text-bitter-chocolate">{{ ingredient_symbols[forloop.index0] }}</div><h3 class="mt-3 text-xs font-bold tracking-[1px] uppercase">{{ item | strip | escape }}</h3><p class="mt-1 text-[10px] tracking-[.8px] text-bitter-chocolate uppercase">{{ ingredient_benefits[forloop.index0] }}</p></article>{% endfor %}
+            {% assign ingredient_image = ingredient.card_image.value | default: ingredient.image.value %}
+            <article class="text-center"><div class="mx-auto size-16 overflow-hidden rounded-full bg-[#f1ddcc]">{% if ingredient_image != blank %}{{ ingredient_image | image_url: width: 240 | image_tag: class: 'size-full object-cover', loading: 'lazy', alt: ingredient.image_alt.value | default: ingredient.name.value }}{% endif %}</div><h3 class="mt-3 text-[11px] font-bold tracking-[.7px] uppercase">{{ ingredient.name.value | default: ingredient.system.handle | escape }}</h3><p class="mt-1 text-[9px] leading-4 tracking-[.6px] text-bitter-chocolate uppercase">{{ ingredient.summary.value | truncatewords: 7 }}</p></article>
           {% endfor %}
         </div>
-      </section>
+      </section>{% endif %}
 
       {% comment %} Component: Certifications and testing {% endcomment %}
-      <section class="mt-10" data-reveal-group>
+      {% if product_standards != blank %}<section class="mt-10 border-t border-pecan-brown/15 pt-10" data-reveal-group>
         <p class="text-xs font-semibold tracking-[1.5px] text-bitter-chocolate uppercase">{{ section.settings.standards_eyebrow | escape }}</p>
         <h2 class="mt-2 font-display text-4xl">{{ section.settings.standards_heading | escape }}</h2>
         <div class="mt-7 grid grid-cols-2 gap-x-8 gap-y-7">
-          {% assign standards = section.settings.standards | split: '|' %}
-          {% for standard in standards %}<div class="flex items-center gap-3"><span class="grid size-10 shrink-0 place-items-center rounded-full border border-pecan-brown text-sm">✓</span><span class="text-sm font-medium">{{ standard | strip | escape }}</span></div>{% endfor %}
+          {% for standard in product_standards %}<div class="flex items-center gap-2"><span class="grid size-[42px] shrink-0 place-items-center rounded-full border border-toasted-almond text-sm">✓</span><span class="text-sm">{{ standard | escape }}</span></div>{% endfor %}
         </div>
-        <p class="mt-7 text-[10px] leading-4 font-semibold tracking-[.8px] text-bitter-chocolate uppercase">{{ section.settings.standards_note | escape }}</p>
-      </section>
+        {% if product.metafields.custom.standards_note.value != blank %}<p class="mt-7 text-xs leading-5 font-medium tracking-[.4px] text-pecan-brown uppercase">{{ product.metafields.custom.standards_note.value | escape }}</p>{% endif %}
+      </section>{% endif %}
 
-      {% comment %} Component: Before and after {% endcomment %}
-      <section class="mt-10" data-reveal-group><h2 class="font-display text-4xl">{{ section.settings.efficacy_heading | escape }}</h2>
-        <div class="relative mt-5 aspect-[16/9] overflow-hidden rounded-xl bg-[#dfd4ca]" data-comparison>
-          {% assign before_image = product.metafields.custom.before_image.value | default: section.settings.before_image %}{% assign after_image = product.metafields.custom.after_image.value | default: section.settings.after_image %}
-          {% if before_image != blank %}{{ before_image | image_url: width: 1200 | image_tag: class: 'absolute inset-0 size-full object-cover', loading: 'lazy', alt: section.settings.before_label }}{% else %}<img class="absolute inset-0 size-full object-cover" src="{{ 'instagram-feed-04.png' | asset_url }}" width="486" height="274" loading="lazy" alt="{{ section.settings.before_label | escape }}">{% endif %}
-          <div class="absolute inset-y-0 right-0 overflow-hidden" style="width: 50%" data-comparison-after>{% if after_image != blank %}{{ after_image | image_url: width: 1200 | image_tag: class: 'absolute top-0 right-0 h-full max-w-none object-cover', loading: 'lazy', alt: section.settings.after_label }}{% else %}<img class="absolute top-0 right-0 h-full max-w-none object-cover" src="{{ 'instagram-feed-05.png' | asset_url }}" width="486" height="274" loading="lazy" alt="{{ section.settings.after_label | escape }}">{% endif %}</div>
-          <div class="absolute inset-y-0 left-1/2 w-0.5 bg-white shadow" data-comparison-divider></div>
-          <input class="absolute inset-0 size-full cursor-ew-resize opacity-0" type="range" min="0" max="100" value="50" aria-label="Compare before and after images" data-comparison-range>
-          <span class="absolute bottom-4 left-4 rounded-full bg-black/30 px-3 py-1 text-[10px] font-semibold tracking-[1px] text-white uppercase backdrop-blur">{{ section.settings.before_label }}</span><span class="absolute right-4 bottom-4 rounded-full bg-black/30 px-3 py-1 text-[10px] font-semibold tracking-[1px] text-white uppercase backdrop-blur">{{ section.settings.after_label }}</span>
-        </div><p class="mt-3 text-center text-xs text-bitter-chocolate">{{ section.settings.efficacy_caption | escape }}</p>
-      </section>
+      {% comment %} Component: Proven efficacy {% endcomment %}
+      {% assign before_image = product.metafields.custom.before_image.value %}
+      {% assign after_image = product.metafields.custom.after_image.value %}
+      {% if before_image != blank and after_image != blank %}
+        <section class="mt-12 border-t border-pecan-brown/15 pt-10" data-reveal-group>
+          <h2 class="font-display text-[34px] leading-[42px] font-normal">{{ section.settings.efficacy_heading | escape }}</h2>
+          <div class="relative mt-5 aspect-[2/1] overflow-hidden rounded-xl bg-[#eee6df]" data-comparison>
+            {{ before_image | image_url: width: 1000 | image_tag: class: 'absolute inset-0 size-full object-cover', widths: '480, 720, 1000', loading: 'lazy', alt: section.settings.before_label }}
+            <div class="absolute inset-y-0 right-0 w-1/2 overflow-hidden" data-comparison-after>
+              {{ after_image | image_url: width: 1000 | image_tag: class: 'absolute top-0 right-0 h-full max-w-none object-cover', widths: '480, 720, 1000', loading: 'lazy', alt: section.settings.after_label }}
+            </div>
+            <div class="absolute inset-y-0 left-1/2 w-px bg-white" data-comparison-divider><span class="absolute top-1/2 left-1/2 grid size-6 -translate-1/2 place-items-center rounded-full bg-white text-[10px] text-bitter-chocolate shadow">↕</span></div>
+            <input class="absolute inset-0 size-full cursor-ew-resize opacity-0" type="range" min="0" max="100" value="50" aria-label="Compare before and after images" data-comparison-range>
+            <span class="absolute bottom-3 left-3 rounded bg-black/55 px-2 py-1 text-[8px] tracking-[.8px] text-white uppercase">{{ section.settings.before_label | escape }}</span>
+            <span class="absolute right-3 bottom-3 rounded bg-black/55 px-2 py-1 text-[8px] tracking-[.8px] text-white uppercase">{{ section.settings.after_label | escape }}</span>
+          </div>
+          {% if product.metafields.custom.efficacy_caption.value != blank %}<p class="mt-4 text-center text-xs leading-5 text-bitter-chocolate">{{ product.metafields.custom.efficacy_caption.value | escape }}</p>{% endif %}
+        </section>
+      {% endif %}
 
-      {% comment %} Component: Product detail accordions {% endcomment %}
-      <div class="mt-10 border-b border-pecan-brown/15" data-pdp-accordions>
-        {% assign backing = product.metafields.custom.scientific_backing %}{% assign sourcing = product.metafields.custom.ethical_sourcing %}
-        {% for block in section.blocks %}{% if block.type == 'accordion' %}<details class="pdp-accordion border-t border-pecan-brown/15" {{ block.shopify_attributes }}><summary class="flex min-h-17 items-center justify-between py-5 text-sm font-semibold tracking-[1.4px] uppercase"><span>{{ block.settings.heading | escape }}</span><span class="pdp-accordion__icon">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6 text-sm leading-6 text-bitter-chocolate">{{ block.settings.content }}</div></div></details>{% endif %}{% endfor %}
-        {% if backing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-17 items-center justify-between py-5 text-sm font-semibold tracking-[1.4px] uppercase"><span>Scientific Backing</span><span class="pdp-accordion__icon">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6 text-sm leading-6 text-bitter-chocolate">{{ backing | metafield_tag }}</div></div></details>{% endif %}
-        {% if sourcing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-17 items-center justify-between py-5 text-sm font-semibold tracking-[1.4px] uppercase"><span>Ethical Sourcing</span><span class="pdp-accordion__icon">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-6 text-sm leading-6 text-bitter-chocolate">{{ sourcing | metafield_tag }}</div></div></details>{% endif %}
-        <details class="pdp-accordion border-t border-pecan-brown/15" open>
-          <summary class="flex min-h-17 items-center justify-between py-5 text-sm font-semibold tracking-[1.4px] uppercase"><span>{{ section.settings.application_heading | escape }}</span><span class="pdp-accordion__icon">⌄</span></summary>
-          <div class="pdp-accordion__body"><div class="pb-6">
-            {% comment %} Component: Ritual steps {% endcomment %}
-            <section class="rounded-xl bg-[#e86705] px-6 py-7 text-center text-[#3e2619] sm:px-9 sm:py-8"><h2 class="font-display text-4xl">{{ section.settings.ritual_heading | escape }}</h2><p class="mt-1 text-xs font-semibold tracking-[1.3px] uppercase">{{ section.settings.ritual_subheading | escape }}</p><ol class="mt-7 grid gap-6 text-left">{% for step in ritual_items %}<li class="grid grid-cols-[3rem_1fr] gap-4"><span class="font-display text-3xl text-white">0{{ forloop.index }}</span><div><h3 class="text-base font-bold">{{ step.heading.value | escape }}</h3><p class="mt-1 text-sm leading-6">{{ step.description.value }}</p></div></li>{% else %}{% assign ritual_index = 0 %}{% for block in section.blocks %}{% if block.type == 'ritual_step' %}{% assign ritual_index = ritual_index | plus: 1 %}<li class="grid grid-cols-[3rem_1fr] gap-4" {{ block.shopify_attributes }}><span class="font-display text-3xl text-white">0{{ ritual_index }}</span><div><h3 class="text-base font-bold">{{ block.settings.heading | escape }}</h3><p class="mt-1 text-sm leading-6">{{ block.settings.text | escape }}</p></div></li>{% endif %}{% endfor %}{% endfor %}</ol></section>
-          </div></div>
-        </details>
-        <details class="pdp-accordion border-t border-pecan-brown/15">
-          <summary class="flex min-h-17 items-center justify-between py-5 text-sm font-semibold tracking-[1.4px] uppercase"><span>{{ section.settings.full_ingredients_heading | escape }}</span><span class="pdp-accordion__icon">⌄</span></summary>
-          <div class="pdp-accordion__body"><div class="pb-6 text-sm leading-6 text-bitter-chocolate"><p>{{ section.settings.full_ingredients_copy | escape }}</p>{% if ingredient_page != blank %}<a class="mt-4 inline-flex text-xs font-bold tracking-[1.2px] uppercase underline underline-offset-4" href="{{ ingredient_page.url }}?product={{ product.handle | url_encode }}">{{ section.settings.full_ingredients_link | escape }}</a>{% endif %}</div></div>
-        </details>
-      </div>
+      {% comment %} Component: Product evidence accordions {% endcomment %}
+      {% assign scientific_backing = product.metafields.custom.scientific_backing %}
+      {% assign ethical_sourcing = product.metafields.custom.ethical_sourcing %}
+      {% assign application_guide = product.metafields.custom.application_guide %}
+      {% if scientific_backing != blank or ethical_sourcing != blank or application_guide != blank %}
+        <div class="mt-10 border-b border-pecan-brown/15" data-pdp-accordions>
+          {% if scientific_backing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.scientific_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-5 text-sm leading-6 text-bitter-chocolate">{{ scientific_backing | metafield_tag }}</div></div></details>{% endif %}
+          {% if ethical_sourcing != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.sourcing_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-5 text-sm leading-6 text-bitter-chocolate">{{ ethical_sourcing | metafield_tag }}</div></div></details>{% endif %}
+          {% if application_guide != blank %}<details class="pdp-accordion border-t border-pecan-brown/15"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between py-4 text-xs font-semibold tracking-[1.2px] uppercase [&::-webkit-details-marker]:hidden"><span>{{ section.settings.application_heading | escape }}</span><span class="pdp-accordion__icon" aria-hidden="true">⌄</span></summary><div class="pdp-accordion__body"><div class="pb-5 text-sm leading-6 text-bitter-chocolate">{{ application_guide | metafield_tag }}</div></div></details>{% endif %}
+        </div>
+      {% endif %}
 
-      {% comment %} Component: Transformation timeline {% endcomment %}
-      <section class="mt-14" data-reveal-group><h2 class="text-center font-display text-4xl">{{ section.settings.timeline_heading | escape }}</h2><span class="mx-auto mt-3 block h-1 w-12 bg-bitter-chocolate"></span><div class="pdp-timeline relative mx-auto mt-12 grid max-w-md gap-14">{% for milestone in timeline_items %}<article class="pdp-timeline__item grid grid-cols-2 items-center gap-12"><div class="pdp-timeline__badge justify-self-end rounded-full bg-bitter-chocolate px-4 py-2 text-[10px] font-bold tracking-[1.2px] text-white uppercase">{{ milestone.period.value | escape }}</div><div><h3 class="text-lg font-semibold">{{ milestone.heading.value | escape }}</h3><p class="mt-2 text-sm leading-6 text-bitter-chocolate">{{ milestone.description.value }}</p></div></article>{% else %}{% assign timeline_index = 0 %}{% for block in section.blocks %}{% if block.type == 'timeline' %}{% assign timeline_index = timeline_index | plus: 1 %}<article class="pdp-timeline__item grid grid-cols-2 items-center gap-12 {% if timeline_index == 2 %}is-reversed{% endif %}" {{ block.shopify_attributes }}><div class="pdp-timeline__badge justify-self-end rounded-full bg-bitter-chocolate px-4 py-2 text-[10px] font-bold tracking-[1.2px] text-white uppercase">{{ block.settings.period | escape }}</div><div><h3 class="text-lg font-semibold">{{ block.settings.heading | escape }}</h3><p class="mt-2 text-sm leading-6 text-bitter-chocolate">{{ block.settings.text | escape }}</p></div></article>{% endif %}{% endfor %}{% endfor %}</div></section>
-    </div>
-  </div>
-
-  {% comment %} Component: Floating purchase bar {% endcomment %}
-  <div class="pointer-events-none fixed inset-x-0 bottom-3 z-40 container mx-auto translate-y-8 px-4 opacity-0 transition duration-300" data-floating-purchase hidden>
-    <div class="pointer-events-auto mx-auto flex min-h-18 max-w-224 items-center justify-between gap-4 rounded-full border border-pecan-brown/15 bg-white/90 px-5 py-3 shadow-[0_25px_50px_-12px_rgb(0_0_0/25%)] backdrop-blur-2xl">
-      <div class="min-w-0"><strong class="block truncate font-display text-lg">{{ product.title | escape }}</strong><span class="text-sm" data-floating-price>{{ current_variant.price | money }}</span></div>
-      <span class="hidden text-xs tracking-[1.2px] uppercase sm:inline" data-floating-stock>{% if current_variant.available %}● {{ section.settings.in_stock_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
-      <button class="h-12 shrink-0 rounded-full bg-[linear-gradient(135deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-7 text-xs font-bold tracking-[1.4px] text-[#f4dfb8] uppercase disabled:cursor-not-allowed disabled:opacity-50" type="submit" form="{{ primary_form_id }}" name="add" data-floating-add {% unless current_variant.available %}disabled{% endunless %}>{% if current_variant.available %}{{ section.settings.add_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</button>
     </div>
   </div>
   <script type="application/json" data-product-json>{{ product.variants | json }}</script>
@@ -171,38 +154,22 @@
 {
   "name": "Product detail",
   "settings": [
-    { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
     { "type": "text", "id": "collection_label", "label": "Fallback collection label", "default": "The Essence Collection" },
+    { "type": "textarea", "id": "editorial_quote", "label": "Fallback editorial quote" },
     { "type": "text", "id": "select_label", "label": "Option heading prefix", "default": "Select" },
-    { "type": "text", "id": "add_label", "label": "Add button", "default": "Add to Ritual" },
+    { "type": "text", "id": "add_label", "label": "Add button", "default": "Add to Cart" },
     { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold Out" },
     { "type": "text", "id": "in_stock_label", "label": "Available label", "default": "In Stock" },
-    { "type": "text", "id": "gallery_marquee", "label": "Gallery marquee", "default": "Clinically considered · Earth-derived actives" },
+    { "type": "text", "id": "gallery_marquee", "label": "Gallery marquee", "default": "Suitable for all skin types" },
     { "type": "text", "id": "ingredients_heading", "label": "Ingredients heading", "default": "Earth-Derived Actives" },
-    { "type": "text", "id": "ingredients_link", "label": "Ingredients link", "default": "Explore all" },
-    { "type": "textarea", "id": "fallback_ingredients", "label": "Fallback ingredients separated by |", "default": "Volcanic Ash|Squalane|Bakuchiol|Sea Buckthorn" },
     { "type": "text", "id": "standards_eyebrow", "label": "Standards eyebrow", "default": "Our Standards" },
-    { "type": "text", "id": "standards_heading", "label": "Standards heading", "default": "Certifications & Testing" },
-    { "type": "textarea", "id": "standards", "label": "Standards separated by |", "default": "Vegan|Gluten-Tested|Dairy-Tested|Nut-Tested|Soy-Tested|Glyphosate Tested|Prop. 65 Compliant" },
-    { "type": "textarea", "id": "standards_note", "label": "Standards note", "default": "Identical strain, formerly known as Bifidobacterium adolescentis SD-BA5-IT" },
-    { "type": "text", "id": "efficacy_heading", "label": "Efficacy heading", "default": "Proven Efficacy" },
-    { "type": "image_picker", "id": "before_image", "label": "Fallback before image" },
-    { "type": "image_picker", "id": "after_image", "label": "Fallback after image" },
-    { "type": "text", "id": "before_label", "label": "Before label", "default": "Before" },
-    { "type": "text", "id": "after_label", "label": "After label", "default": "After" },
-    { "type": "text", "id": "efficacy_caption", "label": "Efficacy caption", "default": "98% of participants reported increased luminosity within 4 weeks." },
-    { "type": "text", "id": "ritual_heading", "label": "Ritual heading", "default": "The Ritual" },
-    { "type": "text", "id": "ritual_subheading", "label": "Ritual subheading", "default": "A grounding daily practice" },
-    { "type": "text", "id": "application_heading", "label": "Application accordion heading", "default": "Application Guide" },
-    { "type": "text", "id": "full_ingredients_heading", "label": "Full ingredients heading", "default": "Full Ingredients" },
-    { "type": "textarea", "id": "full_ingredients_copy", "label": "Full ingredients summary", "default": "Explore the complete ingredient library, sourcing notes, and the role each active plays in your ritual." },
-    { "type": "text", "id": "full_ingredients_link", "label": "Full ingredients link", "default": "Know More" },
-    { "type": "text", "id": "timeline_heading", "label": "Timeline heading", "default": "Timeline of Transformation" }
-  ],
-  "blocks": [
-    { "type": "accordion", "name": "Detail accordion", "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Scientific Backing" }, { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Share supporting product detail and research here.</p>" }] },
-    { "type": "ritual_step", "name": "Ritual step", "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Warm" }, { "type": "textarea", "id": "text", "label": "Text", "default": "Warm a few drops between the palms." }] },
-    { "type": "timeline", "name": "Timeline milestone", "settings": [{ "type": "text", "id": "period", "label": "Period", "default": "7 Days" }, { "type": "text", "id": "heading", "label": "Heading", "default": "Immediate Radiance" }, { "type": "textarea", "id": "text", "label": "Text", "default": "Skin feels replenished, soft, and visibly luminous." }] }
+    { "type": "text", "id": "standards_heading", "label": "Standards heading", "default": "Certifications & Testing" }
+    ,{ "type": "text", "id": "efficacy_heading", "label": "Efficacy heading", "default": "Proven Efficacy" }
+    ,{ "type": "text", "id": "before_label", "label": "Before label", "default": "Day 0" }
+    ,{ "type": "text", "id": "after_label", "label": "After label", "default": "Day 28" }
+    ,{ "type": "text", "id": "scientific_heading", "label": "Scientific heading", "default": "Scientific Backing" }
+    ,{ "type": "text", "id": "sourcing_heading", "label": "Sourcing heading", "default": "Ethical Sourcing" }
+    ,{ "type": "text", "id": "application_heading", "label": "Application heading", "default": "Application Guide" }
   ],
   "presets": [{ "name": "Product detail" }]
 }

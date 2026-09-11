@@ -16,7 +16,7 @@
     const addButtons = [...section.querySelectorAll('[data-add-to-cart], [data-floating-add]')];
     const stockTargets = [...section.querySelectorAll('[data-inventory-status], [data-floating-stock]')];
     const currency = window.Shopify?.currency?.active || 'USD';
-    const addLabel = section.querySelector('[data-add-label]')?.textContent.trim() || 'Add to ritual';
+    const addLabel = section.querySelector('[data-add-label]')?.textContent.trim() || 'Add to Cart';
     let quantity = 1;
 
     const showMedia = (id) => {
@@ -63,15 +63,20 @@
       group.querySelectorAll('[data-option-value]').forEach((peer) => {
         const active = peer === option;
         peer.classList.toggle('is-selected', active);
-        peer.classList.toggle('border-bitter-chocolate', active);
-        peer.classList.toggle('bg-pecan-brown/5', active);
-        peer.classList.toggle('border-toasted-almond', !active);
+        const ring = peer.querySelector('[data-swatch-ring]');
+        if (ring) {
+          ring.classList.toggle('border-bitter-chocolate', active);
+          ring.classList.toggle('border-transparent', !active);
+        } else {
+          peer.classList.toggle('border-bitter-chocolate', active);
+          peer.classList.toggle('bg-pecan-brown/5', active);
+          peer.classList.toggle('border-toasted-almond', !active);
+        }
         peer.setAttribute('aria-pressed', String(active));
       });
       selectVariant();
     }));
     section.querySelectorAll('[data-gallery-thumb]').forEach((thumb) => thumb.addEventListener('click', () => showMedia(thumb.dataset.galleryThumb)));
-
     const setQuantity = (next) => {
       quantity = Math.max(1, next);
       if (quantityInput) quantityInput.value = quantity;
@@ -82,36 +87,45 @@
 
     const comparison = section.querySelector('[data-comparison-range]');
     comparison?.addEventListener('input', () => {
+      const position = Number(comparison.value);
       const after = section.querySelector('[data-comparison-after]');
       const divider = section.querySelector('[data-comparison-divider]');
-      if (after) after.style.width = `${100 - Number(comparison.value)}%`;
-      if (divider) divider.style.left = `${comparison.value}%`;
+      if (after) after.style.width = `${100 - position}%`;
+      if (divider) divider.style.left = `${position}%`;
     });
 
     section.querySelectorAll('.pdp-accordion').forEach((details) => {
       const summary = details.querySelector('summary');
       const body = details.querySelector('.pdp-accordion__body');
       let animation;
+      let closing = false;
       if (!summary || !body) return;
       summary.addEventListener('click', (event) => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         event.preventDefault();
         animation?.cancel();
-        const closing = details.open;
+        const shouldClose = details.open && !closing;
         const startHeight = `${details.offsetHeight}px`;
-        if (!closing) details.open = true;
-        details.classList.toggle('is-closing', closing);
-        const endHeight = closing ? `${summary.offsetHeight}px` : `${summary.offsetHeight + body.scrollHeight}px`;
+        if (!shouldClose) {
+          closing = false;
+          details.open = true;
+        } else {
+          closing = true;
+          details.classList.add('is-closing');
+        }
+        const endHeight = shouldClose ? `${summary.offsetHeight}px` : `${summary.offsetHeight + body.scrollHeight}px`;
         details.style.overflow = 'hidden';
-        animation = details.animate({ height: [startHeight, endHeight] }, { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+        animation = details.animate({ height: [startHeight, endHeight] }, { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
         animation.onfinish = () => {
-          if (closing) details.open = false;
+          if (shouldClose) details.open = false;
+          closing = false;
           details.classList.remove('is-closing');
           details.style.height = '';
           details.style.overflow = '';
           animation = undefined;
         };
         animation.oncancel = () => {
+          closing = false;
           details.classList.remove('is-closing');
           details.style.height = '';
           details.style.overflow = '';
@@ -119,16 +133,6 @@
       });
     });
 
-    const floating = section.querySelector('[data-floating-purchase]');
-    const purchase = section.querySelector('[data-primary-purchase]');
-    if (floating && purchase) new IntersectionObserver(([entry]) => {
-      const visible = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      floating.hidden = !visible;
-      requestAnimationFrame(() => {
-        floating.classList.toggle('opacity-0', !visible);
-        floating.classList.toggle('translate-y-8', !visible);
-      });
-    }).observe(purchase);
   };
   initialize(document);
   document.addEventListener('shopify:section:load', (event) => initialize(event.target));

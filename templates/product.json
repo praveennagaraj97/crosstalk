@@ -6,21 +6,8 @@
     },
     "main": {
       "type": "main-product",
-      "blocks": {
-        "science": { "type": "accordion", "settings": { "heading": "Scientific Backing", "content": "<p>Our formulas unite proven bio-actives with thoughtfully selected botanicals.</p>" } },
-        "sourcing": { "type": "accordion", "settings": { "heading": "Ethical Sourcing", "content": "<p>Ingredients are selected for traceability, efficacy, and responsible cultivation.</p>" } },
-        "ritual_1": { "type": "ritual_step", "settings": { "heading": "Warm", "text": "Warm a few drops between the palms." } },
-        "ritual_2": { "type": "ritual_step", "settings": { "heading": "Press", "text": "Press gently into cleansed face and neck." } },
-        "ritual_3": { "type": "ritual_step", "settings": { "heading": "Breathe", "text": "Pause and allow the formula to settle into the skin." } },
-        "timeline_1": { "type": "timeline", "settings": { "period": "7 Days", "heading": "Immediate Radiance", "text": "Skin feels replenished, soft, and visibly luminous." } },
-        "timeline_2": { "type": "timeline", "settings": { "period": "28 Days", "heading": "Renewed Resilience", "text": "Texture appears smoother and the barrier feels supported." } },
-        "timeline_3": { "type": "timeline", "settings": { "period": "Continued Use", "heading": "Lasting Vitality", "text": "Complexion looks balanced, calm, and consistently radiant." } }
-      },
-      "block_order": ["science", "sourcing", "ritual_1", "ritual_2", "ritual_3", "timeline_1", "timeline_2", "timeline_3"],
-      "settings": { "ingredients_page": "ingredients" }
-    },
-    "reviews": { "type": "product-reviews", "settings": {} },
-    "recommendations": { "type": "product-recommendations-grid", "settings": {} }
+      "settings": {}
+    }
   },
-  "order": ["header", "main", "reviews", "recommendations"]
+  "order": ["header", "main"]
 }

@@ -79,13 +79,15 @@ input[type='search']::-webkit-search-cancel-button {
 .shopify-payment-button-wrap .shopify-payment-button,
 .shopify-payment-button-wrap .shopify-payment-button__button {
   width: 100%;
-  min-height: 3rem;
+  min-height: 2.75rem;
 }
 
 .shopify-payment-button-wrap .shopify-payment-button__button {
-  border-radius: 999px;
-  background: linear-gradient(135deg, #2d1f1e, #9b685b 50%, #4e3b37);
-  color: #f4dfb8;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #2d1f1e, #9b685b 50%, #4e3b37) !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 28%), 0 8px 18px rgb(90 46 44 / 18%) !important;
+  color: #f4dfb8 !important;
   font-size: .75rem;
   font-weight: 700;
   letter-spacing: 1.2px;
