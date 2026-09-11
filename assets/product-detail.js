@@ -17,7 +17,10 @@
     const stockTargets = [...section.querySelectorAll('[data-inventory-status], [data-floating-stock]')];
     const currency = window.Shopify?.currency?.active || 'USD';
     const addLabel = section.querySelector('[data-add-label]')?.textContent.trim() || 'Add to Cart';
+    const galleryStage = section.querySelector('[data-gallery-stage]');
+    const galleryThumbs = [...section.querySelectorAll('[data-gallery-thumb]')];
     let quantity = 1;
+    let pointerStartX;
 
     const showMedia = (id) => {
       if (!id) return;
@@ -33,7 +36,15 @@
         thumb.classList.toggle('border-bitter-chocolate', active);
         thumb.classList.toggle('border-transparent', !active);
         thumb.classList.toggle('opacity-70', !active);
+        if (active) thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       });
+    };
+
+    const moveGallery = (direction) => {
+      if (!galleryThumbs.length) return;
+      const current = galleryThumbs.findIndex((thumb) => thumb.getAttribute('aria-pressed') === 'true');
+      const next = (Math.max(current, 0) + direction + galleryThumbs.length) % galleryThumbs.length;
+      showMedia(galleryThumbs[next].dataset.galleryThumb);
     };
 
     const selectVariant = () => {
@@ -77,6 +88,23 @@
       selectVariant();
     }));
     section.querySelectorAll('[data-gallery-thumb]').forEach((thumb) => thumb.addEventListener('click', () => showMedia(thumb.dataset.galleryThumb)));
+    galleryStage?.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      moveGallery(event.key === 'ArrowRight' ? 1 : -1);
+    });
+    galleryStage?.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      pointerStartX = event.clientX;
+      galleryStage.setPointerCapture?.(event.pointerId);
+    });
+    galleryStage?.addEventListener('pointerup', (event) => {
+      if (pointerStartX === undefined) return;
+      const distance = event.clientX - pointerStartX;
+      pointerStartX = undefined;
+      if (Math.abs(distance) >= 45) moveGallery(distance < 0 ? 1 : -1);
+    });
+    galleryStage?.addEventListener('pointercancel', () => { pointerStartX = undefined; });
     const setQuantity = (next) => {
       quantity = Math.max(1, next);
       if (quantityInput) quantityInput.value = quantity;

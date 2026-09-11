@@ -6,6 +6,25 @@
     },
     "main": {
       "type": "main-product",
+      "blocks": {
+        "wild_rosehip": {
+          "type": "ingredient",
+          "settings": { "icon": "leaf", "name": "Wild Rosehip", "summary": "Regeneration" }
+        },
+        "red_clay": {
+          "type": "ingredient",
+          "settings": { "icon": "sparkles", "name": "Red Clay", "summary": "Mineral Balance" }
+        },
+        "squalane": {
+          "type": "ingredient",
+          "settings": { "icon": "drop", "name": "Squalane", "summary": "Deep Hydration" }
+        },
+        "vitamin_c": {
+          "type": "ingredient",
+          "settings": { "icon": "radiance", "name": "Vitamin C", "summary": "Radiance Boost" }
+        }
+      },
+      "block_order": ["wild_rosehip", "red_clay", "squalane", "vitamin_c"],
       "settings": {}
     }
   },
