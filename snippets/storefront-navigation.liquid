@@ -45,7 +45,7 @@
 
     <nav class="relative ml-10 hidden items-center gap-6 lg:flex {{ navigation_text_class }}" aria-label="Primary navigation" data-navigation-links>
       <span class="storefront-nav-bubble" data-navigation-bubble aria-hidden="true"></span>
-      <details class="group relative z-10 px-3 py-2" data-product-flyout data-navigation-item>
+      <details class="storefront-nav-link group relative z-10 px-3 py-2 {% if active_nav == 'shop' %}is-active{% endif %}" data-product-flyout data-navigation-item {% if active_nav == 'shop' %}data-navigation-active{% endif %}>
         <summary class="cursor-pointer list-none whitespace-nowrap text-base leading-6 marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_focus_class }}">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</summary>
         <div class="invisible absolute top-12 -left-34.25 w-100 translate-y-2 rounded-xl border p-5 opacity-0 shadow-[0_16px_48px_rgb(62_38_25/20%)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:content-[''] group-open:visible group-open:translate-y-0 group-open:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 {{ navigation_flyout_class }}">
           <ul class="grid list-none gap-3.5 p-0" data-flyout-list>
@@ -106,7 +106,7 @@
       <summary class="hero-icon-interactive grid size-10 cursor-pointer list-none place-items-center rounded-full bg-white/90 text-pecan-brown marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 {{ navigation_focus_class }}" aria-label="Menu"><span class="mobile-menu-icon" aria-hidden="true"><span></span><span></span></span></summary>
       <div class="absolute top-13 right-0 w-[min(21rem,calc(100vw-2rem))] origin-top-right rounded-2xl border p-3 shadow-[0_18px_48px_rgb(35_30_23/24%)] backdrop-blur-2xl {{ navigation_mobile_panel_class }}" data-mobile-panel>
         <nav aria-label="Mobile navigation"><ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
-          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.all_products_collection_url }}">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</a></li>
+          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'shop' %}is-active{% endif %}" href="{{ routes.all_products_collection_url }}" {% if active_nav == 'shop' %}aria-current="page"{% endif %}>{{ nav_settings.shop_label | default: 'Shop All' | escape }}</a></li>
           <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" {% if active_nav == 'ingredients' %}aria-current="page"{% endif %}>Ingredients</a></li>
           {% if nav_settings.menu != blank %}{% for link in nav_settings.menu.links %}{% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current %}is-active{% endif %}" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endunless %}{% endfor %}{% endif %}
           <li class="mt-1 border-t border-current/15 pt-1"><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.search_url }}">Search</a></li>

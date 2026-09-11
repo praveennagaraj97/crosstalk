@@ -54,6 +54,11 @@
   }
 }
 
+/* The storefront container is fluid; sections own intentional inner padding. */
+.container {
+  max-width: none !important;
+}
+
 @utility visually-hidden {
   position: absolute;
   width: 1px;

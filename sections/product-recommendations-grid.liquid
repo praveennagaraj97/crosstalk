@@ -1,0 +1,22 @@
+{% liquid
+  assign recommendation_products = recommendations.products
+  if recommendation_products == blank and section.settings.fallback_collection != blank
+    assign recommendation_products = section.settings.fallback_collection.products
+  endif
+%}
+<section class="bg-background py-14 lg:py-20" data-product-recommendations data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent=related" aria-labelledby="RecommendationsTitle-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    <header class="flex items-end justify-between" data-reveal-group><div><h2 id="RecommendationsTitle-{{ section.id }}" class="font-display text-4xl">{{ section.settings.heading | escape }}</h2><span class="mt-3 block h-1 w-12 bg-bitter-chocolate"></span></div><a class="text-xs font-semibold tracking-[1.4px] uppercase" href="{{ routes.all_products_collection_url }}">{{ section.settings.view_all | escape }}</a></header>
+    <div class="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-8" data-reveal-group>
+      {% for recommendation in recommendation_products limit: section.settings.limit %}{% unless recommendation.id == product.id %}<a class="group block" href="{{ recommendation.url }}"><div class="aspect-[3/4] overflow-hidden rounded-xl bg-[#eee6df]">{% if recommendation.featured_image != blank %}{{ recommendation.featured_image | image_url: width: 700 | image_tag: class: 'size-full object-cover transition duration-500 group-hover:scale-105', widths: '240, 420, 700', loading: 'lazy', alt: recommendation.title }}{% endif %}</div><h3 class="mt-4 font-display text-xl">{{ recommendation.title | escape }}</h3><p class="mt-1 text-sm font-semibold">{{ recommendation.price | money }}</p></a>{% endunless %}{% endfor %}
+      {% if recommendation_products == blank %}
+        {% assign fallback_names = 'Travel Radiance|Overnight Recovery|Mineral Dew Mist|Earthbound Clay Mask' | split: '|' %}{% assign fallback_prices = '$35.00|$92.00|$45.00|$78.00' | split: '|' %}{% assign fallback_images = 'hero-product-radiance.png|hero-product-clay.png|radiance-volcanic-oil-product.png|amaari-radiance-hero.png' | split: '|' %}
+        {% for fallback_name in fallback_names %}<a class="group block" href="{{ routes.all_products_collection_url }}"><div class="aspect-[3/4] overflow-hidden rounded-xl bg-[#eee6df]"><img class="size-full object-cover transition duration-500 group-hover:scale-105" src="{{ fallback_images[forloop.index0] | asset_url }}" width="256" height="341" loading="lazy" alt="{{ fallback_name | escape }}"></div><h3 class="mt-4 font-display text-xl">{{ fallback_name }}</h3><p class="mt-1 text-sm font-semibold">{{ fallback_prices[forloop.index0] }}</p></a>{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+<script>document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('[data-product-recommendations]').forEach(async r=>{if(r.dataset.loaded)return;r.dataset.loaded='true';try{const h=await fetch(r.dataset.url).then(x=>x.text());const d=new DOMParser().parseFromString(h,'text/html').querySelector('[data-product-recommendations]');if(d&&d.querySelector('a.group'))r.innerHTML=d.innerHTML}catch(e){}})})</script>
+{% schema %}
+{"name":"Product recommendations","settings":[{"type":"text","id":"heading","label":"Heading","default":"You May Also Like"},{"type":"text","id":"view_all","label":"View all label","default":"View All"},{"type":"collection","id":"fallback_collection","label":"Fallback collection"},{"type":"range","id":"limit","label":"Products","min":2,"max":8,"step":1,"default":4}],"presets":[{"name":"Product recommendations"}]}
+{% endschema %}
