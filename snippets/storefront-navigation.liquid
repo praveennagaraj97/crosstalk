@@ -1,0 +1,117 @@
+{% liquid
+  assign ingredients_url = blank
+  if ingredient_page != blank
+    assign ingredients_url = ingredient_page.url
+  elsif nav_settings.ingredients_page != blank
+    assign ingredients_url = pages[nav_settings.ingredients_page].url
+  endif
+  if ingredients_url == blank
+    assign ingredients_url = routes.root_url | append: 'pages/ingredients'
+  endif
+  if context_product != blank
+    assign ingredients_url = ingredients_url | append: '?product=' | append: context_product.handle
+  endif
+
+  if surface == 'light'
+    assign navigation_text_class = 'text-bitter-chocolate'
+    assign navigation_shell_class = 'border-pecan-brown/25 bg-[#f6eee8]/82 shadow-[0_10px_32px_rgb(90_46_44/12%)]'
+    assign navigation_focus_class = 'focus-visible:outline-bitter-chocolate'
+    assign navigation_mobile_panel_class = 'border-toasted-almond/30 bg-[#f9f5f2]/98 text-bitter-chocolate'
+    assign navigation_flyout_class = 'border-pecan-brown/20 bg-[#f4e8de]/96 text-bitter-chocolate'
+    assign navigation_flyout_focus_class = 'focus-visible:outline-bitter-chocolate'
+    assign navigation_flyout_secondary_class = 'text-bitter-chocolate/70'
+    assign navigation_cart_icon_class = 'storefront-navigation__icon--light'
+  else
+    assign navigation_text_class = 'text-white'
+    assign navigation_shell_class = 'border-white/20 bg-white/10'
+    assign navigation_focus_class = 'focus-visible:outline-white'
+    assign navigation_mobile_panel_class = 'border-white/30 bg-[#676950]/92 text-white'
+    assign navigation_flyout_class = 'border-white/25 bg-[#77785f]/95 text-white'
+    assign navigation_flyout_focus_class = 'focus-visible:outline-white'
+    assign navigation_flyout_secondary_class = 'text-white/80'
+    assign navigation_cart_icon_class = blank
+  endif
+%}
+
+<header class="storefront-navigation--{{ surface }} container relative z-30 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-5" data-storefront-navigation>
+  <div class="flex min-h-12 items-center rounded-full border px-3.5 shadow-[0_6px_24px_rgb(42_34_27/12%)] backdrop-blur-3xl lg:min-h-17 lg:px-7 {{ navigation_shell_class }}" data-reveal-group data-reveal-nav>
+    <a class="mobile-logo-link shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_focus_class }}" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+      {% if nav_settings.logo != blank %}
+        {{ nav_settings.logo | image_url: width: 240 | image_tag: class: 'h-7 w-auto lg:h-6', widths: '120, 240', alt: shop.name }}
+      {% else %}
+        <img class="h-7 w-auto lg:h-6" src="{{ 'I198-7557-44-4636.svg' | asset_url }}" width="98" height="24" alt="{{ shop.name | escape }}">
+      {% endif %}
+    </a>
+
+    <nav class="relative ml-10 hidden items-center gap-6 lg:flex {{ navigation_text_class }}" aria-label="Primary navigation" data-navigation-links>
+      <span class="storefront-nav-bubble" data-navigation-bubble aria-hidden="true"></span>
+      <details class="group relative z-10 px-3 py-2" data-product-flyout data-navigation-item>
+        <summary class="cursor-pointer list-none whitespace-nowrap text-base leading-6 marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_focus_class }}">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</summary>
+        <div class="invisible absolute top-12 -left-34.25 w-100 translate-y-2 rounded-xl border p-5 opacity-0 shadow-[0_16px_48px_rgb(62_38_25/20%)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:content-[''] group-open:visible group-open:translate-y-0 group-open:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 {{ navigation_flyout_class }}">
+          <ul class="grid list-none gap-3.5 p-0" data-flyout-list>
+            {% if nav_products != blank %}
+              {% for nav_product in nav_products %}
+                <li><a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_flyout_focus_class }}" href="{{ nav_product.url }}">
+                  {% if nav_product.featured_image != blank %}{{ nav_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: nav_product.title }}{% endif %}
+                  <span class="font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>
+                </a></li>
+              {% endfor %}
+            {% else %}
+              {% for block in nav_blocks %}
+                {% if block.type == 'product' and block.settings.product != blank %}
+                  {% assign nav_product = block.settings.product %}
+                  <li><a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_flyout_focus_class }}" href="{{ nav_product.url }}">
+                    {% if nav_product.featured_image != blank %}{{ nav_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: nav_product.title }}{% endif %}
+                    <span><span class="block font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>{% if block.settings.subtitle != blank %}<span class="block text-[13px] leading-5 text-white/65">{{ block.settings.subtitle | escape }}</span>{% endif %}</span>
+                  </a></li>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            <li><a class="block rounded-lg py-2 text-sm {{ navigation_flyout_secondary_class }}" href="{{ routes.all_products_collection_url }}">View all products</a></li>
+          </ul>
+        </div>
+      </details>
+      <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-navigation-item {% if active_nav == 'ingredients' %}data-navigation-active aria-current="page"{% endif %}>Ingredients</a>
+      {% if nav_settings.menu != blank %}
+        {% for link in nav_settings.menu.links %}
+          {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current %}is-active{% endif %}" href="{{ link.url }}" data-navigation-item {% if link.current %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
+        {% endfor %}
+      {% else %}
+        {% assign fallback_labels = 'Our Story|Journal|Contact' | split: '|' %}
+        {% assign fallback_handles = 'our-story|journal|contact-1' | split: '|' %}
+        {% for fallback_label in fallback_labels %}
+          {% assign fallback_handle = fallback_handles[forloop.index0] %}
+          <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == fallback_handle %}is-active{% endif %}" href="{{ routes.root_url }}pages/{{ fallback_handle }}" data-navigation-item {% if active_nav == fallback_handle %}data-navigation-active aria-current="page"{% endif %}>{{ fallback_label }}</a>
+        {% endfor %}
+      {% endif %}
+    </nav>
+  </div>
+
+  <div class="hidden min-h-17 items-center gap-6 rounded-full border px-5 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:flex {{ navigation_shell_class }}">
+    <form class="hero-search-interactive flex h-9 w-56 items-center gap-2 rounded-full bg-white px-4" action="{{ routes.search_url }}" method="get" role="search">
+      <img class="size-3.5" src="{{ 'I198-7557-540-5876.svg' | asset_url }}" width="14" height="14" alt="">
+      <label class="visually-hidden" for="NavigationSearch-{{ section.id }}">Search</label>
+      <input id="NavigationSearch-{{ section.id }}" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-sm text-pecan-brown outline-none placeholder:text-toasted-almond" type="search" name="q" placeholder="{{ nav_settings.navigation_search_placeholder | default: 'Find your glow' | escape }}">
+      <button class="hero-search-clear grid size-4 shrink-0 cursor-pointer place-items-center rounded-full" type="button" aria-label="Clear search" data-search-clear hidden>
+        <img class="size-3" src="{{ 'hero-search-close.svg' | asset_url }}" width="12" height="12" alt="">
+      </button>
+    </form>
+    <a class="hero-icon-interactive grid size-9 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart"><img class="h-5.5 w-4.5" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="18" height="22" alt=""></a>
+    {% if shop.customer_accounts_enabled %}<a class="hero-icon-interactive grid size-10 place-items-center rounded-full bg-white {{ navigation_focus_class }}" href="{{ routes.account_url }}" aria-label="Account"><img class="size-4.5" src="{{ 'I198-7557-540-5886.svg' | asset_url }}" width="18" height="18" alt=""></a>{% endif %}
+  </div>
+
+  <div class="flex items-center gap-1 rounded-full border p-1 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:hidden {{ navigation_shell_class }} {{ navigation_text_class }}">
+    <a class="hero-icon-interactive grid size-10 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart"><img class="h-5 w-4" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="16" height="20" alt=""></a>
+    <details class="group relative" data-mobile-menu>
+      <summary class="hero-icon-interactive grid size-10 cursor-pointer list-none place-items-center rounded-full bg-white/90 text-pecan-brown marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 {{ navigation_focus_class }}" aria-label="Menu"><span class="mobile-menu-icon" aria-hidden="true"><span></span><span></span></span></summary>
+      <div class="absolute top-13 right-0 w-[min(21rem,calc(100vw-2rem))] origin-top-right rounded-2xl border p-3 shadow-[0_18px_48px_rgb(35_30_23/24%)] backdrop-blur-2xl {{ navigation_mobile_panel_class }}" data-mobile-panel>
+        <nav aria-label="Mobile navigation"><ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
+          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.all_products_collection_url }}">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</a></li>
+          <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" {% if active_nav == 'ingredients' %}aria-current="page"{% endif %}>Ingredients</a></li>
+          {% if nav_settings.menu != blank %}{% for link in nav_settings.menu.links %}{% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current %}is-active{% endif %}" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endunless %}{% endfor %}{% endif %}
+          <li class="mt-1 border-t border-current/15 pt-1"><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.search_url }}">Search</a></li>
+        </ul></nav>
+      </div>
+    </details>
+  </div>
+</header>

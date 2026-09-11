@@ -1,0 +1,26 @@
+{% liquid
+  assign navigation_products = section.settings.products
+  assign ingredients_page = pages[section.settings.ingredients_page]
+  if ingredients_page == blank
+    assign ingredients_page = pages['ingredients']
+  endif
+%}
+
+<section class="relative bg-[#7d8060] pb-3 lg:pb-5">
+  {% render 'storefront-navigation', nav_settings: section.settings, nav_products: navigation_products, active_nav: '', surface: 'dark', context_product: product, ingredient_page: ingredients_page %}
+</section>
+
+{% schema %}
+{
+  "name": "Storefront header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Navigation menu" },
+    { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
+    { "type": "product_list", "id": "products", "label": "Product menu", "limit": 12 },
+    { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
+    { "type": "text", "id": "navigation_search_placeholder", "label": "Search placeholder", "default": "Find your glow" }
+  ],
+  "presets": [{ "name": "Storefront header" }]
+}
+{% endschema %}

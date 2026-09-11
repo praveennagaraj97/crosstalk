@@ -1,0 +1,25 @@
+{% liquid
+  assign navigation_products = section.settings.products
+  assign ingredients_page = pages['ingredients']
+%}
+
+<section class="min-h-screen bg-background" aria-labelledby="NavigationTestTitle-{{ section.id }}">
+  {% render 'storefront-navigation', nav_settings: section.settings, nav_products: navigation_products, active_nav: page.handle, surface: 'light', context_product: blank, ingredient_page: ingredients_page %}
+  <div class="container mx-auto px-4 py-20" data-reveal-group>
+    <p id="NavigationTestTitle-{{ section.id }}" class="font-display text-4xl text-text-brown">{{ page.title | escape }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Navigation test page",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Navigation menu" },
+    { "type": "product_list", "id": "products", "label": "Products", "limit": 12 },
+    { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
+    { "type": "text", "id": "navigation_search_placeholder", "label": "Search placeholder", "default": "Find your glow" }
+  ],
+  "presets": [{ "name": "Navigation test page" }]
+}
+{% endschema %}

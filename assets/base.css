@@ -38,6 +38,20 @@
     color: var(--color-text-brown);
     font-family: var(--font-sans);
   }
+
+  :where(
+    a[href],
+    button:not(:disabled),
+    summary,
+    select,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    label[for],
+    [role="button"]
+  ) {
+    cursor: pointer;
+  }
 }
 
 @utility visually-hidden {

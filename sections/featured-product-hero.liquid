@@ -8,6 +8,14 @@
   assign marquee_background = section.settings.marquee_background | color_modify: 'alpha', marquee_alpha
   assign image_overlay_alpha = section.settings.image_overlay_opacity | divided_by: 100.0
   assign image_overlay_color = section.settings.image_overlay_color | color_modify: 'alpha', image_overlay_alpha
+  assign ingredients_page = pages[section.settings.ingredients_page]
+  if ingredients_page == blank
+    assign ingredients_page = pages['ingredients']
+  endif
+  assign ingredients_url = ingredients_page.url
+  if hero_product != blank and ingredients_url != blank
+    assign ingredients_url = ingredients_url | append: '?product=' | append: hero_product.handle
+  endif
   if hero_product != blank
     assign hero_url = hero_product.url
   endif
@@ -120,7 +128,9 @@
               assign nav_label = section.settings[label_key]
               assign nav_url = section.settings[url_key]
             %}
-            {% if nav_url != blank %}
+            {% if index == 1 and ingredients_url != blank %}
+              <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ ingredients_url }}">{{ nav_label | escape }}</a>
+            {% elsif nav_url != blank %}
               <a class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ nav_url }}">{{ nav_label | escape }}</a>
             {% else %}
               <span class="hero-glass-interactive whitespace-nowrap text-base leading-6 text-white">{{ nav_label | escape }}</span>
@@ -187,7 +197,7 @@
                   assign nav_url = section.settings[url_key]
                 %}
                 <li>
-                  {% if nav_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ nav_url }}">{{ nav_label | escape }}</a>{% else %}<span class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5">{{ nav_label | escape }}</span>{% endif %}
+                  {% if index == 1 and ingredients_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ ingredients_url }}">{{ nav_label | escape }}</a>{% elsif nav_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ nav_url }}">{{ nav_label | escape }}</a>{% else %}<span class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5">{{ nav_label | escape }}</span>{% endif %}
                 </li>
               {% endfor %}
             {% endif %}
@@ -231,6 +241,7 @@
     { "type": "range", "id": "image_overlay_opacity", "label": "Image overlay opacity", "min": 0, "max": 60, "step": 5, "unit": "%", "default": 15 },
     { "type": "image_picker", "id": "logo", "label": "Logo" },
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
+    { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
     { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
     { "type": "text", "id": "nav_label_1", "label": "Navigation item 1 label", "default": "Ingredients" },
     { "type": "url", "id": "nav_url_1", "label": "Navigation item 1 link" },

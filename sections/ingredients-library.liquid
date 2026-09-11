@@ -1,0 +1,215 @@
+{% liquid
+  assign alphabet = 'A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z' | split: '|'
+  assign configured_products = section.settings.products
+  assign ingredient_page = page
+%}
+
+<section class="min-h-screen bg-background" data-ingredients-library aria-labelledby="IngredientsTitle-{{ section.id }}">
+  {% comment %} Component: Announcement marquee {% endcomment %}
+  {% if section.settings.show_marquee %}
+    <div class="h-8 overflow-hidden border-b border-[#eadfd7] bg-white/55 text-pecan-brown backdrop-blur-xl lg:h-10" aria-label="Promotions">
+      {% capture ingredient_marquee_items %}
+        {% assign announcement_items = section.settings.announcement_text | newline_to_br | split: '<br />' %}
+        {% for announcement in announcement_items %}
+          {% if announcement != blank %}
+            <span class="flex shrink-0 items-center gap-7 whitespace-nowrap text-xs leading-5 tracking-[0.4px] lg:text-sm">
+              <span>{{ announcement | strip | escape }}</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+            </span>
+          {% endif %}
+        {% endfor %}
+      {% endcapture %}
+      <div class="marquee-track flex h-full w-max items-center" tabindex="0" style="--hero-marquee-duration: {{ section.settings.marquee_speed }}s">
+        <div class="flex shrink-0 items-center gap-8 pr-8">{{ ingredient_marquee_items }}</div>
+        <div class="marquee-copy flex shrink-0 items-center gap-8 pr-8" aria-hidden="true">{{ ingredient_marquee_items }}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %} Component: Page navigation {% endcomment %}
+  {% render 'storefront-navigation', nav_settings: section.settings, nav_products: configured_products, active_nav: 'ingredients', surface: 'light', context_product: blank, ingredient_page: ingredient_page %}
+
+  {% comment %} Component: Library hero {% endcomment %}
+  <header class="container mx-auto px-4 pt-16 pb-10 text-center lg:pt-24 lg:pb-12" data-reveal-group>
+    <p class="text-xs leading-4 font-semibold tracking-[3px] text-bitter-chocolate uppercase">{{ section.settings.eyebrow | escape }}</p>
+    <h1 id="IngredientsTitle-{{ section.id }}" class="mt-4 font-display text-5xl leading-none text-text-brown sm:text-[4rem] lg:text-[4.875rem] lg:leading-[1.218]">{{ section.settings.heading | escape }}</h1>
+    <p class="mx-auto mt-4 max-w-144 text-sm leading-6 tracking-[0.4px] text-bitter-chocolate sm:text-base">{{ section.settings.description | escape }}</p>
+    <label class="relative mx-auto mt-7 flex h-13 max-w-131 items-center rounded-full border border-toasted-almond bg-[#f5ebe1] px-6 text-left focus-within:ring-2 focus-within:ring-toasted-almond/40">
+      <span class="mr-2 text-pecan-brown" aria-hidden="true">⌕</span>
+      <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
+      <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-sm leading-5 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
+      <button class="ingredient-search-clear ml-2 grid size-7 shrink-0 place-items-center rounded-full text-text-brown" type="button" data-ingredient-search-clear hidden aria-label="Clear ingredient search">
+        <svg class="size-3" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2 2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </label>
+  </header>
+
+  {% comment %} Component: Product chooser {% endcomment %}
+  <div class="container mx-auto px-4 pb-16" data-product-chooser hidden>
+    <div class="rounded-2xl border border-toasted-almond/30 bg-[#f9f5f2] p-6 text-center lg:p-10" data-reveal-group>
+      <h2 class="font-display text-3xl leading-9">{{ section.settings.chooser_heading | escape }}</h2>
+      <p class="mt-2 text-sm leading-6 text-[#7c6253]">{{ section.settings.chooser_text | escape }}</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        {% for chooser_product in configured_products %}
+          <a class="rounded-full border border-bitter-chocolate/20 bg-white px-5 py-3 text-sm font-medium hover:border-bitter-chocolate focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ ingredient_page.url }}?product={{ chooser_product.handle | url_encode }}">{{ chooser_product.title | escape }}</a>
+        {% else %}
+          <p class="text-sm text-[#7c6253]">{{ section.settings.no_products_text | escape }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div data-library-controls hidden>
+    {% comment %} Component: Alphabet index {% endcomment %}
+    <nav class="border-y border-[#f5ebe1] py-8" aria-label="Ingredient alphabet">
+      <div class="container mx-auto flex gap-4 overflow-x-auto px-4 sm:justify-center sm:gap-6">
+        {% for letter in alphabet %}<button class="ingredient-letter shrink-0 text-xs leading-4 font-semibold tracking-[3px] text-[#b18a73] uppercase disabled:cursor-not-allowed disabled:opacity-25" type="button" data-letter="{{ letter }}" disabled aria-disabled="true">{{ letter }}</button>{% endfor %}
+      </div>
+    </nav>
+
+    {% comment %} Component: Product ingredient datasets {% endcomment %}
+    <div class="container mx-auto px-4 py-12 lg:py-16">
+      {% for configured_product in configured_products %}
+        {% assign product_ingredients = configured_product.metafields.custom.ingredients.value %}
+        <div data-product-dataset="{{ configured_product.handle | escape }}" hidden>
+          {% assign rendered_count = 0 %}
+          {% for letter in alphabet %}
+            {% capture cards %}
+              {% for ingredient in product_ingredients %}
+                {% assign first_letter = ingredient.name.value | default: ingredient.system.handle | slice: 0 | upcase %}
+                {% if first_letter == letter %}
+                  {% assign rendered_count = rendered_count | plus: 1 %}
+                  {% render 'ingredient-card', ingredient: ingredient, configured_products: configured_products, current_product: configured_product, learn_more_label: section.settings.learn_more_label, card_index: forloop.index0 %}
+                {% endif %}
+              {% endfor %}
+              {% if product_ingredients == blank %}
+                {% for block in section.blocks %}
+                  {% assign first_letter = block.settings.name | slice: 0 | upcase %}
+                  {% if block.type == 'demo_ingredient' and first_letter == letter %}
+                    {% assign rendered_count = rendered_count | plus: 1 %}
+                    {% render 'ingredient-card', ingredient: block, demo: true, configured_products: configured_products, current_product: configured_product, learn_more_label: section.settings.learn_more_label, card_index: forloop.index0 %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endcapture %}
+            {% if cards contains 'data-ingredient-card' %}
+              <section class="scroll-mt-8 [&:not(:first-child)]:mt-14 lg:[&:not(:first-child)]:mt-18" data-letter-group="{{ letter }}">
+                <h2 class="border-b border-[#f5ebe1] pb-4 font-display text-3xl leading-9 outline-none" tabindex="-1">{{ letter }}</h2>
+                <div class="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8" data-reveal-group>{{ cards }}</div>
+              </section>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="rounded-2xl border border-toasted-almond/30 bg-[#f9f5f2] px-6 py-12 text-center" data-library-empty hidden>
+        <h2 class="font-display text-3xl">{{ section.settings.empty_heading | escape }}</h2>
+        <p class="mt-2 text-sm text-[#7c6253]">{{ section.settings.empty_text | escape }}</p>
+      </div>
+    </div>
+
+    {% comment %} Component: Search and category filters {% endcomment %}
+    <div class="sticky bottom-4 z-20 container mx-auto px-4 pb-4">
+      <div class="flex flex-col gap-4 rounded-2xl border border-white bg-[#f9f5f2]/95 p-4 shadow-[0_20px_50px_-20px_rgb(62_38_25/28%)] backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between lg:p-6">
+        <label class="relative flex h-10 min-w-0 items-center border-b border-[#d8d1cb] pl-10 lg:w-80">
+          <svg class="absolute left-1 size-5 text-[#765b4d]" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.75" cy="10.75" r="6.75" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
+          <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-xs tracking-[1.4px] uppercase outline-none placeholder:text-[#8f8179]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
+          <button class="ingredient-search-clear ml-2 grid size-7 shrink-0 place-items-center rounded-full text-text-brown" type="button" data-ingredient-search-clear hidden aria-label="Clear ingredient search">
+            <svg class="size-3" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2 2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </label>
+        <div class="flex gap-6 overflow-x-auto" aria-label="Ingredient categories">
+          {% assign filter_values = 'all|hydrators|brighteners|repair-soothe|bio-actives' | split: '|' %}
+          {% assign filter_labels = section.settings.filter_all | append: '|' | append: section.settings.filter_hydrators | append: '|' | append: section.settings.filter_brighteners | append: '|' | append: section.settings.filter_repair | append: '|' | append: section.settings.filter_actives | split: '|' %}
+          {% for filter_value in filter_values %}<button class="ingredient-filter shrink-0 border-b border-transparent pb-1 text-[10px] leading-4 font-bold tracking-[2px] text-[#a8a29e] uppercase" type="button" data-ingredient-filter="{{ filter_value }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ filter_labels[forloop.index0] | escape }}</button>{% endfor %}
+        </div>
+        <p class="shrink-0 text-xs text-[#7c6253]" data-result-count aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} Component: Ingredient detail modal {% endcomment %}
+  <dialog class="ingredient-dialog m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-256 overflow-hidden rounded-2xl bg-[#f5ebe1] p-0 text-text-brown shadow-[0_25px_50px_-12px_rgb(0_0_0/25%)] backdrop:bg-[#221810]/55 lg:h-[min(46rem,calc(100dvh-2rem))]" data-ingredient-dialog aria-labelledby="IngredientDialogTitle-{{ section.id }}">
+    <div class="ingredient-dialog__panel relative grid max-h-[calc(100dvh-2rem)] overflow-y-auto lg:h-full lg:max-h-none lg:grid-cols-[3fr_2fr] lg:overflow-hidden" data-dialog-panel>
+      <div class="order-2 p-6 sm:p-9 lg:order-1 lg:overflow-y-auto lg:p-14">
+        <header>
+          <h2 id="IngredientDialogTitle-{{ section.id }}" class="font-display text-4xl leading-none lg:text-5xl" data-dialog-name></h2>
+          <p class="mt-2 text-xs leading-5 font-bold tracking-[4px] text-[#b18a73] uppercase" data-dialog-categories-label></p>
+        </header>
+        <div class="mt-10 grid gap-8 lg:mt-12 lg:gap-10">
+          <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.about_heading | escape }}</h3><p class="mt-3 text-sm leading-6 tracking-[0.3px] text-[#7c6253] sm:text-base" data-dialog-about></p></section>
+          <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.works_heading | escape }}</h3><p class="mt-3 text-sm leading-6 tracking-[0.3px] text-[#7c6253] sm:text-base" data-dialog-works></p></section>
+          <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.found_heading | escape }}</h3><div class="mt-3 flex flex-wrap gap-3" data-dialog-products></div></section>
+          <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.science_heading | escape }}</h3><div class="mt-3 flex flex-wrap gap-3" data-dialog-science></div></section>
+        </div>
+      </div>
+      <div class="relative order-1 min-h-72 overflow-hidden lg:order-2 lg:h-full lg:min-h-0">
+        <img class="absolute inset-0 size-full object-cover" src="{{ 'brand-story-botanical.png' | asset_url }}" width="410" height="828" alt="" data-dialog-image>
+        <div class="absolute right-5 bottom-5 rounded-xl border border-white/20 bg-white/30 p-4 text-white backdrop-blur-xl">
+          <span class="block text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.source_heading | escape }}</span>
+          <span class="mt-1 block text-sm" data-dialog-source></span>
+        </div>
+      </div>
+      <button class="absolute top-5 right-5 z-10 grid size-10 cursor-pointer place-items-center rounded-full bg-[#3e2619]/75 text-xl text-white backdrop-blur-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" type="button" data-dialog-close aria-label="Close ingredient details">×</button>
+    </div>
+  </dialog>
+</section>
+
+<script src="{{ 'ingredients-library.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Ingredient library",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Navigation menu" },
+    { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
+    { "type": "product_list", "id": "products", "label": "Configured products", "limit": 24 },
+    { "type": "checkbox", "id": "show_marquee", "label": "Show announcement marquee", "default": true },
+    { "type": "textarea", "id": "announcement_text", "label": "Announcements (one per line)", "default": "New product drop in 6hrs\nSuitable for all skin types\nFirst time users get 10% OFF\nPromo code FIRST10" },
+    { "type": "range", "id": "marquee_speed", "label": "Announcement speed", "min": 10, "max": 60, "step": 5, "unit": "s", "default": 30 },
+    { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search ingredients..." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Science & Nature in Harmony" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Ingredient Library" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "A comprehensive guide to the potent botanical actives and earth-derived minerals that power our clinical formulations." },
+    { "type": "text", "id": "filter_all", "label": "All filter", "default": "All" },
+    { "type": "text", "id": "filter_hydrators", "label": "Hydrators filter", "default": "Hydrators" },
+    { "type": "text", "id": "filter_brighteners", "label": "Brighteners filter", "default": "Brighteners" },
+    { "type": "text", "id": "filter_repair", "label": "Repair filter", "default": "Repair & Soothe" },
+    { "type": "text", "id": "filter_actives", "label": "Actives filter", "default": "Bio-Actives" },
+    { "type": "text", "id": "learn_more_label", "label": "Card action", "default": "Learn More" },
+    { "type": "text", "id": "chooser_heading", "label": "Product chooser heading", "default": "Choose a product" },
+    { "type": "textarea", "id": "chooser_text", "label": "Product chooser text", "default": "Select a formula to explore its complete ingredient library." },
+    { "type": "text", "id": "no_products_text", "label": "No products message", "default": "Add products in this section's settings to begin." },
+    { "type": "text", "id": "empty_heading", "label": "No results heading", "default": "No ingredients found" },
+    { "type": "textarea", "id": "empty_text", "label": "No results text", "default": "Try another search term or category." },
+    { "type": "text", "id": "about_heading", "label": "About heading", "default": "About the Ingredient" },
+    { "type": "text", "id": "works_heading", "label": "How it works heading", "default": "How It Works" },
+    { "type": "text", "id": "found_heading", "label": "Found in heading", "default": "Found In" },
+    { "type": "text", "id": "science_heading", "label": "Science heading", "default": "Scientific Background" },
+    { "type": "text", "id": "source_heading", "label": "Source heading", "default": "Source" }
+  ],
+  "blocks": [
+    {
+      "type": "demo_ingredient",
+      "name": "Preview ingredient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Aloe Vera" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
+        { "type": "text", "id": "categories", "label": "Categories separated by |", "default": "Hydrators|Repair & Soothe" },
+        { "type": "textarea", "id": "summary", "label": "Summary", "default": "A cooling humectant that intensely hydrates while calming inflammation and redness." },
+        { "type": "textarea", "id": "about", "label": "About", "default": "A botanical rich in polysaccharides, minerals, and antioxidants traditionally used to comfort stressed skin." },
+        { "type": "textarea", "id": "how_it_works", "label": "How it works", "default": "Its humectant compounds draw water toward the skin while soothing actives support a calm, resilient barrier." },
+        { "type": "text", "id": "source", "label": "Source", "default": "Botanical origin" },
+        { "type": "text", "id": "science_label_1", "label": "Reference 1 label" },
+        { "type": "url", "id": "science_url_1", "label": "Reference 1 URL" },
+        { "type": "text", "id": "science_label_2", "label": "Reference 2 label" },
+        { "type": "url", "id": "science_url_2", "label": "Reference 2 URL" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Ingredient library" }]
+}
+{% endschema %}

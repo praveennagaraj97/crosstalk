@@ -1,5 +1,9 @@
 {
   "sections": {
+    "header": {
+      "type": "storefront-header",
+      "settings": {}
+    },
     "main": {
       "type": "product-placeholder",
       "settings": {
@@ -7,5 +11,5 @@
       }
     }
   },
-  "order": ["main"]
+  "order": ["header", "main"]
 }

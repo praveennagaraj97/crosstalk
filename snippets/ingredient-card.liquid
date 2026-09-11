@@ -1,0 +1,89 @@
+{% liquid
+  if demo
+    assign ingredient_name = ingredient.settings.name
+    assign ingredient_image = ingredient.settings.image
+    assign ingredient_alt = ingredient.settings.image_alt
+    assign ingredient_summary = ingredient.settings.summary
+    assign ingredient_categories = ingredient.settings.categories
+    assign ingredient_about = ingredient.settings.about
+    assign ingredient_works = ingredient.settings.how_it_works
+    assign ingredient_source = ingredient.settings.source
+    assign science_label_1 = ingredient.settings.science_label_1
+    assign science_url_1 = ingredient.settings.science_url_1
+    assign science_label_2 = ingredient.settings.science_label_2
+    assign science_url_2 = ingredient.settings.science_url_2
+  else
+    assign ingredient_name = ingredient.name.value | default: ingredient.system.handle
+    assign ingredient_image = ingredient.card_image.value
+    assign ingredient_alt = ingredient.image_alt.value
+    assign ingredient_summary = ingredient.summary.value
+    assign ingredient_categories = ingredient.categories.value | join: '|'
+    assign ingredient_about = ingredient.about.value
+    assign ingredient_works = ingredient.how_it_works.value
+    assign ingredient_source = ingredient.source.value
+    assign science_label_1 = ingredient.scientific_reference_1_label.value
+    assign science_url_1 = ingredient.scientific_reference_1_url.value
+    assign science_label_2 = ingredient.scientific_reference_2_label.value
+    assign science_url_2 = ingredient.scientific_reference_2_url.value
+  endif
+
+  assign ingredient_letter = ingredient_name | slice: 0 | upcase
+  assign categories_search = ingredient_categories | downcase | replace: ' & ', '-' | replace: ' ', '-'
+  assign search_text = ingredient_name | append: ' ' | append: ingredient_summary | append: ' ' | append: ingredient_categories
+  assign fallback_images = 'brand-story-botanical.png|instagram-feed-03.png|radiance-volcanic-oil-texture.png' | split: '|'
+  assign fallback_index = card_index | modulo: 3
+%}
+
+<article
+  class="group flex min-w-0 flex-col"
+  data-ingredient-card
+  data-letter="{{ ingredient_letter | escape }}"
+  data-categories="{{ categories_search | escape }}"
+  data-search="{{ search_text | escape }}"
+  {% if demo %}{{ ingredient.shopify_attributes }}{% endif %}
+>
+  <button class="cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" type="button" data-open-ingredient aria-label="Learn more about {{ ingredient_name | escape }}">
+    <span class="relative block aspect-[408/473] overflow-hidden rounded-xl bg-[#ede3da]">
+      {% if ingredient_image != blank %}
+        {{ ingredient_image | image_url: width: 900 | image_tag: class: 'size-full object-cover transition-transform duration-500 group-hover:scale-[1.025] group-focus-within:scale-[1.025]', widths: '320, 480, 640, 900', sizes: '(min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw', loading: 'lazy', alt: ingredient_alt }}
+      {% else %}
+        <img class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.025] group-focus-within:scale-[1.025]" src="{{ fallback_images[fallback_index] | asset_url }}" width="408" height="473" loading="lazy" alt="{{ ingredient_alt | default: ingredient_name | escape }}" data-card-image>
+      {% endif %}
+      {% if ingredient_image != blank %}<span class="hidden"><img src="{{ ingredient_image | image_url: width: 900 }}" width="900" height="1044" alt="{{ ingredient_alt | default: ingredient_name | escape }}" data-card-image></span>{% endif %}
+      <span class="absolute top-4 left-4 flex max-w-[calc(100%-2rem)] flex-wrap gap-2">
+        {% assign category_items = ingredient_categories | split: '|' %}
+        {% for category in category_items limit: 2 %}
+          {% if category != blank %}<span class="rounded-full border border-white/35 bg-white/35 px-3 py-1.5 text-[10px] leading-4 font-semibold tracking-[1.5px] text-white uppercase shadow-sm backdrop-blur-xl">{{ category | strip | escape }}</span>{% endif %}
+        {% endfor %}
+      </span>
+    </span>
+    <span class="mt-4 block font-display text-2xl leading-7 text-text-brown" data-card-name>{{ ingredient_name | escape }}</span>
+    <span class="mt-2 block min-h-10 text-sm leading-5 tracking-[0.3px] text-[#7c6253]">{{ ingredient_summary | escape }}</span>
+    <span class="mt-4 inline-flex items-center gap-2 text-xs leading-4 font-semibold tracking-[2px] text-bitter-chocolate uppercase">
+      {{ learn_more_label | escape }} <span aria-hidden="true">↗</span>
+    </span>
+  </button>
+
+  <span class="hidden" data-card-categories-label>{{ ingredient_categories | replace: '|', ' • ' | escape }}</span>
+  <span class="hidden" data-card-about>{{ ingredient_about | escape }}</span>
+  <span class="hidden" data-card-works>{{ ingredient_works | escape }}</span>
+  <span class="hidden" data-card-source>{{ ingredient_source | escape }}</span>
+  <span class="hidden" data-card-products>
+    {% if demo %}
+      <a class="ingredient-dialog__link" href="{{ current_product.url }}">{{ current_product.title | escape }} <span aria-hidden="true">↗</span></a>
+    {% else %}
+      {% for candidate_product in configured_products %}
+        {% assign candidate_ingredients = candidate_product.metafields.custom.ingredients.value %}
+        {% assign ingredient_found = false %}
+        {% for candidate_ingredient in candidate_ingredients %}
+          {% if candidate_ingredient.system.handle == ingredient.system.handle %}{% assign ingredient_found = true %}{% break %}{% endif %}
+        {% endfor %}
+        {% if ingredient_found %}<a class="ingredient-dialog__link" href="{{ candidate_product.url }}">{{ candidate_product.title | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
+      {% endfor %}
+    {% endif %}
+  </span>
+  <span class="hidden" data-card-science>
+    {% if science_label_1 != blank and science_url_1 != blank %}<a class="ingredient-dialog__link" href="{{ science_url_1 }}" rel="noopener noreferrer" target="_blank">{{ science_label_1 | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
+    {% if science_label_2 != blank and science_url_2 != blank %}<a class="ingredient-dialog__link" href="{{ science_url_2 }}" rel="noopener noreferrer" target="_blank">{{ science_label_2 | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
+  </span>
+</article>

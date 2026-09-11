@@ -44,7 +44,41 @@
     });
   };
 
+  const initializeNavigationBubbles = (root = document) => {
+    root.querySelectorAll('[data-navigation-links]:not([data-navigation-ready])').forEach((navigation) => {
+      navigation.dataset.navigationReady = 'true';
+      const bubble = navigation.querySelector('[data-navigation-bubble]');
+      const items = [...navigation.querySelectorAll('[data-navigation-item]')];
+      const activeItem = navigation.querySelector('[data-navigation-active]');
+      if (!bubble || items.length === 0) return;
+
+      const moveBubble = (item) => {
+        if (!item) {
+          bubble.classList.remove('is-visible');
+          return;
+        }
+        const navigationBox = navigation.getBoundingClientRect();
+        const itemBox = item.getBoundingClientRect();
+        bubble.style.setProperty('--nav-bubble-x', `${itemBox.left - navigationBox.left}px`);
+        bubble.style.setProperty('--nav-bubble-width', `${itemBox.width}px`);
+        bubble.classList.add('is-visible');
+      };
+
+      items.forEach((item) => {
+        item.addEventListener('pointerenter', () => moveBubble(item));
+        item.addEventListener('focusin', () => moveBubble(item));
+      });
+      navigation.addEventListener('pointerleave', () => moveBubble(activeItem));
+      navigation.addEventListener('focusout', (event) => {
+        if (!navigation.contains(event.relatedTarget)) moveBubble(activeItem);
+      });
+      window.addEventListener('resize', () => moveBubble(activeItem), { passive: true });
+      window.requestAnimationFrame(() => moveBubble(activeItem));
+    });
+  };
+
   reveal();
+  initializeNavigationBubbles();
 
   document.querySelectorAll('[data-product-flyout]').forEach((details) => {
     const desktop = window.matchMedia('(min-width: 64rem)');
@@ -90,7 +124,10 @@
     syncClearButton();
   });
 
-  document.addEventListener('shopify:section:load', (event) => reveal(event.target));
+  document.addEventListener('shopify:section:load', (event) => {
+    reveal(event.target);
+    initializeNavigationBubbles(event.target);
+  });
   document.addEventListener('click', closeDisclosures);
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeDisclosures(event);
