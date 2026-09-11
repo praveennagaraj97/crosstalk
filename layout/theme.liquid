@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script>document.documentElement.classList.replace('no-js', 'js');</script>
     {% # theme-check-disable RemoteAsset %}
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,14 +11,14 @@
     {% # theme-check-enable RemoteAsset %}
     {{ content_for_header }}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'animations.css' | asset_url | stylesheet_tag }}
   </head>
   <body>
-    {% section 'announcement-marquee' %}
-
     <main id="MainContent" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 
     {% section 'footer' %}
+    <script src="{{ 'reveal.js' | asset_url }}" defer></script>
   </body>
 </html>

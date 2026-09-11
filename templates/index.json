@@ -1,4 +1,8 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "featured_product_hero": {
+      "type": "featured-product-hero"
+    }
+  },
+  "order": ["featured_product_hero"]
 }

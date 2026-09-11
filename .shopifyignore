@@ -1,9 +1,11 @@
-node_modules/
-.github/
-.githooks/
-.vscode/
+node_modules/*
+.github/*
+.githooks/*
+.vscode/*
+scripts/*
 package.json
 package-lock.json
 README.md
 Makefile
 AGENTS.md
+assets/base.css

@@ -9,7 +9,7 @@
 
 <footer class="overflow-hidden bg-bitter-chocolate py-8 text-white">
   <div class="container mx-auto w-full px-4">
-    <div class="flex flex-col items-start justify-between gap-8 lg:min-h-66.25 lg:flex-row lg:gap-20">
+    <div class="flex flex-col items-start justify-between gap-8 lg:min-h-66.25 lg:flex-row lg:gap-20" data-reveal-group>
       {% comment %} Component: Brand {% endcomment %}
       <div class="w-full lg:w-111">
         {% if section.settings.logo != blank %}
@@ -37,11 +37,11 @@
               endcase
             %}
             {% if social_url != blank %}
-              <a class="grid size-10 place-items-center rounded-full border border-white hover:text-logo focus-visible:text-logo" href="{{ social_url }}" aria-label="{{ social_names[social_index] }}" rel="noopener noreferrer" target="_blank">
+              <a class="footer-tile-interactive grid size-10 place-items-center rounded-full border border-white hover:text-logo focus-visible:text-logo" href="{{ social_url }}" aria-label="{{ social_names[social_index] }}" rel="noopener noreferrer" target="_blank">
                 <img class="size-3.5" src="{{ fallback_social_icons[social_index] | asset_url }}" width="14" height="14" loading="lazy" alt="">
               </a>
             {% else %}
-              <span class="grid size-10 place-items-center rounded-full border border-white" aria-hidden="true">
+              <span class="footer-tile-interactive grid size-10 place-items-center rounded-full border border-white" aria-hidden="true">
                 <img class="size-3.5" src="{{ fallback_social_icons[social_index] | asset_url }}" width="14" height="14" loading="lazy" alt="">
               </span>
             {% endif %}
@@ -81,9 +81,9 @@
                 {% endif %}
               {% endcapture %}
               {% if badge_url != blank %}
-                <a href="{{ badge_url }}" class="{{ badge_classes }}" rel="noopener noreferrer" target="_blank">{{ badge_content }}</a>
+                <a href="{{ badge_url }}" class="footer-tile-interactive {{ badge_classes }}" rel="noopener noreferrer" target="_blank">{{ badge_content }}</a>
               {% else %}
-                <span class="{{ badge_classes }}">{{ badge_content }}</span>
+                <span class="footer-tile-interactive {{ badge_classes }}">{{ badge_content }}</span>
               {% endif %}
             {% endfor %}
           </div>
@@ -96,7 +96,7 @@
         {% if section.settings.discover_menu != blank %}
           <ul class="grid list-none gap-1.5 p-0">
             {% for link in section.settings.discover_menu.links %}
-              <li><a class="font-sans text-sm leading-5 font-light no-underline hover:text-logo focus-visible:text-logo lg:text-base lg:leading-6" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              <li><a class="footer-link-interactive font-sans text-sm leading-5 font-light no-underline lg:text-base lg:leading-6" href="{{ link.url }}">{{ link.title | escape }}</a></li>
             {% endfor %}
           </ul>
         {% else %}
@@ -111,9 +111,9 @@
               {% if menu_label != blank %}
                 <li>
                   {% if menu_url != blank %}
-                    <a class="font-sans text-sm leading-5 font-light no-underline hover:text-logo focus-visible:text-logo lg:text-base lg:leading-6" href="{{ menu_url }}">{{ menu_label | escape }}</a>
+                    <a class="footer-link-interactive font-sans text-sm leading-5 font-light no-underline lg:text-base lg:leading-6" href="{{ menu_url }}">{{ menu_label | escape }}</a>
                   {% else %}
-                    <span class="font-sans text-sm leading-5 font-light lg:text-base lg:leading-6">{{ menu_label | escape }}</span>
+                    <span class="footer-link-interactive font-sans text-sm leading-5 font-light lg:text-base lg:leading-6">{{ menu_label | escape }}</span>
                   {% endif %}
                 </li>
               {% endif %}
@@ -124,12 +124,12 @@
     </div>
 
     {% comment %} Component: Legal {% endcomment %}
-    <div class="mt-6 flex flex-col items-start justify-between gap-5 border-t border-white pt-6 lg:flex-row lg:items-center lg:gap-8 lg:pt-8">
+    <div class="mt-6 flex flex-col items-start justify-between gap-5 border-t border-white pt-6 lg:flex-row lg:items-center lg:gap-8 lg:pt-8" data-reveal-group>
       {% if section.settings.legal_menu != blank %}
         <nav aria-label="Legal">
           <ul class="flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
             {% for link in section.settings.legal_menu.links %}
-              <li><a class="font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase no-underline hover:text-logo focus-visible:text-logo" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              <li><a class="footer-link-interactive font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase no-underline" href="{{ link.url }}">{{ link.title | escape }}</a></li>
             {% endfor %}
           </ul>
         </nav>
@@ -140,9 +140,9 @@
               {% if legal_label != blank %}
                 <li>
                   {% if legal_urls[forloop.index0] != blank %}
-                    <a class="font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase no-underline hover:text-logo focus-visible:text-logo" href="{{ legal_urls[forloop.index0] }}">{{ legal_label | escape }}</a>
+                    <a class="footer-link-interactive font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase no-underline" href="{{ legal_urls[forloop.index0] }}">{{ legal_label | escape }}</a>
                   {% else %}
-                    <span class="font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase">{{ legal_label | escape }}</span>
+                    <span class="footer-link-interactive font-sans text-[11px] leading-4 font-light tracking-[0.8px] uppercase">{{ legal_label | escape }}</span>
                   {% endif %}
                 </li>
               {% endif %}

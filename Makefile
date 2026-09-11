@@ -17,7 +17,7 @@ check: build
 	$(SHOPIFY) theme check
 
 package: check
-	$(SHOPIFY) theme package
+	./scripts/package-theme.sh "$(SHOPIFY)"
 
 pull-dev:
 	@test -n "$(STORE)" || (echo "Usage: make pull-dev STORE=your-dev-store.myshopify.com" >&2; exit 1)

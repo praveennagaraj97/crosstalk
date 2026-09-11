@@ -1,0 +1,149 @@
+/* Interaction: navigation glass feedback */
+.hero-glass-interactive {
+  position: relative;
+  isolation: isolate;
+  transition: color 240ms ease, transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.hero-glass-interactive::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -8px -12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 5%));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%), 0 8px 22px rgb(42 34 27 / 8%);
+  opacity: 0;
+  transform: scale(.9);
+  transition: opacity 240ms ease, transform 320ms cubic-bezier(.22, 1, .36, 1), border-color 240ms ease;
+  backdrop-filter: blur(12px);
+}
+
+.hero-glass-interactive:hover,
+.hero-glass-interactive:focus-visible {
+  color: var(--color-white);
+  text-shadow: 0 1px 8px rgb(34 25 20 / 28%);
+  transform: translateY(-1px);
+}
+
+.hero-glass-interactive:hover::before,
+.hero-glass-interactive:focus-visible::before {
+  border-color: rgb(255 255 255 / 22%);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-search-interactive,
+.hero-icon-interactive {
+  transition: transform 320ms cubic-bezier(.22, 1, .36, 1), background-color 240ms ease,
+    box-shadow 320ms ease;
+}
+
+.hero-search-interactive:hover,
+.hero-search-interactive:focus-within {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgb(42 34 27 / 14%), inset 0 1px 0 rgb(255 255 255 / 70%);
+}
+
+.hero-icon-interactive:hover,
+.hero-icon-interactive:focus-visible {
+  background-color: rgb(255 255 255 / 22%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 28%), 0 9px 22px rgb(42 34 27 / 14%);
+  transform: translateY(-2px) scale(1.055);
+}
+
+.hero-icon-interactive > img {
+  transition: transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.hero-search-clear {
+  background: rgb(164 113 73 / 10%);
+  transition: background-color 200ms ease, transform 260ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.hero-search-clear:hover,
+.hero-search-clear:focus-visible {
+  background: rgb(164 113 73 / 20%);
+  transform: rotate(90deg) scale(1.08);
+}
+
+.hero-icon-interactive:hover > img,
+.hero-icon-interactive:focus-visible > img {
+  transform: scale(1.08);
+}
+
+/* Interaction: footer links and tiles */
+.footer-link-interactive {
+  position: relative;
+  display: inline-block;
+  transition: color 240ms ease, transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.footer-link-interactive::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: .7;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 360ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.footer-link-interactive:hover,
+.footer-link-interactive:focus-visible {
+  color: var(--color-white);
+  text-shadow: 0 1px 8px rgb(25 9 8 / 28%);
+  transform: translateY(-1px);
+}
+
+.footer-link-interactive:hover::after,
+.footer-link-interactive:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.footer-tile-interactive {
+  transition: border-color 240ms ease, box-shadow 320ms ease, transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.footer-tile-interactive:hover,
+.footer-tile-interactive:focus-visible {
+  border-color: rgb(255 255 255 / 70%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 22%), 0 10px 24px rgb(25 9 8 / 22%);
+  transform: translateY(-3px) scale(1.025);
+}
+
+/* Accessibility: remove movement while preserving visible state */
+@media (prefers-reduced-motion: reduce) {
+  .hero-glass-interactive,
+  .hero-glass-interactive::before,
+  .hero-search-interactive,
+  .hero-icon-interactive,
+  .hero-icon-interactive > img,
+  .hero-search-clear,
+  .footer-link-interactive,
+  .footer-link-interactive::after,
+  .footer-tile-interactive {
+    transition: none;
+  }
+
+  .hero-glass-interactive:hover,
+  .hero-glass-interactive:focus-visible,
+  .hero-search-interactive:hover,
+  .hero-search-interactive:focus-within,
+  .hero-icon-interactive:hover,
+  .hero-icon-interactive:focus-visible,
+  .hero-icon-interactive:hover > img,
+  .hero-icon-interactive:focus-visible > img,
+  .footer-link-interactive:hover,
+  .footer-link-interactive:focus-visible,
+  .footer-tile-interactive:hover,
+  .footer-tile-interactive:focus-visible {
+    transform: none;
+  }
+}
