@@ -1,0 +1,150 @@
+{% liquid
+  assign contact_url = section.settings.contact_url
+  if contact_url == blank
+    assign contact_url = routes.root_url
+  endif
+%}
+
+<section id="SupportFaqSection-{{ section.id }}" class="bg-background pt-5 pb-15" aria-labelledby="SupportFaq-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-200">
+      {% comment %} Component: Support heading {% endcomment %}
+      <header class="text-center" data-reveal-group>
+        {% if section.settings.eyebrow != blank %}
+          <p class="bg-[linear-gradient(147deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[3px] text-transparent uppercase">
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 id="SupportFaq-{{ section.id }}" class="mt-2 font-display text-[2.125rem] leading-10.5 font-normal text-text-brown">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {% endif %}
+      </header>
+
+      {% comment %} Component: FAQ accordion {% endcomment %}
+      <div class="mt-16 space-y-4" data-reveal-group>
+        {% for block in section.blocks %}
+          <details class="group overflow-hidden rounded-xl border border-[#f3ede7] bg-[#f3ede7]/20 transition-colors open:bg-[#f3ede7]/25 hover:border-toasted-almond/50"{% if forloop.first and section.settings.open_first %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="flex min-h-18 cursor-pointer list-none items-center justify-between gap-6 px-6 py-5 text-left text-base leading-6 font-medium tracking-[0.4px] text-text-brown outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pecan-brown [&::-webkit-details-marker]:hidden">
+              <span>{{ block.settings.question | escape }}</span>
+              <img class="h-2 w-3 shrink-0 transition-transform duration-300 group-open:rotate-180" src="{{ 'faq-chevron.svg' | asset_url }}" width="12" height="8" alt="">
+            </summary>
+            <div class="support-faq__answer">
+              <div>
+                <p class="px-6 pb-6 text-sm leading-5 tracking-[0.4px] text-pecan-brown">
+                  {{ block.settings.answer | escape }}
+                </p>
+              </div>
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+
+      {% comment %} Component: Contact support card {% endcomment %}
+      <aside class="mt-16 rounded-2xl border border-[#f5ebe1] bg-pecan-brown/5 p-8 text-center" data-reveal-group aria-label="{{ section.settings.contact_heading | escape }}">
+        {% if section.settings.contact_heading != blank %}
+          <h3 class="text-base leading-6 font-semibold tracking-[0.4px] text-text-brown">{{ section.settings.contact_heading | escape }}</h3>
+        {% endif %}
+        {% if section.settings.contact_text != blank %}
+          <p class="mt-2 text-sm leading-5 tracking-[0.4px] text-pecan-brown">{{ section.settings.contact_text | escape }}</p>
+        {% endif %}
+        {% if section.settings.contact_label != blank %}
+          <a class="chrome-action relative mt-4 inline-flex min-h-10.5 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-4 py-3 text-center text-sm leading-4.5 font-semibold tracking-[0.4px] text-[#f4dfb8] shadow-[0_4px_6px_-1px_rgb(166_114_105/30%),inset_0_1px_1px_1px_rgb(255_255_255/40%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ contact_url }}">
+            <span class="relative z-10">{{ section.settings.contact_label | escape }}</span>
+          </a>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.getElementById('SupportFaqSection-{{ section.id }}');
+    if (!section || section.dataset.accordionReady === 'true') return;
+
+    section.dataset.accordionReady = 'true';
+
+    section.querySelectorAll('details').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const answer = details.querySelector('.support-faq__answer');
+      let animation;
+      let closing = false;
+
+      summary.addEventListener('click', (event) => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        event.preventDefault();
+        animation?.cancel();
+
+        const startHeight = `${details.offsetHeight}px`;
+        const shouldClose = details.open && !closing;
+
+        if (!shouldClose) {
+          closing = false;
+          details.open = true;
+        } else {
+          closing = true;
+        }
+
+        const endHeight = shouldClose ? `${summary.offsetHeight}px` : `${summary.offsetHeight + answer.scrollHeight}px`;
+
+        details.style.overflow = 'hidden';
+        animation = details.animate(
+          { height: [startHeight, endHeight] },
+          { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+
+        animation.onfinish = () => {
+          if (shouldClose) details.open = false;
+          closing = false;
+          details.style.height = '';
+          details.style.overflow = '';
+          animation = undefined;
+        };
+
+        animation.oncancel = () => {
+          details.style.height = '';
+          details.style.overflow = '';
+        };
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Support FAQ",
+  "tag": "section",
+  "class": "support-faq-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Support" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How can we help?" },
+    { "type": "checkbox", "id": "open_first", "label": "Open first question", "default": true },
+    { "type": "text", "id": "contact_heading", "label": "Contact heading", "default": "Still have questions?" },
+    { "type": "text", "id": "contact_text", "label": "Contact text", "default": "Our support team is available Monday—Friday, 9am to 6pm EST." },
+    { "type": "text", "id": "contact_label", "label": "Contact button label", "default": "Contact Us" },
+    { "type": "url", "id": "contact_url", "label": "Contact link" }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What is your question?" },
+        { "type": "textarea", "id": "answer", "label": "Answer", "default": "Add the answer here." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Support FAQ",
+    "blocks": [
+      { "type": "question", "settings": { "question": "What is your shipping & delivery policy?", "answer": "We offer complimentary standard shipping on orders over $250. Standard delivery typically takes 5-7 business days. Express shipping is available at checkout for an additional fee." } },
+      { "type": "question", "settings": { "question": "Do you ship internationally?", "answer": "Yes. International shipping options and delivery estimates are shown at checkout." } },
+      { "type": "question", "settings": { "question": "What is the return process?", "answer": "Contact our support team to begin a return and receive the next steps." } }
+    ]
+  }]
+}
+{% endschema %}

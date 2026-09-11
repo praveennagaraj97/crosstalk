@@ -82,7 +82,35 @@
     "ritual_newsletter": {
       "type": "newsletter",
       "settings": {}
+    },
+    "support_faq": {
+      "type": "support-faq",
+      "blocks": {
+        "shipping": {
+          "type": "question",
+          "settings": {
+            "question": "What is your shipping & delivery policy?",
+            "answer": "We offer complimentary standard shipping on orders over $250. Standard delivery typically takes 5-7 business days. Express shipping is available at checkout for an additional fee."
+          }
+        },
+        "international": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. International shipping options and delivery estimates are shown at checkout."
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "What is the return process?",
+            "answer": "Contact our support team to begin a return and receive the next steps."
+          }
+        }
+      },
+      "block_order": ["shipping", "international", "returns"],
+      "settings": {}
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered", "ritual_newsletter"]
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered", "ritual_newsletter", "support_faq"]
 }
