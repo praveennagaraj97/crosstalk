@@ -1,0 +1,110 @@
+{% comment %} Section: Ritual newsletter {% endcomment %}
+<section class="bg-background py-14 sm:py-16 lg:py-20" aria-labelledby="RitualNewsletter-{{ section.id }}">
+  {% comment %} Component: Ritual newsletter panel {% endcomment %}
+  <div class="container mx-auto px-4">
+    <div
+      class="relative isolate min-h-123.5 overflow-hidden rounded-4xl border border-[color:rgb(212_108_17/5%)] bg-[#ead8c2] px-6 py-10 shadow-sm sm:px-10 sm:py-14 lg:px-20 lg:py-20"
+      data-reveal-group
+      data-newsletter-panel
+    >
+      {% comment %} Component: Botanical background {% endcomment %}
+      <div class="absolute inset-0 -z-10">
+        {% if section.settings.background_image != blank %}
+          {{ section.settings.background_image | image_url: width: 2400 | image_tag: class: 'size-full object-cover object-center', widths: '640, 960, 1280, 1600, 2000, 2400', sizes: '(min-width: 1024px) 1280px, 100vw', loading: 'lazy' }}
+        {% else %}
+          <img class="size-full object-cover object-center" src="{{ 'ritual-newsletter-background.png' | asset_url }}" width="2816" height="1536" loading="lazy" alt="">
+        {% endif %}
+      </div>
+
+      {% comment %} Component: Newsletter content and form {% endcomment %}
+      <div class="max-w-128 text-text-brown">
+        {% if section.settings.eyebrow != blank %}
+          <p class="bg-[linear-gradient(173deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text px-1.25 text-sm leading-5 font-bold tracking-[6px] text-transparent uppercase">
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 id="RitualNewsletter-{{ section.id }}" class="mt-4 font-display text-[2.5rem] leading-[1.08] font-normal sm:text-5xl sm:leading-[1.2]">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <p class="mt-8 max-w-126.5 px-1.25 text-base leading-7 tracking-[0.4px] text-bitter-chocolate sm:text-lg sm:leading-[1.625]">
+            {{ section.settings.text | escape }}
+          </p>
+        {% endif %}
+
+        {% form 'customer', class: 'mt-8 px-1.25' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <label class="visually-hidden" for="RitualNewsletterEmail-{{ section.id }}">{{ section.settings.email_label | escape }}</label>
+            <input
+              id="RitualNewsletterEmail-{{ section.id }}"
+              data-newsletter-email
+              class="h-[60px] w-full min-w-0 rounded-lg border border-background bg-background px-6 text-base leading-6 tracking-[0.4px] text-text-brown outline-none transition-shadow placeholder:text-[#b18a73] focus:border-toasted-almond focus:ring-2 focus:ring-toasted-almond/40 sm:flex-1"
+              type="email"
+              name="contact[email]"
+              value="{% if customer %}{{ customer.email | escape }}{% endif %}"
+              autocomplete="email"
+              autocapitalize="off"
+              spellcheck="false"
+              style="height: 60px;"
+              placeholder="{{ section.settings.email_placeholder | escape }}"
+              required
+              {% if form.errors %}aria-invalid="true" aria-describedby="RitualNewsletterMessage-{{ section.id }}"{% endif %}
+            >
+            <button class="chrome-action relative inline-flex min-h-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(133deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-8 py-4 text-center text-base leading-5 font-semibold tracking-[1.4px] text-[#f4dfb8] uppercase shadow-[0_4px_6px_-1px_rgb(166_114_105/30%),inset_0_1px_1px_1px_rgb(255_255_255/40%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" type="submit">
+              <span class="relative z-10">{{ section.settings.button_label | escape }}</span>
+            </button>
+          </div>
+
+          {% if form.posted_successfully? %}
+            <p id="RitualNewsletterMessage-{{ section.id }}" class="mt-4 text-sm font-semibold text-bitter-chocolate" role="status" tabindex="-1">
+              {{ section.settings.success_message | escape }}
+            </p>
+          {% elsif form.errors %}
+            <div id="RitualNewsletterMessage-{{ section.id }}" class="mt-4 text-sm font-semibold text-bitter-chocolate" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          {% if section.settings.privacy_text != blank %}
+            <p class="mt-6 text-[0.625rem] leading-3.75 font-bold tracking-[1px] text-text-brown uppercase">
+              {% if section.settings.privacy_link != blank %}
+                <a class="underline decoration-transparent underline-offset-4 transition-colors hover:text-pecan-brown hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ section.settings.privacy_link }}">
+                  {{ section.settings.privacy_text | escape }}
+                </a>
+              {% else %}
+                {{ section.settings.privacy_text | escape }}
+              {% endif %}
+            </p>
+          {% endif %}
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ritual newsletter",
+  "tag": "section",
+  "class": "ritual-newsletter-section",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Newsletter" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Join the Amaari Ritual" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Subscribe for early access to rituals, seasonal edits, and botanical stories." },
+    { "type": "text", "id": "email_label", "label": "Email field label", "default": "Email address" },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Subscribe" },
+    { "type": "text", "id": "success_message", "label": "Success message", "default": "Welcome to the Amaari ritual." },
+    { "type": "text", "id": "privacy_text", "label": "Privacy notice", "default": "By subscribing, you agree to our privacy policy." },
+    { "type": "url", "id": "privacy_link", "label": "Privacy policy link" }
+  ],
+  "presets": [{ "name": "Ritual newsletter" }]
+}
+{% endschema %}

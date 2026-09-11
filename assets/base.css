@@ -88,6 +88,15 @@
     transform: scale(1);
   }
 
+  .js [data-newsletter-panel] > :first-child {
+    transform: scale(1.02);
+    transition-duration: 800ms;
+  }
+
+  .js [data-newsletter-panel].is-revealed > :first-child {
+    transform: scale(1);
+  }
+
   [data-reveal-nav] > * {
     transition-duration: 420ms;
   }

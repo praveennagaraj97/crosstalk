@@ -78,7 +78,11 @@
     "brand_story_layered": {
       "type": "brand-story-layered",
       "settings": {}
+    },
+    "ritual_newsletter": {
+      "type": "newsletter",
+      "settings": {}
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered"]
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered", "ritual_newsletter"]
 }
