@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "featured_product_hero": {
+      "type": "featured-product-hero",
+      "blocks": {
+        "radiance_product": {
+          "type": "product",
+          "settings": {
+            "product": "radiance-volcanic-oil",
+            "subtitle": "Restorative Night Treatment"
+          }
+        }
+      },
+      "block_order": ["radiance_product"],
+      "settings": {
+        "featured_product": "radiance-volcanic-oil"
+      }
+    },
+    "featured_product_deep_dive": {
+      "type": "featured-product-deep-dive",
+      "blocks": {
+        "bio_active": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Bio-Active",
+            "text": "Stimulates cellular renewal at the surface level."
+          }
+        },
+        "deep_glow": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Deep Glow",
+            "text": "Instant light-reflecting minerals for a velvet finish."
+          }
+        }
+      },
+      "block_order": ["bio_active", "deep_glow"],
+      "settings": {
+        "featured_product": "radiance-volcanic-oil"
+      }
+    },
+    "technology_showcase": {
+      "type": "technology-showcase",
+      "blocks": {
+        "cellular_transport": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "plus",
+            "heading": "Cellular Transport",
+            "text": "Encapsulated minerals bypass the dermal barrier for direct delivery."
+          }
+        },
+        "thermal_activation": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "minus",
+            "heading": "Thermal Activation",
+            "text": "Reactive volcanic compounds respond to natural skin temperature."
+          }
+        }
+      },
+      "block_order": ["cellular_transport", "thermal_activation"],
+      "settings": {}
+    },
+    "instagram_feed": {
+      "type": "instagram-feed",
+      "blocks": {
+        "journal_image_1": { "type": "image", "settings": {} },
+        "journal_image_2": { "type": "image", "settings": {} },
+        "journal_image_3": { "type": "image", "settings": {} },
+        "journal_image_4": { "type": "image", "settings": {} },
+        "journal_image_5": { "type": "image", "settings": {} },
+        "journal_image_6": { "type": "image", "settings": {} }
+      },
+      "block_order": ["journal_image_1", "journal_image_2", "journal_image_3", "journal_image_4", "journal_image_5", "journal_image_6"],
+      "settings": {}
+    },
+    "brand_story_layered": {
+      "type": "brand-story-layered",
+      "settings": {}
+    },
+    "ritual_newsletter": {
+      "type": "newsletter",
+      "settings": {}
+    },
+    "support_faq": {
+      "type": "support-faq",
+      "blocks": {
+        "shipping": {
+          "type": "question",
+          "settings": {
+            "question": "What is your shipping & delivery policy?",
+            "answer": "We offer complimentary standard shipping on orders over $250. Standard delivery typically takes 5-7 business days. Express shipping is available at checkout for an additional fee."
+          }
+        },
+        "international": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. International shipping options and delivery estimates are shown at checkout."
+          }
+        },
+        "returns": {
+          "type": "question",
+          "settings": {
+            "question": "What is the return process?",
+            "answer": "Contact our support team to begin a return and receive the next steps."
+          }
+        }
+      },
+      "block_order": ["shipping", "international", "returns"],
+      "settings": {}
+    }
+  },
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered", "ritual_newsletter", "support_faq"]
+}
