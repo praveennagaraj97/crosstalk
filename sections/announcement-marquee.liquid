@@ -1,5 +1,5 @@
-<section class="h-10 overflow-hidden border-b border-white/20 bg-white/40 text-pecan-brown shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px] [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-marquee-enter motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once aria-label="Promotions">
-  <div class="flex h-full w-max items-center animate-marquee-scroll hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:w-full motion-reduce:justify-center motion-reduce:animate-none" tabindex="0">
+<section class="h-10 overflow-hidden border-b border-white/20 bg-white/40 text-pecan-brown shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px]" aria-label="Promotions">
+  <div class="marquee-track flex h-full w-max items-center" tabindex="0">
     {% capture announcement_items %}
       {% if section.blocks.size > 0 %}
         {% for block in section.blocks %}
@@ -28,7 +28,7 @@
         {{ announcement_items }}
       {% endif %}
     </div>
-    <div class="flex shrink-0 items-center gap-8 pr-12 motion-reduce:hidden" aria-hidden="true">
+    <div class="marquee-copy flex shrink-0 items-center gap-8 pr-12" aria-hidden="true">
       {{ announcement_items }}
     </div>
   </div>

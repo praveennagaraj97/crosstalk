@@ -18,11 +18,10 @@
 
 ## Animation and motion
 
-- Keep motion tokens and keyframes in `src/global.css`; apply the generated animation utilities in Liquid.
-- Give each section a distinct entrance treatment and stagger repeated siblings using CSS custom-property delays; avoid a single generic animation everywhere.
-- Keep animations short, subtle, and meaningful. Every animation must have a `prefers-reduced-motion` fallback that removes motion without hiding content.
-- Animate on view once: use `data-reveal-once` with the shared GSAP ScrollTrigger controller in `assets/theme.js`; trigger each element once as it enters the viewport and never replay it on later scrolls.
-- Keep the approved GSAP and ScrollTrigger distribution files in `assets/`; do not add further vendor dependencies without a documented storefront need.
+- Prefer no animation unless it communicates behavior or is essential to a component.
+- Use CSS for simple motion. Do not add an animation library without a documented storefront requirement.
+- Keep the few shared motion rules and keyframes in `src/global.css` rather than repeating state utilities throughout Liquid markup.
+- Every animation must have one centralized `prefers-reduced-motion` fallback that removes motion without hiding content.
 - For desktop references, match the supplied Figma typography weights and line heights before adjusting scale or spacing. Treat a full desktop view as the visual acceptance reference for every implemented screen.
 
 ## Quality
