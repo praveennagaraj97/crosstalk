@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-placeholder",
+      "settings": {
+        "placeholder_text": "This is product detail page."
+      }
+    }
+  },
+  "order": ["main"]
+}

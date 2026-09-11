@@ -1,7 +1,20 @@
 {
   "sections": {
     "featured_product_hero": {
-      "type": "featured-product-hero"
+      "type": "featured-product-hero",
+      "blocks": {
+        "radiance_product": {
+          "type": "product",
+          "settings": {
+            "product": "radiance-volcanic-oil",
+            "subtitle": "Restorative Night Treatment"
+          }
+        }
+      },
+      "block_order": ["radiance_product"],
+      "settings": {
+        "featured_product": "radiance-volcanic-oil"
+      }
     }
   },
   "order": ["featured_product_hero"]

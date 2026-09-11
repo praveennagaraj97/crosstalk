@@ -1,0 +1,19 @@
+{% comment %} Product detail placeholder {% endcomment %}
+<section class="container mx-auto px-4 py-12" aria-labelledby="ProductTitle-{{ section.id }}">
+  <h1 id="ProductTitle-{{ section.id }}" class="visually-hidden">{{ product.title | escape }}</h1>
+  <p>{{ section.settings.placeholder_text | escape }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "Product placeholder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Placeholder text",
+      "default": "This is product detail page."
+    }
+  ]
+}
+{% endschema %}
