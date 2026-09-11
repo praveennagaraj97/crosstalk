@@ -1,25 +1,25 @@
-<section class="h-10 overflow-hidden border-b border-white/20 bg-white/40 text-pecan-brown shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px]" aria-label="Promotions">
+<section class="h-8 overflow-hidden border-b border-white/20 bg-white/40 text-pecan-brown shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px]" aria-label="Promotions">
   <div class="marquee-track flex h-full w-max items-center" tabindex="0">
     {% capture announcement_items %}
       {% if section.blocks.size > 0 %}
         {% for block in section.blocks %}
-          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]">
+          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]">
             <span>{{ block.settings.text | escape }}</span>
             <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
           </span>
         {% endfor %}
       {% else %}
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>New product drop in 6hrs</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>Suitable for all skin types</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>First time users get 10% OFF</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>Promo code FIRST10</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>New product drop in 6hrs</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>Suitable for all skin types</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>First time users get 10% OFF</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>Promo code FIRST10</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
       {% endif %}
     {% endcapture %}
 
     <div class="flex shrink-0 items-center gap-8 pr-12">
       {% if section.blocks.size > 0 %}
         {% for block in section.blocks %}
-          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]" {{ block.shopify_attributes }}>
+          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]" {{ block.shopify_attributes }}>
             <span>{{ block.settings.text | escape }}</span>
             <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
           </span>

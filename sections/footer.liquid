@@ -92,11 +92,11 @@
 
       {% comment %} Component: Navigation {% endcomment %}
       <nav class="w-full lg:w-43.75 lg:self-center" aria-label="{{ section.settings.menu_heading | escape }}">
-        <h2 class="mb-4.5 text-lg leading-7 font-normal tracking-[0.2px] uppercase">{{ section.settings.menu_heading | escape }}</h2>
+        <h2 class="mb-4.5 text-lg">{{ section.settings.menu_heading | escape }}</h2>
         {% if section.settings.discover_menu != blank %}
           <ul class="grid list-none gap-2.5 p-0">
             {% for link in section.settings.discover_menu.links %}
-              <li><a class="text-lg leading-7 font-normal tracking-[0.2px] no-underline hover:text-logo focus-visible:text-logo" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              <li><a class="text-sm font-light no-underline hover:text-logo focus-visible:text-logo" href="{{ link.url }}">{{ link.title | escape }}</a></li>
             {% endfor %}
           </ul>
         {% else %}
@@ -111,9 +111,9 @@
               {% if menu_label != blank %}
                 <li>
                   {% if menu_url != blank %}
-                    <a class="text-lg leading-7 font-normal tracking-[0.2px] no-underline hover:text-logo focus-visible:text-logo" href="{{ menu_url }}">{{ menu_label | escape }}</a>
+                    <a class="text-sm font-light no-underline hover:text-logo focus-visible:text-logo" href="{{ menu_url }}">{{ menu_label | escape }}</a>
                   {% else %}
-                    <span class="text-lg leading-7 font-normal tracking-[0.2px]">{{ menu_label | escape }}</span>
+                    <span class="text-sm font-light">{{ menu_label | escape }}</span>
                   {% endif %}
                 </li>
               {% endif %}
