@@ -13,10 +13,17 @@
     const optionGroups = [...section.querySelectorAll('[data-option-group]')];
     const priceTargets = [...section.querySelectorAll('[data-product-price], [data-floating-price]')];
     const comparePrice = section.querySelector('[data-compare-price]');
-    const addButtons = [...section.querySelectorAll('[data-add-to-cart], [data-floating-add]')];
+    const addButtons = [...section.querySelectorAll('[data-add-to-cart]')];
+    const primaryAddButton = section.querySelector('[data-add-to-cart]');
+    const floatingAddButton = section.querySelector('[data-floating-add]');
+    const floatingAddLabel = floatingAddButton?.querySelector('[data-floating-add-label]');
+    const floatingCart = section.querySelector('[data-floating-cart]');
+    const primaryPurchase = section.querySelector('[data-primary-purchase]');
     const stockTargets = [...section.querySelectorAll('[data-inventory-status], [data-floating-stock]')];
     const currency = window.Shopify?.currency?.active || 'USD';
     const addLabel = section.querySelector('[data-add-label]')?.textContent.trim() || 'Add to Cart';
+    const checkoutLabel = section.dataset.checkoutLabel || 'Checkout';
+    const soldOutLabel = section.dataset.soldOutLabel || 'Sold out';
     const galleryStage = section.querySelector('[data-gallery-stage]');
     const galleryThumbs = [...section.querySelectorAll('[data-gallery-thumb]')];
     let quantity = 1;
@@ -50,7 +57,11 @@
     const selectVariant = () => {
       const selected = optionGroups.map((group) => group.querySelector('.is-selected')?.dataset.optionValue);
       const variant = variants.find((candidate) => candidate.options.every((value, index) => value === selected[index]));
-      if (!variant) return addButtons.forEach((button) => { button.disabled = true; });
+      if (!variant) {
+        addButtons.forEach((button) => { button.disabled = true; });
+        if (floatingAddButton) floatingAddButton.disabled = true;
+        return;
+      }
       if (idInput) idInput.value = variant.id;
       priceTargets.forEach((target) => { target.textContent = formatMoney(variant.price, currency); });
       if (comparePrice) {
@@ -59,9 +70,11 @@
       }
       addButtons.forEach((button) => {
         button.disabled = !variant.available;
-        (button.querySelector('[data-add-label]') || button).textContent = variant.available ? addLabel : 'Sold out';
+        (button.querySelector('[data-add-label]') || button).textContent = variant.available ? addLabel : soldOutLabel;
       });
-      stockTargets.forEach((target) => { target.textContent = variant.available ? '● In stock' : 'Sold out'; });
+      if (floatingAddButton) floatingAddButton.disabled = !variant.available;
+      if (floatingAddLabel) floatingAddLabel.textContent = variant.available ? checkoutLabel : soldOutLabel;
+      stockTargets.forEach((target) => { target.textContent = variant.available ? 'In Stock' : soldOutLabel; });
       showMedia(variant.featured_media?.id);
       const url = new URL(window.location.href);
       url.searchParams.set('variant', variant.id);
@@ -112,6 +125,28 @@
     };
     section.querySelector('[data-quantity-minus]')?.addEventListener('click', () => setQuantity(quantity - 1));
     section.querySelector('[data-quantity-plus]')?.addEventListener('click', () => setQuantity(quantity + 1));
+
+    floatingAddButton?.addEventListener('click', () => {
+      if (!primaryAddButton || primaryAddButton.disabled) return;
+      form?.requestSubmit(primaryAddButton);
+    });
+
+    if (floatingCart && primaryPurchase) {
+      let scrollFrame;
+      const syncFloatingCart = () => {
+        scrollFrame = undefined;
+        const visible = primaryPurchase.getBoundingClientRect().bottom < 0;
+        floatingCart.classList.toggle('is-visible', visible);
+        floatingCart.setAttribute('aria-hidden', String(!visible));
+      };
+      const queueFloatingCartSync = () => {
+        if (scrollFrame) return;
+        scrollFrame = window.requestAnimationFrame(syncFloatingCart);
+      };
+      window.addEventListener('scroll', queueFloatingCartSync, { passive: true });
+      window.addEventListener('resize', queueFloatingCartSync, { passive: true });
+      syncFloatingCart();
+    }
 
     const comparison = section.querySelector('[data-comparison-range]');
     comparison?.addEventListener('input', () => {

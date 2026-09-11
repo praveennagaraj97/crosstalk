@@ -17,7 +17,7 @@
   assign primary_form_id = 'ProductForm-' | append: section.id
 %}
 
-<section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}">
+<section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}" data-checkout-label="{{ section.settings.floating_checkout_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}">
   <div class="container mx-auto grid items-start gap-8 px-4 pt-5 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8 lg:pt-10">
     {% comment %} Component: Sticky product gallery {% endcomment %}
     <div class="w-full lg:sticky lg:top-5" data-product-gallery data-reveal-group>
@@ -209,6 +209,29 @@
 
     </div>
   </div>
+
+  {% comment %} Component: Persistent floating purchase bar {% endcomment %}
+  <div class="pointer-events-none fixed inset-x-0 bottom-8 z-50 translate-y-5 opacity-0" data-floating-cart aria-hidden="true">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto flex min-h-16 w-full max-w-[896px] items-center justify-between gap-3 rounded-full border border-pecan-brown/10 bg-white/95 py-2 pr-2 pl-5 shadow-[0_25px_50px_-12px_rgb(0_0_0/25%)] backdrop-blur-2xl lg:min-h-[74px] lg:py-3 lg:pr-4 lg:pl-[22px]">
+        <div class="flex min-w-0 items-center gap-4 lg:px-2">
+          <div class="min-w-0">
+            <p class="truncate text-[10px] leading-4 tracking-[1.1px] text-bitter-chocolate uppercase lg:text-xs lg:leading-5">{{ product.title | escape }}</p>
+            <p class="text-sm leading-5 font-semibold tracking-[1px] text-text-brown uppercase lg:text-base" data-floating-price>{{ current_variant.price | money }}</p>
+          </div>
+          <span class="hidden h-10 w-px bg-pecan-brown/10 sm:block" aria-hidden="true"></span>
+          <div class="hidden items-center gap-3 sm:flex">
+            <img class="size-3 shrink-0" src="{{ '47-6899.svg' | asset_url }}" width="12" height="12" alt="">
+            <span class="whitespace-nowrap text-[10px] leading-5 tracking-[1.1px] text-text-brown uppercase lg:text-xs" data-floating-stock>{% if current_variant.available %}{{ section.settings.in_stock_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-2 lg:gap-4">
+          <button class="chrome-action relative h-12 min-w-32 overflow-hidden rounded-full bg-[linear-gradient(135deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 text-xs font-bold tracking-[1.4px] text-[#f4dfb8] uppercase shadow-[inset_0_1px_0_rgb(255_255_255/40%),0_4px_6px_-1px_rgb(166_114_105/30%)] disabled:cursor-not-allowed disabled:opacity-50 lg:min-w-[165px] lg:px-8 lg:text-sm" type="button" data-floating-add {% unless current_variant.available %}disabled{% endunless %}><span data-floating-add-label>{% if current_variant.available %}{{ section.settings.floating_checkout_label | escape }}{% else %}{{ section.settings.sold_out_label | escape }}{% endif %}</span></button>
+          <button class="grid size-12 cursor-not-allowed place-items-center rounded-full border-[1.5px] border-bitter-chocolate shadow-[0_8px_10px_-6px_rgb(212_108_17/20%),0_20px_25px_-5px_rgb(212_108_17/20%)]" type="button" disabled aria-label="Wishlist unavailable" title="Wishlist coming soon"><img src="{{ '56-9281.svg' | asset_url }}" class="h-5 w-[22px]" width="22" height="20" alt=""></button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="application/json" data-product-json>{{ product.variants | json }}</script>
 </section>
 <script src="{{ 'product-detail.js' | asset_url }}" defer></script>
@@ -223,6 +246,7 @@
     { "type": "text", "id": "add_label", "label": "Add button", "default": "Add to Cart" },
     { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold Out" },
     { "type": "text", "id": "in_stock_label", "label": "Available label", "default": "In Stock" },
+    { "type": "text", "id": "floating_checkout_label", "label": "Floating checkout button", "default": "Checkout" },
     { "type": "text", "id": "gallery_marquee", "label": "Gallery marquee", "default": "Suitable for all skin types" },
     { "type": "text", "id": "ingredients_heading", "label": "Ingredients heading", "default": "Earth-Derived Actives" },
     { "type": "text", "id": "standards_eyebrow", "label": "Standards eyebrow", "default": "Our Standards" },
