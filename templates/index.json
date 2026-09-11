@@ -74,7 +74,11 @@
       },
       "block_order": ["journal_image_1", "journal_image_2", "journal_image_3", "journal_image_4", "journal_image_5", "journal_image_6"],
       "settings": {}
+    },
+    "brand_story_layered": {
+      "type": "brand-story-layered",
+      "settings": {}
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed"]
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered"]
 }

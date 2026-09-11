@@ -79,6 +79,15 @@
     transform: none;
   }
 
+  .js [data-brand-art] > * {
+    transform: scale(1.035);
+    transition-duration: 850ms;
+  }
+
+  .js [data-brand-art].is-revealed > * {
+    transform: scale(1);
+  }
+
   [data-reveal-nav] > * {
     transition-duration: 420ms;
   }

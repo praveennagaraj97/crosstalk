@@ -1,0 +1,81 @@
+{% liquid
+  assign philosophy_url = section.settings.link_url
+  if philosophy_url == blank
+    assign philosophy_url = routes.root_url
+  endif
+%}
+
+<section
+  class="relative isolate overflow-hidden bg-bitter-chocolate py-16 text-white sm:py-20 lg:min-h-227.25 lg:py-30"
+  style="--brand-story-bg: {{ section.settings.background_color }}; --brand-story-accent: {{ section.settings.accent_color }}; --brand-story-muted: {{ section.settings.muted_color }}; background-color: var(--brand-story-bg);"
+  aria-labelledby="BrandStory-{{ section.id }}"
+>
+  {% comment %} Component: Botanical backdrop {% endcomment %}
+  <div class="absolute inset-x-0 bottom-0 h-[44%] overflow-hidden sm:h-1/2 lg:inset-y-0 lg:right-0 lg:left-1/2 lg:h-auto" aria-hidden="true" data-reveal-group data-brand-art>
+    <div class="size-full">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 1800 | image_tag: class: 'size-full object-cover opacity-30 mix-blend-overlay', widths: '480, 720, 960, 1200, 1440, 1800', sizes: '(min-width: 1024px) 50vw, 100vw', loading: 'lazy' }}
+      {% else %}
+        <img class="size-full object-cover opacity-30 mix-blend-overlay" src="{{ 'brand-story-botanical.png' | asset_url }}" width="512" height="512" loading="lazy" alt="">
+      {% endif %}
+    </div>
+  </div>
+
+  {% comment %} Component: Brand story editorial content {% endcomment %}
+  <div class="container relative z-10 mx-auto grid px-4 lg:min-h-167.25 lg:grid-cols-2 lg:items-center lg:gap-20">
+    <div data-reveal-group>
+      <h2 id="BrandStory-{{ section.id }}" class="font-display text-[3.25rem] leading-[1.12] font-normal tracking-[-0.02em] uppercase sm:text-[4rem] lg:text-[4.875rem] lg:leading-[1.218]">
+        <span class="block">{{ section.settings.heading_line_1 | escape }}</span>
+        <span class="block bg-[linear-gradient(108deg,#fff4c9_0%,#e4b960_42%,#fff0b3_70%,#c68b36_100%)] bg-clip-text text-transparent drop-shadow-[0_2px_7px_rgb(255_211_112/25%)]">{{ section.settings.heading_line_2 | escape }}</span>
+        <span class="block">{{ section.settings.heading_line_3 | escape }}</span>
+        <span class="block" style="color: var(--brand-story-muted);">{{ section.settings.heading_line_4 | escape }}</span>
+      </h2>
+
+      <div class="mt-8 max-w-128 text-base leading-7 tracking-[0.4px] text-[#f5ebe1] sm:text-lg sm:leading-[1.625] lg:mt-7.5">
+        {% if section.settings.paragraph_1 != blank %}
+          <p>{{ section.settings.paragraph_1 | escape | newline_to_br }}</p>
+        {% endif %}
+        {% if section.settings.paragraph_2 != blank %}
+          <p class="mt-8">{{ section.settings.paragraph_2 | escape | newline_to_br }}</p>
+        {% endif %}
+        {% if section.settings.link_label != blank %}
+          <a class="group mt-8 inline-flex min-h-11 items-center gap-4 text-sm leading-5 font-bold tracking-[1.4px] text-white uppercase focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white lg:min-h-0" href="{{ philosophy_url }}">
+            <span class="h-px w-12 bg-[linear-gradient(90deg,var(--brand-story-accent),transparent)] transition-transform duration-300 group-hover:scale-x-110 group-focus-visible:scale-x-110"></span>
+            <span class="transition-colors duration-300 group-hover:text-toasted-almond group-focus-visible:text-toasted-almond">{{ section.settings.link_label | escape }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% comment %} Component: Botanical focus ring {% endcomment %}
+    <div class="pointer-events-none relative mt-10 h-72 sm:h-96 lg:mt-0 lg:h-150" aria-hidden="true" data-reveal-group data-brand-art>
+      <div class="relative size-full">
+        <span class="absolute top-1/2 left-1/2 h-[83.333%] w-[69.444%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[color:rgb(212_108_17/30%)]"></span>
+        <span class="absolute top-0 right-0 size-48 rounded-full bg-[color:rgb(212_108_17/10%)] blur-3xl sm:size-64"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand story layered",
+  "tag": "section",
+  "class": "brand-story-layered-section",
+  "settings": [
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "Seeded in" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "Science" },
+    { "type": "text", "id": "heading_line_3", "label": "Heading line 3", "default": "Rooted in" },
+    { "type": "text", "id": "heading_line_4", "label": "Heading line 4", "default": "Nature" },
+    { "type": "textarea", "id": "paragraph_1", "label": "First paragraph", "default": "We don't believe in more. We believe in better. Amaari was born from the need to simplify the noise of the modern beauty industry." },
+    { "type": "textarea", "id": "paragraph_2", "label": "Second paragraph", "default": "By combining high-potency bio-actives with cold-pressed botanicals, we’ve created a system that respects your skin’s microbiome and the planet." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Our Full Philosophy" },
+    { "type": "url", "id": "link_url", "label": "Link" },
+    { "type": "image_picker", "id": "image", "label": "Botanical image" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#5A2E2C" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#D46C11" },
+    { "type": "color", "id": "muted_color", "label": "Muted heading", "default": "#B18A73" }
+  ],
+  "presets": [{ "name": "Brand story layered" }]
+}
+{% endschema %}
