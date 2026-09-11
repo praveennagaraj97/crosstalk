@@ -73,6 +73,85 @@
   transform: scale(1.08);
 }
 
+.mobile-logo-link > img {
+  filter: drop-shadow(0 1px 4px rgb(62 38 25 / 18%));
+}
+
+@media (min-width: 64rem) {
+  .mobile-logo-link > img {
+    filter: none;
+  }
+}
+
+/* Interaction: mobile navigation */
+.mobile-menu-icon {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 12px;
+}
+
+.mobile-menu-icon > span {
+  position: absolute;
+  left: 0;
+  width: 16px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: top 260ms cubic-bezier(.22, 1, .36, 1), transform 300ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.mobile-menu-icon > span:first-child {
+  top: 3px;
+}
+
+.mobile-menu-icon > span:last-child {
+  top: 8px;
+}
+
+[data-mobile-menu][open] .mobile-menu-icon > span:first-child {
+  top: 5px;
+  transform: rotate(45deg);
+}
+
+[data-mobile-menu][open] .mobile-menu-icon > span:last-child {
+  top: 5px;
+  transform: rotate(-45deg);
+}
+
+[data-mobile-panel] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px) scale(.98);
+  transition: visibility 240ms, opacity 200ms ease, transform 300ms cubic-bezier(.22, 1, .36, 1);
+}
+
+[data-mobile-menu][open] [data-mobile-panel] {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+  transform: none;
+}
+
+[data-mobile-menu-items] > li {
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 180ms ease, transform 260ms cubic-bezier(.22, 1, .36, 1);
+}
+
+[data-mobile-menu][open] [data-mobile-menu-items] > li {
+  opacity: 1;
+  transform: none;
+}
+
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(2) { transition-delay: 30ms; }
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(3) { transition-delay: 60ms; }
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(4) { transition-delay: 90ms; }
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(5) { transition-delay: 120ms; }
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(6) { transition-delay: 150ms; }
+[data-mobile-menu][open] [data-mobile-menu-items] > li:nth-child(7) { transition-delay: 180ms; }
+
 /* Interaction: footer links and tiles */
 .footer-link-interactive {
   position: relative;
@@ -125,11 +204,19 @@
   .hero-search-interactive,
   .hero-icon-interactive,
   .hero-icon-interactive > img,
+  .mobile-menu-icon > span,
+  [data-mobile-panel],
+  [data-mobile-menu-items] > li,
   .hero-search-clear,
   .footer-link-interactive,
   .footer-link-interactive::after,
   .footer-tile-interactive {
     transition: none;
+  }
+
+  [data-mobile-panel],
+  [data-mobile-menu-items] > li {
+    transform: none;
   }
 
   .hero-glass-interactive:hover,

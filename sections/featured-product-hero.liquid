@@ -54,12 +54,12 @@
 
   {% comment %} Component: Floating navigation {% endcomment %}
   <header class="container relative z-20 mx-auto flex w-full items-start justify-between px-4 pt-3 lg:pt-5">
-    <div class="flex min-h-13 items-center rounded-full border border-white/20 bg-white/10 px-4 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:min-h-17 lg:w-171 lg:px-7" data-reveal-group data-reveal-nav>
-      <a class="hero-glass-interactive shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+    <div class="flex min-h-12 items-center rounded-full border border-white/40 bg-white/30 px-3.5 shadow-[0_6px_24px_rgb(42_34_27/12%)] backdrop-blur-3xl lg:min-h-17 lg:w-171 lg:border-white/20 lg:bg-white/10 lg:px-7 lg:shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)]" data-reveal-group data-reveal-nav>
+      <a class="mobile-logo-link hero-glass-interactive shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
         {% if section.settings.logo != blank %}
-          {{ section.settings.logo | image_url: width: 240 | image_tag: class: 'h-6 w-auto', widths: '120, 240', alt: shop.name }}
+          {{ section.settings.logo | image_url: width: 240 | image_tag: class: 'h-7 w-auto lg:h-6', widths: '120, 240', alt: shop.name }}
         {% else %}
-          <img class="h-5 w-auto lg:h-6" src="{{ 'I198-7557-44-4636.svg' | asset_url }}" width="98" height="24" alt="{{ shop.name | escape }}">
+          <img class="h-7 w-auto lg:h-6" src="{{ 'I198-7557-44-4636.svg' | asset_url }}" width="98" height="24" alt="{{ shop.name | escape }}">
         {% endif %}
       </a>
 
@@ -145,36 +145,55 @@
       {% endif %}
     </div>
 
-    <details class="group relative lg:hidden" data-mobile-menu>
-      <summary class="hero-icon-interactive grid size-15 cursor-pointer list-none place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-3xl marker:hidden" aria-label="Open menu">
-        <span class="text-2xl leading-none">☰</span>
-      </summary>
-      <div class="absolute top-17 right-0 w-[min(22rem,calc(100vw-2rem))] rounded-2xl border border-white/25 bg-[#77785f]/95 p-5 text-white shadow-2xl backdrop-blur-2xl">
+    <div class="flex items-center gap-1 rounded-full border border-white/25 bg-white/15 p-1 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:hidden" data-mobile-actions data-reveal-group>
+      <a class="hero-icon-interactive grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" href="{{ routes.cart_url }}" aria-label="Cart">
+        <img class="h-5 w-4" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="16" height="20" alt="">
+      </a>
+
+      <details class="group relative" data-mobile-menu>
+        <summary class="hero-icon-interactive grid size-10 cursor-pointer list-none place-items-center rounded-full bg-white/90 text-pecan-brown marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Menu">
+          <span class="mobile-menu-icon" aria-hidden="true"><span></span><span></span></span>
+        </summary>
+        <div class="absolute top-13 right-0 w-[min(21rem,calc(100vw-2rem))] origin-top-right rounded-2xl border border-white/30 bg-[#676950]/92 p-3 text-white shadow-[0_18px_48px_rgb(35_30_23/24%)] backdrop-blur-2xl" data-mobile-panel>
         <nav aria-label="Mobile navigation">
-          <ul class="grid list-none gap-3 p-0">
-            <li>
+          <ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
+            <li class="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
               <details class="group/products">
-                <summary class="cursor-pointer list-none py-1 font-display text-2xl marker:hidden">{{ section.settings.shop_label | escape }}</summary>
-                <ul class="mt-2 grid list-none gap-2 border-l border-white/20 pl-4">
+                <summary class="hero-glass-interactive cursor-pointer list-none text-sm leading-5 font-medium marker:hidden">{{ section.settings.shop_label | escape }}</summary>
+                <ul class="mt-2 grid list-none gap-1.5 border-l border-white/20 pl-3">
                   {% assign mobile_product_count = 0 %}
                   {% for block in section.blocks %}
                     {% if block.type == 'product' and block.settings.product != blank %}
                       {% assign mobile_product_count = mobile_product_count | plus: 1 %}
-                      <li><a class="block py-1 text-sm" href="{{ block.settings.product.url }}">{{ block.settings.product.title | escape }}</a></li>
+                      <li><a class="hero-glass-interactive block py-1 text-xs leading-5 text-white/80" href="{{ block.settings.product.url }}">{{ block.settings.product.title | escape }}</a></li>
                     {% endif %}
                   {% endfor %}
-                  {% if mobile_product_count == 0 %}<li><a class="block py-1 text-sm" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}
+                  {% if mobile_product_count == 0 %}<li><a class="hero-glass-interactive block py-1 text-xs leading-5 text-white/80" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}
                 </ul>
               </details>
             </li>
-            {% if section.settings.menu != blank %}{% for link in section.settings.menu.links %}<li><a class="block py-1 text-base" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}{% endif %}
-            <li class="mt-2 border-t border-white/20 pt-3"><a class="block py-1" href="{{ routes.search_url }}">Search</a></li>
-            <li><a class="block py-1" href="{{ routes.cart_url }}">Cart</a></li>
-            {% if shop.customer_accounts_enabled %}<li><a class="block py-1" href="{{ routes.account_url }}">Account</a></li>{% endif %}
+            {% if section.settings.menu != blank %}
+              {% for link in section.settings.menu.links %}<li><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}
+            {% else %}
+              {% for index in (1..4) %}
+                {% liquid
+                  assign label_key = 'nav_label_' | append: index
+                  assign url_key = 'nav_url_' | append: index
+                  assign nav_label = section.settings[label_key]
+                  assign nav_url = section.settings[url_key]
+                %}
+                <li>
+                  {% if nav_url != blank %}<a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ nav_url }}">{{ nav_label | escape }}</a>{% else %}<span class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5">{{ nav_label | escape }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            {% endif %}
+            <li class="mt-1 border-t border-white/15 pt-1"><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ routes.search_url }}">Search</a></li>
+            {% if shop.customer_accounts_enabled %}<li><a class="hero-glass-interactive block rounded-xl px-3 py-2.5 text-sm leading-5" href="{{ routes.account_url }}">Account</a></li>{% endif %}
           </ul>
         </nav>
-      </div>
-    </details>
+        </div>
+      </details>
+    </div>
   </header>
 
   {% comment %} Component: Campaign content {% endcomment %}
@@ -206,14 +225,14 @@
     { "type": "image_picker", "id": "logo", "label": "Logo" },
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
     { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },
-    { "type": "text", "id": "nav_label_1", "label": "Fallback navigation label 1", "default": "Ingredients" },
-    { "type": "url", "id": "nav_url_1", "label": "Fallback navigation link 1" },
-    { "type": "text", "id": "nav_label_2", "label": "Fallback navigation label 2", "default": "Our Story" },
-    { "type": "url", "id": "nav_url_2", "label": "Fallback navigation link 2" },
-    { "type": "text", "id": "nav_label_3", "label": "Fallback navigation label 3", "default": "Journal" },
-    { "type": "url", "id": "nav_url_3", "label": "Fallback navigation link 3" },
-    { "type": "text", "id": "nav_label_4", "label": "Fallback navigation label 4", "default": "Contact" },
-    { "type": "url", "id": "nav_url_4", "label": "Fallback navigation link 4" },
+    { "type": "text", "id": "nav_label_1", "label": "Navigation item 1 label", "default": "Ingredients" },
+    { "type": "url", "id": "nav_url_1", "label": "Navigation item 1 link" },
+    { "type": "text", "id": "nav_label_2", "label": "Navigation item 2 label", "default": "Our Story" },
+    { "type": "url", "id": "nav_url_2", "label": "Navigation item 2 link" },
+    { "type": "text", "id": "nav_label_3", "label": "Navigation item 3 label", "default": "Journal" },
+    { "type": "url", "id": "nav_url_3", "label": "Navigation item 3 link" },
+    { "type": "text", "id": "nav_label_4", "label": "Navigation item 4 label", "default": "Contact" },
+    { "type": "url", "id": "nav_url_4", "label": "Navigation item 4 link" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Find your glow" },
     { "type": "checkbox", "id": "show_marquee", "label": "Show announcement marquee", "default": true },
     { "type": "color", "id": "marquee_text_color", "label": "Announcement text", "default": "#a47149" },
