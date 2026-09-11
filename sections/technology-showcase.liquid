@@ -1,0 +1,93 @@
+<section class="relative isolate min-h-150 overflow-hidden p-4 sm:p-6 lg:min-h-[721px] lg:p-10" aria-labelledby="TechnologyShowcase-{{ section.id }}">
+  {% comment %} Component: Botanical background {% endcomment %}
+  <div class="absolute inset-0 -z-20">
+    {% if section.settings.background_image != blank %}
+      {{ section.settings.background_image | image_url: width: 2400 | image_tag: class: 'size-full object-cover', widths: '750, 1100, 1440, 1920, 2400', sizes: '100vw', loading: 'lazy', alt: '' }}
+    {% else %}
+      <img class="size-full object-cover" src="{{ 'volcanic-mineral-background.png' | asset_url }}" width="512" height="512" loading="lazy" alt="">
+    {% endif %}
+  </div>
+  <div class="absolute inset-0 -z-10 bg-[#221810]/40" aria-hidden="true"></div>
+
+  {% comment %} Component: Technology glass panel {% endcomment %}
+  <div class="mx-auto flex min-h-142 max-w-360 items-center overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 px-6 py-9 shadow-[0_25px_50px_-12px_rgb(0_0_0/25%)] backdrop-blur-[24px] sm:px-10 lg:min-h-[641px] lg:py-16 lg:pr-35 lg:pl-16">
+    <div class="mx-auto flex w-full max-w-231.5 flex-col items-center gap-9 lg:flex-row lg:gap-67.5">
+      {% comment %} Component: Technical narrative {% endcomment %}
+      <div class="w-full max-w-115.75 text-white" data-reveal-group>
+        <div>
+          {% if section.settings.eyebrow != blank %}
+            <p class="text-xs leading-3.75 font-semibold tracking-[3px] text-white/80 uppercase">{{ section.settings.eyebrow | escape }}</p>
+          {% endif %}
+          <h2 id="TechnologyShowcase-{{ section.id }}" class="mt-4 whitespace-pre-line font-display text-[2.5rem] leading-none font-normal sm:text-5xl">{{ section.settings.heading | escape }}</h2>
+          {% if section.settings.description != blank %}
+            <p class="mt-4 max-w-112 text-base leading-7 tracking-[0.4px] text-white/90 sm:text-lg sm:leading-[29.25px]">{{ section.settings.description | escape }}</p>
+          {% endif %}
+        </div>
+
+        <div class="mt-8 grid gap-6 border-t border-white/10 pt-6">
+          {% for block in section.blocks %}
+            {% liquid
+              assign icon_asset = 'technology-cellular-transport.svg'
+              if block.settings.icon == 'minus'
+                assign icon_asset = 'technology-thermal-activation.svg'
+              endif
+            %}
+            <div class="flex items-start gap-4" {{ block.shopify_attributes }}>
+              <span class="mt-1 grid size-6.5 shrink-0 place-items-center rounded-full border border-white/30" aria-hidden="true">
+                <img class="size-4" src="{{ icon_asset | asset_url }}" width="16" height="16" loading="lazy" alt="">
+              </span>
+              <div class="min-w-0">
+                <h3 class="text-sm leading-5 font-bold tracking-[1.4px] uppercase">{{ block.settings.heading | escape }}</h3>
+                <p class="text-xs leading-5 tracking-[0.4px] text-white/60">{{ block.settings.text | escape }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% comment %} Component: Infusion product artwork {% endcomment %}
+      <div class="flex h-80 w-32 shrink-0 items-center justify-center sm:h-120 sm:w-45 lg:h-127.75 lg:w-48.25" data-reveal-group>
+        {% if section.settings.product_artwork != blank %}
+          {{ section.settings.product_artwork | image_url: width: 800 | image_tag: class: 'size-full object-contain object-center', widths: '240, 386, 600, 800', sizes: '(min-width: 640px) 193px, 144px', loading: 'lazy', alt: section.settings.product_artwork_alt }}
+        {% else %}
+          <img class="size-full object-contain object-center" src="{{ 'amaari-mineral-infusion-generated.png' | asset_url }}" width="493" height="1453" loading="lazy" alt="{{ section.settings.product_artwork_alt | escape }}">
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Technology showcase",
+  "tag": "section",
+  "class": "technology-showcase-section",
+  "max_blocks": 2,
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "image_picker", "id": "product_artwork", "label": "Product artwork" },
+    { "type": "text", "id": "product_artwork_alt", "label": "Product artwork alt text", "default": "Amaari volcanic mineral infusion bottle" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Technical Innovation" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Volcanic Mineral\nInfusion" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Most skincare sits on the surface—Amaari penetrates deep. Powered by VIACAP® Technology for 17x faster absorption." }
+  ],
+  "blocks": [
+    {
+      "type": "technology_point",
+      "name": "Technology point",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "plus", "label": "Plus" }, { "value": "minus", "label": "Minus" }], "default": "plus" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Cellular Transport" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Encapsulated minerals bypass the dermal barrier for direct delivery." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Technology showcase",
+    "blocks": [
+      { "type": "technology_point", "settings": { "icon": "plus", "heading": "Cellular Transport", "text": "Encapsulated minerals bypass the dermal barrier for direct delivery." } },
+      { "type": "technology_point", "settings": { "icon": "minus", "heading": "Thermal Activation", "text": "Reactive volcanic compounds respond to natural skin temperature." } }
+    ]
+  }]
+}
+{% endschema %}

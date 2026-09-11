@@ -5,6 +5,7 @@
 - Match supplied desktop references at their exact viewport before adapting the layout.
 - Preserve the reference typography, color, proportions, alignment, and image focal point.
 - Aim for compact, premium composition: restrained type, tight rhythm, clear hierarchy, and intentional whitespace.
+- Avoid excessive empty space when content can be composed more effectively; keep whitespace only when it improves hierarchy, focus, or readability.
 - Design mobile independently for clarity and touch use; do not merely shrink the desktop layout.
 - Give interactive elements visible hover, focus, open, and active states. Keep glass effects subtle and text legible.
 - Prefer consistency over one-off styling. Reuse established tokens, containers, radii, and interaction patterns.

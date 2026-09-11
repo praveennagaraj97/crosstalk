@@ -38,7 +38,30 @@
       "settings": {
         "featured_product": "radiance-volcanic-oil"
       }
+    },
+    "technology_showcase": {
+      "type": "technology-showcase",
+      "blocks": {
+        "cellular_transport": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "plus",
+            "heading": "Cellular Transport",
+            "text": "Encapsulated minerals bypass the dermal barrier for direct delivery."
+          }
+        },
+        "thermal_activation": {
+          "type": "technology_point",
+          "settings": {
+            "icon": "minus",
+            "heading": "Thermal Activation",
+            "text": "Reactive volcanic compounds respond to natural skin temperature."
+          }
+        }
+      },
+      "block_order": ["cellular_transport", "thermal_activation"],
+      "settings": {}
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive"]
+  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase"]
 }

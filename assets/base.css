@@ -27,7 +27,6 @@
     0%, 34% { transform: translateX(-180%) skewX(-22deg); }
     76%, 100% { transform: translateX(520%) skewX(-22deg); }
   }
-
 }
 
 @layer base {
@@ -151,4 +150,5 @@
     content: none;
     animation: none;
   }
+
 }
