@@ -1,0 +1,56 @@
+<section class="h-10 overflow-hidden border-b border-white/20 bg-white/40 text-pecan-brown shadow-[0_4px_50px_-12px_rgb(0_0_0/12%)] backdrop-blur-[38px] [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-marquee-enter motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once aria-label="Promotions">
+  <div class="flex h-full w-max items-center animate-marquee-scroll hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:w-full motion-reduce:justify-center motion-reduce:animate-none" tabindex="0">
+    {% capture announcement_items %}
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]">
+            <span>{{ block.settings.text | escape }}</span>
+            <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+          </span>
+        {% endfor %}
+      {% else %}
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>New product drop in 6hrs</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>Suitable for all skin types</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>First time users get 10% OFF</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]"><span>Promo code FIRST10</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
+      {% endif %}
+    {% endcapture %}
+
+    <div class="flex shrink-0 items-center gap-8 pr-12">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-base leading-6 font-normal tracking-[0.4px]" {{ block.shopify_attributes }}>
+            <span>{{ block.settings.text | escape }}</span>
+            <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+          </span>
+        {% endfor %}
+      {% else %}
+        {{ announcement_items }}
+      {% endif %}
+    </div>
+    <div class="flex shrink-0 items-center gap-8 pr-12 motion-reduce:hidden" aria-hidden="true">
+      {{ announcement_items }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Announcement marquee",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "New product drop in 6hrs"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

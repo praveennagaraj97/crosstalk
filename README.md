@@ -10,8 +10,19 @@ Before distributing the theme outside development, replace the reserved
 ## Requirements
 
 - Node.js 22.12 or newer
+- npm 10 or newer
 - Shopify CLI 4.8 or newer
 - A Shopify development store when you are ready to preview the theme
+
+Install the pinned frontend dependencies after cloning:
+
+```bash
+npm ci
+```
+
+This also enables the repository's Git hooks. The pre-commit hook compiles and
+stages the deployable Tailwind stylesheet; the pre-push hook rejects stale
+generated CSS or a broken structure contract.
 
 ## Local development
 
@@ -24,7 +35,8 @@ shopify theme dev --store your-dev-store.myshopify.com
 
 The CLI prints a local preview URL, normally `http://127.0.0.1:9292`.
 This project includes a local, ignored `.env` file for its development-store
-handle. With that file configured, start the preview with:
+handle. With that file configured, start Tailwind's watcher and the Shopify
+preview together with:
 
 ```bash
 make dev
@@ -35,6 +47,12 @@ To use a different store for one run, override it on the command line:
 ```bash
 make dev STORE=your-dev-store.myshopify.com
 ```
+
+Write Tailwind utilities directly in Liquid `class` attributes. Global design
+tokens, base rules, accessibility utilities, and animation keyframes live in
+`src/global.css`. Tailwind compiles that source into `assets/theme.css`; the
+generated file is committed for Shopify GitHub integration and ZIP uploads and
+must not be edited by hand.
 
 ## Full development-theme upload
 
@@ -51,18 +69,19 @@ theme.
 
 ## Validate
 
-Run Shopify Theme Check before uploading:
+Build the production CSS, run the repository contract test, and run Shopify
+Theme Check before uploading:
 
 ```bash
-shopify theme check
+make check
 ```
 
 ## Package and upload
 
-Create a theme ZIP:
+Create a validated theme ZIP:
 
 ```bash
-shopify theme package
+make package
 ```
 
 Upload the resulting ZIP in Shopify Admin: **Online Store → Themes → Import

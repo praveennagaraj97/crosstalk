@@ -1,0 +1,193 @@
+{% liquid
+  assign fallback_badges = 'nykaa-logo.svg|tira-logo.webp|amazon-logo.png|purplle-logo.svg' | split: '|'
+  assign badge_names = 'Nykaa|Tira|Amazon|Purplle' | split: '|'
+  assign fallback_social_icons = 'I198-7726-285-3709.svg|I198-7726-285-3524.svg|I198-7726-285-3577.svg' | split: '|'
+  assign social_names = 'Instagram|Facebook|Twitter' | split: '|'
+  assign legal_labels = section.settings.legal_label_1 | append: '|' | append: section.settings.legal_label_2 | append: '|' | append: section.settings.legal_label_3 | split: '|'
+  assign legal_urls = section.settings.legal_url_1 | append: '|' | append: section.settings.legal_url_2 | append: '|' | append: section.settings.legal_url_3 | split: '|'
+%}
+
+<footer class="overflow-hidden bg-bitter-chocolate pt-18 pb-12 text-white lg:pt-32 [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-footer-shell motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once>
+  <div class="mx-auto w-full max-w-360 px-6 lg:px-20">
+    <div class="flex min-h-66.25 flex-col items-start justify-between gap-20 lg:flex-row">
+      <div class="w-full lg:w-111 [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-footer-brand motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once>
+        {% if section.settings.logo != blank %}
+          <span class="[html.motion-ready_&]:opacity-0 [&.is-visible]:animate-logo motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once>
+            {{ section.settings.logo | image_url: width: 232 | image_tag: class: 'h-7.25 w-29 object-contain', widths: '116, 232', loading: 'lazy', alt: shop.name }}
+          </span>
+        {% else %}
+          <img class="h-7.25 w-29 object-contain [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-logo motion-reduce:animate-none! motion-reduce:opacity-100!" src="{{ 'I198-7726-518-7057.svg' | asset_url }}" width="116" height="29" loading="lazy" alt="{{ shop.name | escape }}" data-reveal-once>
+        {% endif %}
+
+        <p class="mt-5.5 max-w-111 font-display text-xl leading-7 font-normal [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-copy-reveal motion-reduce:animate-none! motion-reduce:opacity-100!" data-reveal-once>{{ section.settings.tagline | escape }}</p>
+
+        <div class="mt-5.5 flex gap-4 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:*:animate-none! motion-reduce:*:opacity-100!" data-reveal-once>
+          {% for index in (1..3) %}
+            {% liquid
+              assign social_index = forloop.index0
+              case index
+                when 1
+                  assign social_url = section.settings.instagram_url
+                when 2
+                  assign social_url = section.settings.facebook_url
+                else
+                  assign social_url = section.settings.twitter_url
+              endcase
+            %}
+            {% if social_url != blank %}
+              <a class="grid size-10 place-items-center rounded-full border border-white transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" href="{{ social_url }}" aria-label="{{ social_names[social_index] }}" rel="noopener noreferrer" target="_blank">
+                <img class="size-3.5" src="{{ fallback_social_icons[social_index] | asset_url }}" width="14" height="14" loading="lazy" alt="">
+              </a>
+            {% else %}
+              <span class="grid size-10 place-items-center rounded-full border border-white" aria-hidden="true">
+                <img class="size-3.5" src="{{ fallback_social_icons[social_index] | asset_url }}" width="14" height="14" loading="lazy" alt="">
+              </span>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="mt-5.5 [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-availability motion-reduce:!animate-none motion-reduce:!opacity-100" data-reveal-once>
+          <p class="mb-1.5 font-display text-xl leading-7 font-normal">{{ section.settings.availability_heading | escape }}</p>
+          <div class="flex items-center gap-3.75 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:[&>*]:!animate-none motion-reduce:[&>*]:!opacity-100" data-reveal-once>
+            {% for index in (1..4) %}
+              {% liquid
+                assign image_key = 'badge_' | append: index | append: '_image'
+                assign url_key = 'badge_' | append: index | append: '_url'
+                assign badge_image = section.settings[image_key]
+                assign badge_url = section.settings[url_key]
+                case index
+                  when 1
+                    assign badge_width = 80
+                    assign badge_classes = 'grid h-10 w-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-[linear-gradient(135deg,#e82831,#e84232_60%,#f49b5e)] px-2.5 py-1.75 [&>img]:brightness-0 [&>img]:invert'
+                  when 2
+                    assign badge_width = 40
+                    assign badge_classes = 'grid size-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f9dcd4] px-1.25 py-2 [&>img]:mix-blend-multiply'
+                  when 3
+                    assign badge_width = 50
+                    assign badge_classes = 'grid h-10 w-12.5 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.5'
+                  else
+                    assign badge_width = 65
+                    assign badge_classes = 'grid h-10 w-16.25 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.25'
+                endcase
+              %}
+              {% capture badge_content %}
+                {% if badge_image != blank %}
+                  {{ badge_image | image_url: height: 80 | image_tag: class: 'h-full w-full object-contain', widths: '80, 160', loading: 'lazy', alt: '' }}
+                {% else %}
+                  <img class="h-full w-full object-contain" src="{{ fallback_badges[forloop.index0] | asset_url }}" width="{{ badge_width }}" height="40" loading="lazy" alt="{{ badge_names[forloop.index0] }}">
+                {% endif %}
+              {% endcapture %}
+              {% if badge_url != blank %}
+                <a href="{{ badge_url }}" class="{{ badge_classes }} transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" rel="noopener noreferrer" target="_blank">{{ badge_content }}</a>
+              {% else %}
+                <span class="{{ badge_classes }}">{{ badge_content }}</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <nav class="w-full lg:w-43.75 lg:self-center [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-footer-navigation motion-reduce:!animate-none motion-reduce:!opacity-100" data-reveal-once aria-label="{{ section.settings.menu_heading | escape }}">
+        <h2 class="mb-4.5 text-lg leading-7 font-normal tracking-[0.2px] uppercase">{{ section.settings.menu_heading | escape }}</h2>
+        {% if section.settings.discover_menu != blank %}
+          <ul class="grid list-none gap-2.5 p-0 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:[&>*]:!animate-none motion-reduce:[&>*]:!opacity-100" data-reveal-once>
+            {% for link in section.settings.discover_menu.links %}
+              <li style="--stagger-index: {{ forloop.index0 }};"><a class="text-lg leading-7 font-normal tracking-[0.2px] no-underline transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <ul class="grid list-none gap-2.5 p-0 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:[&>*]:!animate-none motion-reduce:[&>*]:!opacity-100" data-reveal-once>
+            {% for index in (1..5) %}
+              {% liquid
+                assign label_key = 'menu_label_' | append: index
+                assign url_key = 'menu_url_' | append: index
+                assign menu_label = section.settings[label_key]
+                assign menu_url = section.settings[url_key]
+              %}
+              {% if menu_label != blank %}
+                <li style="--stagger-index: {{ forloop.index0 }};">
+                  {% if menu_url != blank %}
+                    <a class="text-lg leading-7 font-normal tracking-[0.2px] no-underline transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" href="{{ menu_url }}">{{ menu_label | escape }}</a>
+                  {% else %}
+                    <span class="text-lg leading-7 font-normal tracking-[0.2px]">{{ menu_label | escape }}</span>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </nav>
+    </div>
+
+    <div class="mt-15 flex flex-col items-start justify-between gap-8 border-t border-white pt-12 lg:flex-row lg:items-center [html.motion-ready_&]:opacity-0 [&.is-visible]:animate-footer-bottom motion-reduce:!animate-none motion-reduce:!opacity-100" data-reveal-once>
+      {% if section.settings.legal_menu != blank %}
+        <nav aria-label="Legal">
+          <ul class="flex list-none flex-wrap gap-8 p-0 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:[&>*]:!animate-none motion-reduce:[&>*]:!opacity-100" data-reveal-once>
+            {% for link in section.settings.legal_menu.links %}
+              <li style="--stagger-index: {{ forloop.index0 }};"><a class="text-xs leading-3.75 font-medium tracking-[1px] uppercase no-underline transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% else %}
+        <nav aria-label="Legal">
+          <ul class="flex list-none flex-wrap gap-8 p-0 [html.motion-ready_&:not(.is-visible)>*]:opacity-0 [&.is-visible>*]:animate-stagger-item motion-reduce:[&>*]:!animate-none motion-reduce:[&>*]:!opacity-100" data-reveal-once>
+            {% for legal_label in legal_labels %}
+              {% if legal_label != blank %}
+                <li style="--stagger-index: {{ forloop.index0 }};">
+                  {% if legal_urls[forloop.index0] != blank %}
+                    <a class="text-xs leading-3.75 font-medium tracking-[1px] uppercase no-underline transition-[color,opacity,transform] duration-180 ease-in-out hover:-translate-y-0.5 hover:text-logo focus-visible:-translate-y-0.5 focus-visible:text-logo motion-reduce:transition-none" href="{{ legal_urls[forloop.index0] }}">{{ legal_label | escape }}</a>
+                  {% else %}
+                    <span class="text-xs leading-3.75 font-medium tracking-[1px] uppercase">{{ legal_label | escape }}</span>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endif %}
+      <p class="text-xs leading-5 tracking-[0.4px]">{{ section.settings.copyright | escape }}</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare." },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
+    { "type": "url", "id": "twitter_url", "label": "Twitter URL" },
+    { "type": "text", "id": "availability_heading", "label": "Availability heading", "default": "Also Available on" },
+    { "type": "image_picker", "id": "badge_1_image", "label": "Badge 1 image" },
+    { "type": "url", "id": "badge_1_url", "label": "Badge 1 URL" },
+    { "type": "image_picker", "id": "badge_2_image", "label": "Badge 2 image" },
+    { "type": "url", "id": "badge_2_url", "label": "Badge 2 URL" },
+    { "type": "image_picker", "id": "badge_3_image", "label": "Badge 3 image" },
+    { "type": "url", "id": "badge_3_url", "label": "Badge 3 URL" },
+    { "type": "image_picker", "id": "badge_4_image", "label": "Badge 4 image" },
+    { "type": "url", "id": "badge_4_url", "label": "Badge 4 URL" },
+    { "type": "text", "id": "menu_heading", "label": "Menu heading", "default": "Discover" },
+    { "type": "link_list", "id": "discover_menu", "label": "Discover menu" },
+    { "type": "text", "id": "menu_label_1", "label": "Menu item 1 label", "default": "Shop All" },
+    { "type": "url", "id": "menu_url_1", "label": "Menu item 1 URL" },
+    { "type": "text", "id": "menu_label_2", "label": "Menu item 2 label", "default": "Our Story" },
+    { "type": "url", "id": "menu_url_2", "label": "Menu item 2 URL" },
+    { "type": "text", "id": "menu_label_3", "label": "Menu item 3 label", "default": "Journal" },
+    { "type": "url", "id": "menu_url_3", "label": "Menu item 3 URL" },
+    { "type": "text", "id": "menu_label_4", "label": "Menu item 4 label", "default": "Contact" },
+    { "type": "url", "id": "menu_url_4", "label": "Menu item 4 URL" },
+    { "type": "text", "id": "menu_label_5", "label": "Menu item 5 label", "default": "FAQs" },
+    { "type": "url", "id": "menu_url_5", "label": "Menu item 5 URL" },
+    { "type": "link_list", "id": "legal_menu", "label": "Legal menu" },
+    { "type": "text", "id": "legal_label_1", "label": "Legal item 1 label", "default": "Privacy Policy" },
+    { "type": "url", "id": "legal_url_1", "label": "Legal item 1 URL" },
+    { "type": "text", "id": "legal_label_2", "label": "Legal item 2 label", "default": "Terms of Service" },
+    { "type": "url", "id": "legal_url_2", "label": "Legal item 2 URL" },
+    { "type": "text", "id": "legal_label_3", "label": "Legal item 3 label", "default": "Shipping & Returns" },
+    { "type": "url", "id": "legal_url_3", "label": "Legal item 3 URL" },
+    { "type": "text", "id": "copyright", "label": "Copyright", "default": "© 2024 Amaari Collective. All Rights Reserved." }
+  ]
+}
+{% endschema %}

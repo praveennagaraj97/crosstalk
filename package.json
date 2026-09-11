@@ -1,0 +1,18 @@
+{
+  "name": "crosstalk-shopify-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
+    "dev:css": "tailwindcss -i ./src/global.css -o ./assets/theme.css --watch",
+    "build:css": "tailwindcss -i ./src/global.css -o ./assets/theme.css --minify",
+    "check:css": "tmpfile=$(mktemp); trap 'rm -f \"$tmpfile\"' EXIT; tailwindcss -i ./src/global.css -o \"$tmpfile\" --minify && cmp -s \"$tmpfile\" ./assets/theme.css",
+    "test": "bash tests/theme_structure_test.sh",
+    "check": "npm run check:css && npm test"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "concurrently": "10.0.5",
+    "tailwindcss": "4.3.3"
+  }
+}

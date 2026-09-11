@@ -1,0 +1,6 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "liquid": "html"
+  },
+  "tailwindCSS.experimental.configFile": "src/global.css"
+}

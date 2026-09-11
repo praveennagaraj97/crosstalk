@@ -1,0 +1,19 @@
+name: Theme check
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm install --global @shopify/cli@4.8.0
+      - run: shopify theme check
