@@ -1,16 +1,4 @@
 {
-  "sections": {
-    "example_navigation": {
-      "type": "example-navigation",
-      "settings": {}
-    },
-    "example_hero": {
-      "type": "example-hero",
-      "settings": {
-        "heading": "A small Liquid example",
-        "body": "<p>This section is intentionally plain. Edit its fields in Shopify's Theme Editor.</p>"
-      }
-    }
-  },
-  "order": ["example_navigation", "example_hero"]
+  "sections": {},
+  "order": []
 }
