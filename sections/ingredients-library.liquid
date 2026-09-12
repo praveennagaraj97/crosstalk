@@ -2,6 +2,14 @@
   assign alphabet = 'A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z' | split: '|'
   assign configured_products = section.settings.products
   assign ingredient_page = page
+  assign selected_product = false
+
+  for configured_product in configured_products
+    if configured_product.handle == request.params.product
+      assign selected_product = true
+      break
+    endif
+  endfor
 %}
 
 <section class="min-h-screen bg-background" data-ingredients-library aria-labelledby="IngredientsTitle-{{ section.id }}">
@@ -10,14 +18,16 @@
     <p class="text-xs leading-4 font-semibold tracking-[3px] text-bitter-chocolate uppercase">{{ section.settings.eyebrow | escape }}</p>
     <h1 id="IngredientsTitle-{{ section.id }}" class="mt-4 font-display text-5xl leading-none text-text-brown sm:text-[4rem] lg:text-[4.875rem] lg:leading-[1.218]">{{ section.settings.heading | escape }}</h1>
     <p class="mx-auto mt-4 max-w-144 text-sm leading-6 tracking-[0.4px] text-bitter-chocolate sm:text-base">{{ section.settings.description | escape }}</p>
-    <label class="relative mx-auto mt-7 flex h-13 max-w-131 items-center rounded-full border border-toasted-almond bg-[#f5ebe1] px-6 text-left focus-within:ring-2 focus-within:ring-toasted-almond/40">
-      <svg class="mr-3 size-6 shrink-0 text-pecan-brown" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.75" cy="10.75" r="6.75" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
-      <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-sm leading-5 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
-      <button class="ingredient-search-clear ml-2 grid size-7 shrink-0 place-items-center rounded-full text-text-brown" type="button" data-ingredient-search-clear hidden aria-label="Clear ingredient search">
-        <svg class="size-3" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2 2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
-    </label>
+    {% if selected_product %}
+      <label class="relative mx-auto mt-7 flex h-13 max-w-131 items-center rounded-full border border-toasted-almond bg-[#f5ebe1] px-6 text-left focus-within:ring-2 focus-within:ring-toasted-almond/40">
+        <svg class="mr-3 size-6 shrink-0 text-pecan-brown" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.75" cy="10.75" r="6.75" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
+        <input class="ingredient-search-input min-w-0 flex-1 border-0 bg-transparent text-sm leading-5 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73]" type="search" placeholder="{{ section.settings.search_placeholder | escape }}" data-ingredient-search>
+        <button class="ingredient-search-clear ml-2 grid size-7 shrink-0 place-items-center rounded-full text-text-brown" type="button" data-ingredient-search-clear hidden aria-label="Clear ingredient search">
+          <svg class="size-3" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2 2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </label>
+    {% endif %}
   </header>
 
   {% comment %} Component: Product chooser {% endcomment %}
@@ -117,7 +127,7 @@
           <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.about_heading | escape }}</h3><p class="mt-3 text-sm leading-6 tracking-[0.3px] text-[#7c6253] sm:text-base" data-dialog-about></p></section>
           <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.works_heading | escape }}</h3><p class="mt-3 text-sm leading-6 tracking-[0.3px] text-[#7c6253] sm:text-base" data-dialog-works></p></section>
           <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.found_heading | escape }}</h3><div class="mt-3 flex flex-wrap gap-3" data-dialog-products></div></section>
-          <section><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.science_heading | escape }}</h3><div class="mt-3 flex flex-wrap gap-3" data-dialog-science></div></section>
+          <section data-dialog-science-section hidden><h3 class="border-b border-[#e7ded5] pb-2 text-xs font-semibold tracking-[3px] uppercase">{{ section.settings.science_heading | escape }}</h3><div class="mt-3 flex flex-wrap gap-3" data-dialog-science></div></section>
         </div>
       </div>
       <div class="relative order-1 min-h-72 overflow-hidden lg:order-2 lg:h-full lg:min-h-0">

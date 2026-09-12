@@ -144,7 +144,11 @@
       if (foundIn && references) foundIn.innerHTML = references.innerHTML;
       const science = dialog.querySelector('[data-dialog-science]');
       const scienceLinks = card.querySelector('[data-card-science]');
-      if (science && scienceLinks) science.innerHTML = scienceLinks.innerHTML;
+      const scienceSection = dialog.querySelector('[data-dialog-science-section]');
+      if (science && scienceLinks) {
+        science.innerHTML = scienceLinks.innerHTML;
+        if (scienceSection) scienceSection.hidden = scienceLinks.querySelector('a') === null;
+      }
     };
 
     library.addEventListener('click', (event) => {
