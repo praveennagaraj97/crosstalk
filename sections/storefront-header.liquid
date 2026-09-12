@@ -11,9 +11,10 @@
   assign header_background = section.settings.default_background
 
   if request.page_type == 'product'
-    assign active_nav = 'shop'
     assign context_product = product
     assign header_background = section.settings.product_background
+  elsif request.page_type == 'collection' and collection.handle == 'all'
+    assign active_nav = 'shop'
   elsif request.page_type == 'index'
     assign surface = 'dark'
     assign header_background = section.settings.featured_background
@@ -24,7 +25,6 @@
       assign header_background = section.settings.ingredients_background
     elsif page.template_suffix contains 'featured'
       assign surface = 'dark'
-      assign active_nav = 'shop'
       assign header_background = section.settings.featured_background
     endif
   endif
