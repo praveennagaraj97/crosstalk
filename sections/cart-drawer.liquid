@@ -27,7 +27,7 @@
 
     <div class="cart-drawer__status visually-hidden" role="status" aria-live="polite" data-cart-status></div>
 
-    <div class="cart-drawer__items" data-cart-items>
+    <div class="cart-drawer__items{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-items>
       {% for item in cart.items %}
         <article class="cart-drawer__item" data-cart-line="{{ forloop.index }}">
           <a class="cart-drawer__media" href="{{ item.url }}" tabindex="-1">

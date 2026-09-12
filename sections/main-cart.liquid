@@ -9,7 +9,7 @@
     assign recommendations = collections.all
   endif
 %}
-<section class="main-cart bg-background py-10 sm:py-14 lg:py-18" aria-labelledby="MainCartTitle-{{ section.id }}">
+<section class="main-cart bg-background pt-6 pb-12 lg:pt-8 lg:pb-18" aria-labelledby="MainCartTitle-{{ section.id }}" data-main-cart data-cart-url="{{ routes.cart_url }}">
   <div class="container mx-auto px-4">
     {% if cart.item_count == 0 %}
       <header class="main-cart__empty-header" data-reveal>
@@ -22,7 +22,6 @@
         <section class="cart-recommendations" aria-labelledby="CartRecommendationsTitle-{{ section.id }}" data-reveal-group>
           <header class="cart-recommendations__header">
             <h2 id="CartRecommendationsTitle-{{ section.id }}">{{ section.settings.recommendations_heading | escape }}</h2>
-            <a href="{{ recommendations.url }}">{{ section.settings.view_all_label | escape }}</a>
           </header>
           <div class="cart-recommendations__grid">
             {% for recommendation in recommendations.products limit: 4 %}
@@ -43,13 +42,13 @@
           <p class="main-cart__eyebrow">{{ section.settings.eyebrow | escape }}</p>
           <h1 id="MainCartTitle-{{ section.id }}" class="main-cart__title">{{ section.settings.heading | escape }}</h1>
         </div>
-        <span class="main-cart__count">{{ cart.item_count }} {% if cart.item_count == 1 %}Item{% else %}Items{% endif %}</span>
+        <span class="main-cart__count" data-cart-page-count>{{ cart.item_count }} {% if cart.item_count == 1 %}Item{% else %}Items{% endif %}</span>
       </header>
 
       <form action="{{ routes.cart_url }}" method="post" class="main-cart__layout" data-reveal-group>
         <div class="main-cart__items">
           {% for item in cart.items %}
-            <article class="main-cart__item">
+            <article class="main-cart__item" data-cart-page-item data-line-key="{{ item.key }}">
               <a class="main-cart__media" href="{{ item.url }}">
                 {% if item.image != blank %}{{ item.image | image_url: width: 320 | image_tag: class: 'size-full object-cover mix-blend-multiply', widths: '140, 220, 320', loading: 'eager', alt: item.product.title }}{% endif %}
               </a>
@@ -59,12 +58,23 @@
                   {% unless item.product.has_only_default_variant %}<p class="main-cart__variant">{{ item.variant.title | escape }}</p>{% endunless %}
                 </div>
                 <div class="main-cart__item-footer">
-                  <label class="main-cart__quantity">
+                  {% liquid
+                    assign quantity_increment = item.variant.quantity_rule.increment | default: 1
+                    assign quantity_max = item.variant.quantity_rule.max
+                    if item.variant.inventory_management != blank and item.variant.inventory_policy == 'deny'
+                      if quantity_max == blank or item.variant.inventory_quantity < quantity_max
+                        assign quantity_max = item.variant.inventory_quantity
+                      endif
+                    endif
+                  %}
+                  <div class="main-cart__quantity" data-cart-page-quantity>
                     <span class="visually-hidden">Quantity for {{ item.product.title | escape }}</span>
-                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.product.title | escape }}">
-                  </label>
-                  <strong>{{ item.final_line_price | money }}</strong>
-                  <a class="main-cart__remove" href="{{ item.url_to_remove }}">{{ section.settings.remove_label | escape }}</a>
+                    <button type="button" data-cart-page-minus aria-label="Decrease {{ item.product.title | escape }} quantity">−</button>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" step="{{ quantity_increment }}" {% if quantity_max != blank %}max="{{ quantity_max }}"{% endif %} aria-label="Quantity for {{ item.product.title | escape }}">
+                    <button type="button" data-cart-page-plus {% if quantity_max != blank and item.quantity >= quantity_max %}disabled{% endif %} aria-label="Increase {{ item.product.title | escape }} quantity">+</button>
+                  </div>
+                  <strong data-cart-page-line-price>{{ item.final_line_price | money }}</strong>
+                  <a class="main-cart__remove" href="{{ item.url_to_remove }}" data-cart-page-remove>{{ section.settings.remove_label | escape }}</a>
                 </div>
               </div>
             </article>
@@ -72,15 +82,18 @@
         </div>
 
         <aside class="main-cart__summary">
-          <div class="flex items-center justify-between"><span>{{ section.settings.subtotal_label | escape }}</span><strong>{{ cart.total_price | money }}</strong></div>
-          <p>{{ section.settings.shipping_note | escape }}</p>
+          <h2 class="main-cart__summary-title">{{ section.settings.summary_heading | escape }}</h2>
+          <div class="main-cart__summary-row"><span>{{ section.settings.subtotal_label | escape }}</span><strong data-cart-page-subtotal>{{ cart.items_subtotal_price | money }}</strong></div>
+          <div class="main-cart__summary-row"><span>{{ section.settings.shipping_label | escape }}</span><span>{{ section.settings.shipping_value | escape }}</span></div>
+          <div class="main-cart__summary-total"><span>{{ section.settings.total_label | escape }}</span><strong data-cart-page-total>{{ cart.total_price | money }}</strong></div>
           <button class="chrome-action main-cart__checkout" type="submit" name="checkout"><span class="relative z-10">{{ section.settings.checkout_label | escape }}</span></button>
-          <button class="main-cart__update" type="submit" name="update">{{ section.settings.update_label | escape }}</button>
+          <p>{{ section.settings.shipping_note | escape }}</p>
         </aside>
       </form>
     {% endif %}
   </div>
 </section>
+<script src="{{ 'cart-page.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -97,13 +110,15 @@
     { "type": "collection", "id": "continue_collection", "label": "Continue shopping collection" },
     { "type": "header", "content": "Recommendations" },
     { "type": "text", "id": "recommendations_heading", "label": "Heading", "default": "Recommended for your ritual" },
-    { "type": "text", "id": "view_all_label", "label": "View all label", "default": "View All" },
     { "type": "collection", "id": "recommendations_collection", "label": "Products collection" },
     { "type": "text", "id": "remove_label", "label": "Remove label", "default": "Remove" },
+    { "type": "text", "id": "summary_heading", "label": "Summary heading", "default": "Order Summary" },
     { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "shipping_label", "label": "Shipping label", "default": "Shipping" },
+    { "type": "text", "id": "shipping_value", "label": "Shipping value", "default": "Calculated at checkout" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total" },
     { "type": "text", "id": "shipping_note", "label": "Shipping note", "default": "Shipping and returns are calculated at checkout." },
-    { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "Checkout" },
-    { "type": "text", "id": "update_label", "label": "Update label", "default": "Update Cart" }
+    { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "Checkout" }
   ]
 }
 {% endschema %}

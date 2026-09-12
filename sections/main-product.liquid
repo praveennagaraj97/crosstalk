@@ -17,8 +17,8 @@
   assign primary_form_id = 'ProductForm-' | append: section.id
 %}
 
-<section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}" data-checkout-label="{{ section.settings.floating_checkout_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}">
-  <div class="container mx-auto grid items-start gap-8 px-4 pt-5 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8 lg:pt-10">
+<section class="bg-[#f5ebe1] pb-14 lg:pb-20" data-main-product data-section-id="{{ section.id }}" data-product-url="{{ product.url }}" data-cart-url="{{ routes.cart_url }}" data-in-cart-label="{{ section.settings.in_cart_label | escape }}" data-checkout-label="{{ section.settings.floating_checkout_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}">
+  <div class="container mx-auto grid items-start gap-8 px-4 pt-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8 lg:pt-8">
     {% comment %} Component: Sticky product gallery {% endcomment %}
     <div class="w-full" data-product-gallery data-reveal-group>
       <div class="relative aspect-[788/770] touch-pan-y overflow-hidden rounded-[20px] bg-[#eee6df] outline-none focus-visible:ring-2 focus-visible:ring-bitter-chocolate" data-gallery-stage tabindex="0" role="region" aria-label="Product gallery. Swipe or use arrow keys to change media">
@@ -95,8 +95,8 @@
             <button class="grid size-7 place-items-center" type="button" data-quantity-plus aria-label="Increase quantity">+</button>
           </div>
           <button class="grid size-11 shrink-0 cursor-not-allowed place-items-center rounded-full border-2 border-bitter-chocolate/70 text-lg" type="button" disabled aria-label="Wishlist unavailable" title="Wishlist coming soon">♡</button>
-          <button class="chrome-action relative h-11 min-w-32 flex-1 overflow-hidden rounded-full border-2 border-bitter-chocolate bg-transparent px-4 text-[10px] font-bold tracking-[1.1px] text-bitter-chocolate uppercase disabled:cursor-not-allowed disabled:opacity-50" type="submit" name="add" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}><span class="relative z-10" data-add-label>{% if current_variant.available %}{{ section.settings.add_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span></button>
-          <div class="shopify-payment-button-wrap min-w-36 flex-1">{{ form | payment_button }}</div>
+          <button class="chrome-action relative h-11 min-w-32 flex-1 overflow-hidden rounded-full border-2 border-bitter-chocolate bg-transparent px-4 text-[10px] font-bold tracking-[1.1px] text-bitter-chocolate uppercase disabled:cursor-not-allowed disabled:opacity-50" type="submit" name="add" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}><span class="relative z-10 transition-opacity" data-add-label>{% if current_variant.available %}{{ section.settings.add_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span><span class="pdp-add-spinner" data-add-spinner aria-hidden="true"></span></button>
+          <div class="shopify-payment-button-wrap min-w-36 flex-1" data-buy-now>{{ form | payment_button }}</div>
         </div>
         <p class="sr-only" data-inventory-status>{% if current_variant.available %}{{ section.settings.in_stock_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</p>
       {% endform %}
@@ -232,7 +232,21 @@
       </div>
     </div>
   </div>
-  <script type="application/json" data-product-json>{{ product.variants | json }}</script>
+  <script type="application/json" data-product-json>[
+    {% for variant in product.variants %}{
+      "id": {{ variant.id | json }},
+      "options": {{ variant.options | json }},
+      "price": {{ variant.price | json }},
+      "compare_at_price": {{ variant.compare_at_price | json }},
+      "available": {{ variant.available | json }},
+      "featured_media": {% if variant.featured_media != blank %}{"id": {{ variant.featured_media.id | json }}}{% else %}null{% endif %},
+      "inventory_management": {{ variant.inventory_management | json }},
+      "inventory_policy": {{ variant.inventory_policy | json }},
+      "inventory_quantity": {{ variant.inventory_quantity | json }},
+      "quantity_rule": {"min": {{ variant.quantity_rule.min | default: 1 | json }}, "max": {{ variant.quantity_rule.max | json }}, "increment": {{ variant.quantity_rule.increment | default: 1 | json }}}
+    }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ]</script>
+  <script type="application/json" data-cart-variant-ids>[{% for item in cart.items %}{{ item.variant_id | json }}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
 </section>
 <script src="{{ 'product-detail.js' | asset_url }}" defer></script>
 
@@ -241,6 +255,7 @@
   "name": "Product detail",
   "settings": [
     { "type": "text", "id": "collection_label", "label": "Fallback collection label", "default": "The Essence Collection" },
+    { "type": "text", "id": "in_cart_label", "label": "Already in cart label", "default": "In Cart" },
     { "type": "textarea", "id": "editorial_quote", "label": "Fallback editorial quote" },
     { "type": "text", "id": "select_label", "label": "Option heading prefix", "default": "Select" },
     { "type": "text", "id": "add_label", "label": "Add button", "default": "Add to Cart" },

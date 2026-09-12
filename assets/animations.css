@@ -214,9 +214,15 @@
 
 .cart-drawer__empty {
   width: 100%;
+  min-height: 0;
+  flex: 1;
   margin: auto;
   padding: 0;
   text-align: center;
+}
+
+.cart-drawer__empty:not(.hidden) {
+  display: flex;
 }
 
 .cart-drawer__empty p {

@@ -42,6 +42,7 @@
 
   const render = (cart) => {
     itemsTarget.innerHTML = cart.items.map(itemMarkup).join('');
+    itemsTarget.classList.toggle('hidden', cart.item_count === 0);
     countTarget.textContent = itemCountLabel(cart.item_count);
     subtotalTarget.textContent = formatMoney(cart.items_subtotal_price);
     totalTarget.textContent = formatMoney(cart.total_price);
@@ -54,6 +55,7 @@
       const cartLink = badge.closest('a[href]');
       if (cartLink) cartLink.setAttribute('aria-label', `Cart, ${itemCountLabel(cart.item_count)}`);
     });
+    document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
   };
 
   const fetchCart = async () => {
@@ -135,20 +137,28 @@
     if (busy) return;
     busy = true;
     addButton.disabled = true;
+    addButton.classList.add('is-loading');
+    addButton.setAttribute('aria-busy', 'true');
     drawer.classList.add('is-busy');
     drawer.setAttribute('aria-busy', 'true');
-    show(addButton, false);
+    let updatedCart;
     try {
       const response = await fetch(`${rootUrl}cart/add.js`, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(event.target) });
       if (!response.ok) throw new Error('Cart add failed');
-      await refreshCart();
+      updatedCart = await fetchCart();
+      render(updatedCart);
     } catch (error) {
       statusTarget.textContent = drawer.dataset.errorMessage;
     } finally {
       busy = false;
       addButton.disabled = false;
+      addButton.classList.remove('is-loading');
+      addButton.removeAttribute('aria-busy');
       drawer.classList.remove('is-busy');
       drawer.removeAttribute('aria-busy');
+    }
+    if (updatedCart) {
+      show(addButton, false);
     }
   });
 
