@@ -51,7 +51,7 @@
     document.querySelectorAll('[data-cart-count-badge]').forEach((badge) => {
       badge.textContent = cart.item_count;
       badge.classList.toggle('hidden', cart.item_count === 0);
-      const cartLink = badge.closest('[data-cart-drawer-trigger]');
+      const cartLink = badge.closest('a[href]');
       if (cartLink) cartLink.setAttribute('aria-label', `Cart, ${itemCountLabel(cart.item_count)}`);
     });
   };

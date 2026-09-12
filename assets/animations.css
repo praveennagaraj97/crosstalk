@@ -213,8 +213,9 @@
 }
 
 .cart-drawer__empty {
+  width: 100%;
   margin: auto;
-  padding: 3rem 1.75rem;
+  padding: 0;
   text-align: center;
 }
 

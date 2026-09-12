@@ -55,9 +55,7 @@
     </div>
 
     <div class="cart-drawer__empty {% if cart.item_count > 0 %}hidden{% endif %}" data-cart-empty>
-      <h3 class="font-display text-3xl font-normal">{{ section.settings.empty_heading | escape }}</h3>
-      <p>{{ section.settings.empty_copy | escape }}</p>
-      <button class="chrome-action relative mt-6 min-h-12 overflow-hidden rounded-full bg-[linear-gradient(137deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-8 text-sm font-semibold tracking-[1.2px] text-[#f4dfb8] uppercase" type="button" data-cart-drawer-close><span class="relative z-10">{{ section.settings.continue_label | escape }}</span></button>
+      {% render 'empty-cart-state', heading: section.settings.empty_heading, copy: section.settings.empty_copy, action_label: section.settings.continue_label, image: section.settings.empty_image, compact: true, close_drawer: true %}
     </div>
 
     <footer class="cart-drawer__summary {% if cart.item_count == 0 %}hidden{% endif %}" data-cart-summary>
@@ -91,9 +89,10 @@
     { "type": "text", "id": "view_cart_label", "label": "View cart label", "default": "View Cart" },
     { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "Checkout" },
     { "type": "text", "id": "shipping_note", "label": "Footer note", "default": "Shipping and returns are calculated at checkout." },
-    { "type": "text", "id": "empty_heading", "label": "Empty cart heading", "default": "Your cart is empty" },
-    { "type": "textarea", "id": "empty_copy", "label": "Empty cart copy", "default": "Discover a ritual designed for luminous, resilient skin." },
-    { "type": "text", "id": "continue_label", "label": "Continue shopping label", "default": "Continue Shopping" },
+    { "type": "image_picker", "id": "empty_image", "label": "Empty cart background" },
+    { "type": "text", "id": "empty_heading", "label": "Empty cart heading", "default": "Your ritual bag is currently empty" },
+    { "type": "textarea", "id": "empty_copy", "label": "Empty cart copy", "default": "Start your journey to glowing skin by discovering our curated botanical collections." },
+    { "type": "text", "id": "continue_label", "label": "Continue shopping label", "default": "Start Shopping" },
     { "type": "text", "id": "error_message", "label": "Update error", "default": "We couldn't update your cart. Please try again." }
   ]
 }

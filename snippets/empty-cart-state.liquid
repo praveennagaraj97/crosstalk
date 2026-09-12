@@ -1,0 +1,31 @@
+{% comment %}
+  Component: Shared empty cart state
+  Accepts: heading, copy, action_label, action_url, image, compact, close_drawer
+{% endcomment %}
+<div class="empty-cart-state{% if compact %} empty-cart-state--compact{% endif %}" data-reveal>
+  <div class="empty-cart-state__background" aria-hidden="true">
+    {% if image != blank %}
+      {{ image | image_url: width: 1800 | image_tag: class: 'size-full object-cover', widths: '480, 760, 1100, 1440, 1800', loading: 'eager', alt: '' }}
+    {% else %}
+      <img class="size-full object-cover" src="{{ 'a557f0c0420f6653c3277f932eb5149e508e13b6.png' | asset_url }}" width="1376" height="768" loading="eager" alt="">
+    {% endif %}
+  </div>
+  <div class="empty-cart-state__content">
+  <div class="empty-cart-state__art" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+      <path d="M18 23h28l-2.7 28H20.7L18 23Z" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M25 26v-7a7 7 0 0 1 14 0v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M25 37c4.7 3.8 9.3 3.8 14 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="48" cy="17" r="8" fill="currentColor" opacity=".12"/>
+      <path d="m45.5 17 1.7 1.7 3.4-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2 class="empty-cart-state__heading">{{ heading | escape }}</h2>
+  <p class="empty-cart-state__copy">{{ copy | escape }}</p>
+  {% if close_drawer %}
+    <button class="chrome-action empty-cart-state__action" type="button" data-cart-drawer-close><span class="relative z-10">{{ action_label | escape }}</span></button>
+  {% else %}
+    <a class="chrome-action empty-cart-state__action" href="{{ action_url }}"><span class="relative z-10">{{ action_label | escape }}</span></a>
+  {% endif %}
+  </div>
+</div>

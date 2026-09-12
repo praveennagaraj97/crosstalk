@@ -106,7 +106,7 @@
         <img class="size-3" src="{{ 'hero-search-close.svg' | asset_url }}" width="12" height="12" alt="">
       </button>
     </form>
-    <a class="hero-icon-interactive relative grid size-9 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items" data-cart-drawer-trigger>
+    <a class="hero-icon-interactive relative grid size-9 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
       <img class="h-5.5 w-4.5" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="18" height="22" alt="">
       <span class="cart-icon-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count-badge>{{ cart.item_count }}</span>
     </a>
@@ -114,7 +114,7 @@
   </div>
 
   <div class="flex items-center gap-1 rounded-full border p-1 shadow-[0_4px_40px_-12px_rgb(0_0_0/12%)] backdrop-blur-3xl lg:hidden {{ navigation_shell_class }} {{ navigation_text_class }}">
-    <a class="hero-icon-interactive relative grid size-10 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items" data-cart-drawer-trigger>
+    <a class="hero-icon-interactive relative grid size-10 place-items-center rounded-full {{ navigation_focus_class }} {{ navigation_cart_icon_class }}" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
       <img class="h-5 w-4" src="{{ 'I198-7557-540-5882.svg' | asset_url }}" width="16" height="20" alt="">
       <span class="cart-icon-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count-badge>{{ cart.item_count }}</span>
     </a>
