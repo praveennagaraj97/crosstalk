@@ -1,0 +1,100 @@
+{% comment %} Component: Global AJAX cart drawer {% endcomment %}
+<div
+  class="cart-drawer"
+  data-cart-drawer
+  data-cart-url="{{ routes.cart_url }}"
+  data-checkout-url="{{ routes.root_url | append: 'checkout' }}"
+  data-currency="{{ cart.currency.iso_code | default: localization.country.currency.iso_code | default: shop.currency }}"
+  data-empty-heading="{{ section.settings.empty_heading | escape }}"
+  data-empty-copy="{{ section.settings.empty_copy | escape }}"
+  data-remove-label="{{ section.settings.remove_label | escape }}"
+  data-error-message="{{ section.settings.error_message | escape }}"
+  hidden
+  aria-hidden="true"
+>
+  <button class="cart-drawer__backdrop" type="button" data-cart-drawer-close tabindex="-1" aria-label="{{ section.settings.close_label | escape }}"></button>
+
+  <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
+    <header class="cart-drawer__header">
+      <div class="flex items-center gap-4">
+        <h2 id="CartDrawerTitle" class="cart-drawer__title">{{ section.settings.heading | escape }}</h2>
+        <span class="cart-drawer__count" data-cart-count>{{ cart.item_count }} {% if cart.item_count == 1 %}Item{% else %}Items{% endif %}</span>
+      </div>
+      <button class="cart-drawer__close" type="button" data-cart-drawer-close aria-label="{{ section.settings.close_label | escape }}">
+        <span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="cart-drawer__status visually-hidden" role="status" aria-live="polite" data-cart-status></div>
+
+    <div class="cart-drawer__items" data-cart-items>
+      {% for item in cart.items %}
+        <article class="cart-drawer__item" data-cart-line="{{ forloop.index }}">
+          <a class="cart-drawer__media" href="{{ item.url }}" tabindex="-1">
+            {% if item.image != blank %}{{ item.image | image_url: width: 240 | image_tag: class: 'size-full object-cover mix-blend-multiply', widths: '100, 200, 240', loading: 'eager', alt: item.product.title }}{% endif %}
+          </a>
+          <div class="cart-drawer__item-content">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <h3 class="cart-drawer__item-title"><a href="{{ item.url }}">{{ item.product.title | escape }}</a></h3>
+                {% unless item.product.has_only_default_variant %}<p class="cart-drawer__variant">{{ item.variant.title | escape }}</p>{% endunless %}
+              </div>
+              <button class="cart-drawer__remove" type="button" data-cart-remove aria-label="{{ section.settings.remove_label | escape }} {{ item.product.title | escape }}"><span aria-hidden="true">×</span>{{ section.settings.remove_label | escape }}</button>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <div class="cart-drawer__quantity" aria-label="Quantity">
+                <button type="button" data-cart-quantity="{{ item.quantity | minus: 1 }}" aria-label="Decrease {{ item.product.title | escape }} quantity">−</button>
+                <output>{{ item.quantity }}</output>
+                <button type="button" data-cart-quantity="{{ item.quantity | plus: 1 }}" aria-label="Increase {{ item.product.title | escape }} quantity">+</button>
+              </div>
+              <strong class="cart-drawer__line-price">{{ item.final_line_price | money }}</strong>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="cart-drawer__empty {% if cart.item_count > 0 %}hidden{% endif %}" data-cart-empty>
+      <h3 class="font-display text-3xl font-normal">{{ section.settings.empty_heading | escape }}</h3>
+      <p>{{ section.settings.empty_copy | escape }}</p>
+      <button class="chrome-action relative mt-6 min-h-12 overflow-hidden rounded-full bg-[linear-gradient(137deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-8 text-sm font-semibold tracking-[1.2px] text-[#f4dfb8] uppercase" type="button" data-cart-drawer-close><span class="relative z-10">{{ section.settings.continue_label | escape }}</span></button>
+    </div>
+
+    <footer class="cart-drawer__summary {% if cart.item_count == 0 %}hidden{% endif %}" data-cart-summary>
+      <div class="cart-drawer__totals">
+        <div class="flex items-center justify-between"><span>{{ section.settings.subtotal_label | escape }}</span><span class="font-medium text-text-brown" data-cart-subtotal>{{ cart.items_subtotal_price | money }}</span></div>
+        <div class="flex items-center justify-between"><span>{{ section.settings.shipping_label | escape }}</span><span class="font-medium bg-[linear-gradient(137deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-transparent">{{ section.settings.shipping_value | escape }}</span></div>
+        <div class="cart-drawer__total"><span>{{ section.settings.total_label | escape }}</span><span data-cart-total>{{ cart.total_price | money }}</span></div>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-4 sm:gap-6">
+        <a class="chrome-action cart-drawer__action cart-drawer__action--secondary" href="{{ routes.cart_url }}"><span class="relative z-10">{{ section.settings.view_cart_label | escape }}</span></a>
+        <a class="chrome-action cart-drawer__action cart-drawer__action--primary" href="{{ routes.root_url | append: 'checkout' }}"><span class="relative z-10">{{ section.settings.checkout_label | escape }}</span></a>
+      </div>
+      <p class="text-center text-xs leading-5 tracking-[0.4px] text-bitter-chocolate">{{ section.settings.shipping_note | escape }}</p>
+    </footer>
+  </aside>
+</div>
+
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your Cart" },
+    { "type": "text", "id": "close_label", "label": "Close label", "default": "Close cart" },
+    { "type": "text", "id": "remove_label", "label": "Remove label", "default": "Remove" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "shipping_label", "label": "Shipping label", "default": "Shipping" },
+    { "type": "text", "id": "shipping_value", "label": "Shipping value", "default": "Calculated at checkout" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total" },
+    { "type": "text", "id": "view_cart_label", "label": "View cart label", "default": "View Cart" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "Checkout" },
+    { "type": "text", "id": "shipping_note", "label": "Footer note", "default": "Shipping and returns are calculated at checkout." },
+    { "type": "text", "id": "empty_heading", "label": "Empty cart heading", "default": "Your cart is empty" },
+    { "type": "textarea", "id": "empty_copy", "label": "Empty cart copy", "default": "Discover a ritual designed for luminous, resilient skin." },
+    { "type": "text", "id": "continue_label", "label": "Continue shopping label", "default": "Continue Shopping" },
+    { "type": "text", "id": "error_message", "label": "Update error", "default": "We couldn't update your cart. Please try again." }
+  ]
+}
+{% endschema %}
