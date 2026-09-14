@@ -57,13 +57,11 @@
       </div>
 
       <div class="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between lg:mt-[39.4px]">
-        <p class="text-2xl leading-7 font-medium tracking-[1px]">
-          {% if featured_product != blank %}
-            {{ featured_product.selected_or_first_available_variant.price | money }}
-          {% else %}
-            {{ section.settings.fallback_price | escape }}
-          {% endif %}
-        </p>
+        {% if featured_product != blank %}
+          <p class="text-2xl leading-7 font-medium tracking-[1px]">
+            {{ localization.country.currency.symbol }}{{ featured_product.selected_or_first_available_variant.price | money_without_currency }}
+          </p>
+        {% endif %}
         {% if section.settings.cta_label != blank %}
           <a class="chrome-action relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(148deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 py-4 text-center text-base leading-5 font-semibold tracking-[1.4px] text-[#f4dfb8] uppercase shadow-[0_4px_6px_-1px_rgb(166_114_105/24%),inset_0_1px_1px_1px_rgb(255_255_255/35%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate sm:px-6.5" href="{{ product_url }}">
             <span class="relative z-10">{{ section.settings.cta_label | escape }}</span>
@@ -88,7 +86,6 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Flagship Innovation" },
     { "type": "text", "id": "fallback_title", "label": "Fallback product title", "default": "Radiance Volcanic Oil" },
     { "type": "textarea", "id": "description", "label": "Description", "default": "An ethereal fusion of cold-pressed rare botanicals and mineral-rich volcanic ash extract. Designed to restore the skin barrier while delivering an immediate, luminous glow that lasts all day." },
-    { "type": "text", "id": "fallback_price", "label": "Fallback price", "default": "$118.00" },
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the Radiance Oil" }
   ],
   "blocks": [
