@@ -49,7 +49,7 @@
       {% if nav_settings.logo != blank %}
         {{ nav_settings.logo | image_url: width: 240 | image_tag: class: 'h-7 w-auto lg:h-6', widths: '120, 240', alt: shop.name }}
       {% else %}
-        <img class="h-7 w-auto lg:h-6" src="{{ 'I198-7557-44-4636.svg' | asset_url }}" width="98" height="24" alt="{{ shop.name | escape }}">
+        <img class="size-7 object-contain lg:size-6 {% if surface == 'light' %}brightness-0{% endif %}" src="{{ 'main-brand-logo.png' | asset_url }}" width="26" height="26" alt="{{ shop.name | escape }}">
       {% endif %}
     </a>
 
