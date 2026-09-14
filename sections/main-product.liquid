@@ -155,8 +155,8 @@
       {% assign before_image = product.metafields.custom.before_image.value %}
       {% assign after_image = product.metafields.custom.after_image.value %}
       {% for block in efficacy_blocks %}{% if block.settings.product == product %}{% assign before_image = before_image | default: block.settings.before_image %}{% assign after_image = after_image | default: block.settings.after_image %}{% assign efficacy_caption = product.metafields.custom.efficacy_caption.value | default: block.settings.caption %}{% endif %}{% endfor %}
-      {% assign before_image = before_image | default: product.media[3].preview_image %}
-      {% assign after_image = after_image | default: product.media[4].preview_image %}
+      {% assign before_image = before_image | default: product.media[3].preview_image | default: product.media[0].preview_image %}
+      {% assign after_image = after_image | default: product.media[4].preview_image | default: product.media[1].preview_image %}
       {% if before_image != blank and after_image != blank %}
         <section class="mt-12 border-t border-pecan-brown/15 pt-10" data-reveal-group>
           <h2 class="font-display text-[34px] leading-[42px] font-normal">{{ section.settings.efficacy_heading | escape }}</h2>
