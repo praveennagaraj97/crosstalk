@@ -63,7 +63,10 @@
               {% for nav_product in navigation_product_source limit: navigation_product_limit %}
                 <li><a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_flyout_focus_class }}" href="{{ nav_product.url }}">
                   {% if nav_product.featured_image != blank %}{{ nav_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: nav_product.title }}{% endif %}
-                  <span class="font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>
+                  <span>
+                    <span class="block font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>
+                    {% if nav_product.metafields.custom.search_tagline.value != blank %}<span class="mt-0.5 block text-sm leading-5 opacity-60">{{ nav_product.metafields.custom.search_tagline.value | escape }}</span>{% endif %}
+                  </span>
                 </a></li>
               {% endfor %}
             {% else %}
@@ -72,7 +75,10 @@
                   {% assign nav_product = block.settings.product %}
                   <li><a class="group/item flex min-h-16 items-center gap-3.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 {{ navigation_flyout_focus_class }}" href="{{ nav_product.url }}">
                     {% if nav_product.featured_image != blank %}{{ nav_product.featured_image | image_url: width: 128 | image_tag: class: 'size-16 shrink-0 rounded-lg object-cover', widths: '64, 128', loading: 'lazy', alt: nav_product.title }}{% endif %}
-                    <span><span class="block font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>{% if block.settings.subtitle != blank %}<span class="block text-[13px] leading-5 text-white/65">{{ block.settings.subtitle | escape }}</span>{% endif %}</span>
+                    <span>
+                      <span class="block font-display text-lg leading-6 group-hover/item:text-toasted-almond">{{ nav_product.title | escape }}</span>
+                      {% if nav_product.metafields.custom.search_tagline.value != blank %}<span class="mt-0.5 block text-sm leading-5 opacity-60">{{ nav_product.metafields.custom.search_tagline.value | escape }}</span>{% elsif block.settings.subtitle != blank %}<span class="mt-0.5 block text-sm leading-5 opacity-60">{{ block.settings.subtitle | escape }}</span>{% endif %}
+                    </span>
                   </a></li>
                 {% endif %}
               {% endfor %}
