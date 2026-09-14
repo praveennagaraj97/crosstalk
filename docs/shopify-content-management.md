@@ -1,33 +1,13 @@
-# Shopify content management
+# Shopify content
 
-Use the content location that matches what you are changing.
+Shopify is the content source; the repository contains rendering code and a synced theme configuration only.
 
-## Product editor
+- **Products:** title, description, media, price, inventory, collections, and up to three variant options.
+- **Metafields:** product-specific structured data such as `custom.search_tagline` and `custom.ingredients`.
+- **Metaobjects:** reusable records. Add ingredients in **Content → Metaobjects → Ingredient**, then assign them in the product’s **Ingredients** metafield.
+- **Theme editor:** page-level headings, links, selected products, menus, section order, and visual settings.
+- **Pages/blogs:** long-form editorial content, visibility, SEO, and template assignment.
 
-Go to **Products**, open a product, and edit its title, description, media, price, inventory, status, vendor, or collections.
+For ingredient Categories, use `Hydrators`, `Brighteners`, `Repair & Soothe`, or `Bio-Actives`, separated by `|`.
 
-Use **Options and variants** for choices such as Size, Formula, and Finish. Shopify supports up to three option types on a product; their values create the purchasable variant combinations. Set price, SKU, and inventory on each variant.
-
-## Product metafields
-
-Metafields store structured content that belongs to one product. They are configured under **Settings → Custom data → Products** and edited near the bottom of each product page.
-
-- **Search tagline** (`custom.search_tagline`): short text shown with the product in search.
-- **Ingredients** (`custom.ingredients`): reusable Ingredient entries assigned to the product.
-
-## Ingredient library
-
-1. Go to **Content → Metaobjects → Ingredient** and add an entry.
-2. Complete Name, Summary, About, How it works, Source, and Categories.
-3. For Categories, use these labels separated by `|`: `Hydrators`, `Brighteners`, `Repair & Soothe`, `Bio-Actives`.
-4. Open the product, select the entries in its **Ingredients** metafield, and save.
-
-The ingredient page reads the product metafield first. Theme-editor ingredient blocks remain a fallback when no entries are assigned.
-
-## Theme editor and pages
-
-Use **Online Store → Themes → Customize** for layout, section settings, menus, and fallback section blocks. Use **Online Store → Pages** for page title, visibility, SEO, and template assignment. Keep product-specific data in the product editor or metafields.
-
-## Theme sync
-
-Product, variant, metafield, and metaobject data lives in Shopify and is not stored in the theme repository. Before future theme work, pull the remote theme into a temporary location and compare it; push only the changed theme files so newer store customizations are not overwritten.
+Before editing, pull and compare the remote theme. Push only changed code files. Theme settings are synced through Shopify theme JSON; product, metafield, and metaobject data is never part of a theme push.

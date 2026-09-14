@@ -8,11 +8,6 @@
             <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
           </span>
         {% endfor %}
-      {% else %}
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>New product drop in 6hrs</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>Suitable for all skin types</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>First time users get 10% OFF</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
-        <span class="flex shrink-0 items-center gap-8 whitespace-nowrap text-sm leading-6 font-light tracking-[0.4px]"><span>Promo code FIRST10</span><span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span></span>
       {% endif %}
     {% endcapture %}
 
@@ -24,8 +19,6 @@
             <span class="size-1.5 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
           </span>
         {% endfor %}
-      {% else %}
-        {{ announcement_items }}
       {% endif %}
     </div>
     <div class="marquee-copy flex shrink-0 items-center gap-8 pr-12" aria-hidden="true">
