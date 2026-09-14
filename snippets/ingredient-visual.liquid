@@ -1,5 +1,0 @@
-{% if image != blank %}
-  {{ image | image_url: width: 240 | image_tag: class: 'size-full object-cover', loading: 'lazy', alt: alt }}
-{% elsif icon != blank %}
-  {% render 'ingredient-icon', icon: icon %}
-{% endif %}
