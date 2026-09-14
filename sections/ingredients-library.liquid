@@ -71,7 +71,7 @@
               {% if product_ingredients == blank %}
                 {% for block in section.blocks %}
                   {% assign first_letter = block.settings.name | slice: 0 | upcase %}
-                  {% if block.type == 'demo_ingredient' and first_letter == letter %}
+                  {% if block.type == 'demo_ingredient' and block.settings.product.handle == configured_product.handle and first_letter == letter %}
                     {% assign rendered_count = rendered_count | plus: 1 %}
                     {% render 'ingredient-card', ingredient: block, demo: true, configured_products: configured_products, current_product: configured_product, learn_more_label: section.settings.learn_more_label, card_index: forloop.index0 %}
                   {% endif %}
@@ -175,6 +175,7 @@
       "type": "demo_ingredient",
       "name": "Preview ingredient",
       "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
         { "type": "text", "id": "name", "label": "Name", "default": "Aloe Vera" },
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "text", "id": "image_alt", "label": "Image alt text" },
