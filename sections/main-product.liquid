@@ -109,7 +109,9 @@
           {% if ingredient_items != blank %}
             {% for ingredient in ingredient_items limit: 4 %}
               {% assign ingredient_image = ingredient.card_image.value | default: ingredient.image.value %}
-              <article class="min-w-0 text-center"><div class="mx-auto grid size-20 place-items-center overflow-hidden rounded-full bg-[#f1ddcc]">{% if ingredient_image != blank %}{{ ingredient_image | image_url: width: 240 | image_tag: class: 'size-full object-cover', loading: 'lazy', alt: ingredient.image_alt.value | default: ingredient.name.value }}{% endif %}</div><h3 class="mt-3 text-[11px] leading-4 font-bold tracking-[.65px] uppercase">{{ ingredient.name.value | default: ingredient.system.handle | escape }}</h3><p class="mt-0.5 text-[9px] leading-4 tracking-[.45px] text-bitter-chocolate uppercase">{{ ingredient.summary.value | truncatewords: 7 }}</p></article>
+              {% assign ingredient_icon = ingredient.icon.value | downcase %}
+              {% assign ingredient_alt = ingredient.image_alt.value | default: ingredient.name.value %}
+              <article class="min-w-0 text-center"><div class="mx-auto grid size-20 place-items-center overflow-hidden rounded-full bg-[#f1ddcc] text-bitter-chocolate">{% render 'ingredient-visual', image: ingredient_image, icon: ingredient_icon, alt: ingredient_alt %}</div><h3 class="mt-3 text-[11px] leading-4 font-bold tracking-[.65px] uppercase">{{ ingredient.name.value | default: ingredient.system.handle | escape }}</h3><p class="mt-0.5 text-[9px] leading-4 tracking-[.45px] text-bitter-chocolate uppercase">{{ ingredient.summary.value | truncatewords: 7 }}</p></article>
             {% endfor %}
           {% else %}
             {% assign ingredient_block_index = 0 %}{% for block in ingredient_blocks %}{% if block.settings.product.handle == product.handle and ingredient_block_index < 4 %}{% assign ingredient_block_index = ingredient_block_index | plus: 1 %}

@@ -3,8 +3,8 @@
 Shopify is the content source; the repository contains rendering code and a synced theme configuration only.
 
 - **Products:** title, description, media, price, inventory, collections, and up to three variant options.
-- **Metafields:** product-specific structured data such as `custom.search_tagline` and `custom.ingredients`.
-- **Metaobjects:** reusable records. Add ingredients in **Content → Metaobjects → Ingredient**, then assign them in the product’s **Ingredients** metafield.
+- **Metafields:** product-specific structured data such as `custom.search_tagline`, `custom.ingredients`, and the ordered four-item `custom.ingredient_highlights` list.
+- **Metaobjects:** reusable records. Add ingredients in **Content → Metaobjects → Ingredient**, set Icon to `leaf`, `drop`, `sparkles`, or `radiance`, then assign them to a product.
 - **Theme editor:** page-level headings, links, selected products, menus, section order, and visual settings.
 - **Pages/blogs:** long-form editorial content, visibility, SEO, and template assignment.
 
