@@ -7,10 +7,7 @@
   assign ingredient_about = ingredient.about.value
   assign ingredient_works = ingredient.how_it_works.value
   assign ingredient_source = ingredient.source.value
-  assign science_label_1 = ingredient.scientific_reference_1_label.value
-  assign science_url_1 = ingredient.scientific_reference_1_url.value
-  assign science_label_2 = ingredient.scientific_reference_2_label.value
-  assign science_url_2 = ingredient.scientific_reference_2_url.value
+  assign scientific_references = ingredient.scientific_references.value
 
   assign ingredient_letter = ingredient_name | slice: 0 | upcase
   assign categories_search = ingredient_categories | downcase | replace: ' & ', '-' | replace: ' ', '-'
@@ -59,7 +56,8 @@
     {% endfor %}
   </span>
   <span class="hidden" data-card-science>
-    {% if science_label_1 != blank and science_url_1 != blank %}<a class="ingredient-dialog__link" href="{{ science_url_1 }}" rel="noopener noreferrer" target="_blank">{{ science_label_1 | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
-    {% if science_label_2 != blank and science_url_2 != blank %}<a class="ingredient-dialog__link" href="{{ science_url_2 }}" rel="noopener noreferrer" target="_blank">{{ science_label_2 | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
+    {% for reference in scientific_references %}
+      {% if reference.text != blank and reference.url != blank %}<a class="ingredient-dialog__link" href="{{ reference.url | escape }}" rel="noopener noreferrer" target="_blank">{{ reference.text | escape }} <span aria-hidden="true">↗</span></a>{% endif %}
+    {% endfor %}
   </span>
 </article>
