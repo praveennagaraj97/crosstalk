@@ -12,6 +12,12 @@
     assign ingredients_url = ingredients_url | append: '?product=' | append: context_product.handle
   endif
 
+  assign contact_page = pages[nav_settings.contact_page]
+  if contact_page == blank
+    assign contact_page = pages['contact-us']
+  endif
+  assign contact_url = contact_page.url
+
   assign navigation_product_source = nav_products
   if navigation_product_source == blank
     assign navigation_product_source = collections.all.products
@@ -90,14 +96,22 @@
       <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-navigation-item data-ingredients-link {% if active_nav == 'ingredients' %}data-navigation-active aria-current="page"{% endif %}>Ingredients</a>
       {% if nav_settings.menu != blank %}
         {% for link in nav_settings.menu.links %}
-          {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current %}is-active{% endif %}" href="{{ link.url }}" data-navigation-item {% if link.current %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
+          {% liquid
+            assign navigation_link_url = link.url
+            if link.title == nav_settings.contact_link_label and contact_url != blank
+              assign navigation_link_url = contact_url
+            endif
+          %}
+          {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current or page.url == navigation_link_url %}is-active{% endif %}" href="{{ navigation_link_url }}" data-navigation-item {% if link.current or page.url == navigation_link_url %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
         {% endfor %}
       {% else %}
         {% assign fallback_labels = 'Our Story|Journal|Contact' | split: '|' %}
         {% assign fallback_handles = 'our-story|journal|contact-1' | split: '|' %}
         {% for fallback_label in fallback_labels %}
           {% assign fallback_handle = fallback_handles[forloop.index0] %}
-          <a class="storefront-nav-link z-10 px-3 py-2 {% if active_nav == fallback_handle %}is-active{% endif %}" href="{{ routes.root_url }}pages/{{ fallback_handle }}" data-navigation-item {% if active_nav == fallback_handle %}data-navigation-active aria-current="page"{% endif %}>{{ fallback_label }}</a>
+          {% assign fallback_url = routes.root_url | append: 'pages/' | append: fallback_handle %}
+          {% if fallback_label == nav_settings.contact_link_label and contact_url != blank %}{% assign fallback_url = contact_url %}{% endif %}
+          <a class="storefront-nav-link z-10 px-3 py-2 {% if page.url == fallback_url %}is-active{% endif %}" href="{{ fallback_url }}" data-navigation-item {% if page.url == fallback_url %}data-navigation-active aria-current="page"{% endif %}>{{ fallback_label }}</a>
         {% endfor %}
       {% endif %}
     </nav>
@@ -130,7 +144,17 @@
         <nav aria-label="Mobile navigation"><ul class="grid list-none gap-1 p-0" data-mobile-menu-items>
           <li class="rounded-xl border border-current/10 px-3 py-2.5"><details><summary class="list-none text-sm font-medium marker:hidden">{{ nav_settings.shop_label | default: 'Shop All' | escape }}</summary><ul class="mt-2 grid list-none gap-1.5 border-l border-current/20 pl-3">{% for nav_product in navigation_product_source limit: navigation_product_limit %}<li><a class="block py-1 text-xs leading-5" href="{{ nav_product.url }}">{{ nav_product.title | escape }}</a></li>{% endfor %}{% if navigation_product_count > 5 %}<li><a class="block py-1 text-xs leading-5" href="{{ routes.all_products_collection_url }}">View all products</a></li>{% endif %}</ul></details></li>
           <li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if active_nav == 'ingredients' %}is-active{% endif %}" href="{{ ingredients_url }}" data-ingredients-link {% if active_nav == 'ingredients' %}aria-current="page"{% endif %}>Ingredients</a></li>
-          {% if nav_settings.menu != blank %}{% for link in nav_settings.menu.links %}{% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current %}is-active{% endif %}" href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endunless %}{% endfor %}{% endif %}
+          {% if nav_settings.menu != blank %}
+            {% for link in nav_settings.menu.links %}
+              {% liquid
+                assign navigation_link_url = link.url
+                if link.title == nav_settings.contact_link_label and contact_url != blank
+                  assign navigation_link_url = contact_url
+                endif
+              %}
+              {% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current or page.url == navigation_link_url %}is-active{% endif %}" href="{{ navigation_link_url }}">{{ link.title | escape }}</a></li>{% endunless %}
+            {% endfor %}
+          {% endif %}
           <li class="mt-1 border-t border-current/15 pt-1"><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.search_url }}">Search</a></li>
         </ul></nav>
       </div>

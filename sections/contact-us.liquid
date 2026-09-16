@@ -1,0 +1,238 @@
+{% liquid
+  assign social_icons = 'I198-7726-285-3709.svg|I198-7726-285-3524.svg|I198-7726-285-3577.svg' | split: '|'
+  assign social_names = 'Instagram|Facebook|Twitter' | split: '|'
+  assign fallback_social_urls = 'https://www.instagram.com/|https://www.facebook.com/|https://x.com/' | split: '|'
+%}
+
+{% comment %} Component: Contact Us {% endcomment %}
+<section class="bg-background pt-8 pb-12 sm:pt-10 sm:pb-16 lg:pt-10 lg:pb-18" aria-labelledby="ContactUsTitle-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    {% comment %} Component: Intro {% endcomment %}
+    <header class="max-w-171" data-reveal-group>
+      <h1 id="ContactUsTitle-{{ section.id }}" class="font-display text-[2.125rem] leading-10.5 font-normal text-text-brown">
+        {{ section.settings.heading | escape }}
+      </h1>
+      {% if section.settings.intro != blank %}
+        <p class="mt-1 max-w-171 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+          {{ section.settings.intro | escape | newline_to_br }}
+        </p>
+      {% endif %}
+    </header>
+
+    <div class="mt-10 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,542px)_minmax(0,1fr)] lg:gap-13">
+      {% comment %} Component: Contact form {% endcomment %}
+      <div class="rounded-xl border border-[#f7ede4] bg-white/50 p-5 sm:p-6" data-reveal-group data-contact-form>
+        {% form 'contact', class: 'grid gap-5', novalidate: true %}
+          {% if form.posted_successfully? %}
+            {% comment %} Component: Submission success {% endcomment %}
+            <div class="flex min-h-122 flex-col items-center justify-center rounded-lg border border-pecan-brown/30 bg-pecan-brown/10 px-6 py-10 text-center" role="status" tabindex="-1" data-contact-success>
+              <span class="grid size-12 place-items-center rounded-full border border-pecan-brown/40 bg-white/70 text-xl text-pecan-brown" aria-hidden="true">✓</span>
+              <h2 class="mt-5 font-display text-3xl leading-9 text-text-brown">{{ section.settings.success_heading | escape }}</h2>
+              <p class="mt-3 max-w-90 text-sm leading-5 tracking-[0.4px] text-pecan-brown">{{ section.settings.success_message | escape }}</p>
+            </div>
+          {% else %}
+            {% if form.errors %}
+              <div class="rounded-lg border border-[#c64036]/30 bg-[#c64036]/10 px-3 py-3 text-sm leading-5 text-text-brown" role="alert">
+                {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+
+            <div data-contact-field="name">
+              <label class="sr-only" for="ContactName-{{ section.id }}">{{ section.settings.name_label | escape }}</label>
+              <input id="ContactName-{{ section.id }}" class="min-h-13 w-full rounded-lg border border-toasted-almond bg-transparent px-3 py-3 text-base leading-6 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73] focus:border-pecan-brown focus:ring-2 focus:ring-pecan-brown/20" type="text" name="contact[name]" autocomplete="name" aria-describedby="ContactNameError-{{ section.id }}" placeholder="{{ section.settings.name_label | escape }}" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+              <p id="ContactNameError-{{ section.id }}" class="mt-1 hidden text-xs leading-4 text-[#c64036]" data-field-error="name"></p>
+            </div>
+
+            <div data-contact-field="email">
+              <label class="sr-only" for="ContactEmail-{{ section.id }}">{{ section.settings.email_label | escape }}</label>
+              <input id="ContactEmail-{{ section.id }}" class="min-h-13 w-full rounded-lg border border-toasted-almond bg-transparent px-3 py-3 text-base leading-6 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73] focus:border-pecan-brown focus:ring-2 focus:ring-pecan-brown/20" type="email" name="contact[email]" autocomplete="email" autocorrect="off" autocapitalize="off" aria-describedby="ContactEmailError-{{ section.id }}" placeholder="{{ section.settings.email_label | escape }}" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+              <p id="ContactEmailError-{{ section.id }}" class="mt-1 hidden text-xs leading-4 text-[#c64036]" data-field-error="email"></p>
+            </div>
+
+            <div data-contact-field="message">
+              <label class="sr-only" for="ContactMessage-{{ section.id }}">{{ section.settings.message_label | escape }}</label>
+              <textarea id="ContactMessage-{{ section.id }}" class="min-h-67 w-full resize-y rounded-lg border border-toasted-almond bg-transparent px-3 py-3 text-base leading-6 tracking-[0.4px] text-text-brown outline-none placeholder:text-[#b18a73] focus:border-pecan-brown focus:ring-2 focus:ring-pecan-brown/20" name="contact[body]" aria-describedby="ContactMessageError-{{ section.id }}" placeholder="{{ section.settings.message_label | escape }}">{{ form.body }}</textarea>
+              <p id="ContactMessageError-{{ section.id }}" class="mt-1 hidden text-xs leading-4 text-[#c64036]" data-field-error="message"></p>
+            </div>
+
+            <button class="chrome-action min-h-12 w-full rounded-full bg-[linear-gradient(162deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-8 py-3 text-sm leading-5 font-medium tracking-[0.4px] text-[#f4dfb8] shadow-[0_4px_6px_-1px_rgb(166_114_105/30%),inset_0_1px_1px_1px_rgb(255_255_255/40%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" type="button" data-contact-submit>
+              {{ section.settings.submit_label | escape }}
+            </button>
+          {% endif %}
+        {% endform %}
+      </div>
+
+      {% comment %} Component: Contact details {% endcomment %}
+      <div class="grid content-start gap-7" data-reveal-group>
+        <article class="w-full rounded-xl border border-[#f5ebe1] bg-[#f5ebe1]/40 p-6 sm:max-w-59.5">
+          <h2 class="bg-[linear-gradient(156deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[3px] text-transparent uppercase">{{ section.settings.atelier_heading | escape }}</h2>
+          <div class="mt-3 grid gap-1 text-base leading-6 tracking-[0.4px] text-bitter-chocolate">
+            <p class="font-semibold text-text-brown">{{ section.settings.atelier_name | escape }}</p>
+            <p>{{ section.settings.address_line_1 | escape }}</p>
+            <p>{{ section.settings.address_line_2 | escape }}</p>
+            <p>{{ section.settings.address_line_3 | escape }}</p>
+          </div>
+        </article>
+
+        <div class="grid gap-7 sm:grid-cols-2 sm:items-start">
+          <article class="rounded-xl border border-[#f5ebe1] bg-[#f5ebe1]/40 p-6">
+            <h2 class="bg-[linear-gradient(156deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[3px] text-transparent uppercase">{{ section.settings.inquiries_heading | escape }}</h2>
+            <div class="mt-3 grid gap-1 text-base leading-6 tracking-[0.4px]">
+              <a class="font-semibold text-text-brown underline decoration-toasted-almond decoration-1 underline-offset-4 transition-colors hover:text-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
+              <a class="text-bitter-chocolate transition-colors hover:text-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="tel:{{ section.settings.phone | replace: ' ', '' | escape }}">{{ section.settings.phone | escape }}</a>
+            </div>
+          </article>
+
+          <article class="rounded-xl border border-[#f5ebe1] bg-[#f5ebe1]/40 p-6">
+            <h2 class="bg-[linear-gradient(156deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[3px] text-transparent uppercase">{{ section.settings.hours_heading | escape }}</h2>
+            <div class="mt-3 grid gap-1 text-base leading-6 tracking-[0.4px] text-bitter-chocolate">
+              <p>{{ section.settings.hours_weekday | escape }}</p>
+              <p>{{ section.settings.hours_weekend | escape }}</p>
+            </div>
+          </article>
+        </div>
+
+        <article class="w-fit min-w-60.25 rounded-xl border border-[#f5ebe1] bg-[#f5ebe1]/40 p-6">
+          <h2 class="whitespace-nowrap bg-[linear-gradient(156deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-xs leading-3.75 font-semibold tracking-[2.5px] text-transparent uppercase">{{ section.settings.social_heading | escape }}</h2>
+          <div class="mt-3 flex justify-between gap-4">
+            {% for index in (1..3) %}
+              {% liquid
+                assign social_index = forloop.index0
+                assign url_key = 'social_url_' | append: index
+                assign social_url = section.settings[url_key]
+                if social_url == blank
+                  assign social_url = fallback_social_urls[social_index]
+                endif
+              %}
+              <a class="grid size-10 place-items-center rounded-full border border-toasted-almond text-text-brown transition-colors hover:border-pecan-brown hover:text-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ social_url }}" aria-label="{{ social_names[social_index] }}" rel="noopener noreferrer" target="_blank">
+                <span class="contact-social-icon size-3.5" style="--contact-social-icon: url('{{ social_icons[social_index] | asset_url }}');" aria-hidden="true"></span>
+              </a>
+            {% endfor %}
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-social-icon {
+    background: linear-gradient(107deg, #2d1f1e, #9b685b 50%, #4e3b37);
+    -webkit-mask: var(--contact-social-icon) center / contain no-repeat;
+    mask: var(--contact-social-icon) center / contain no-repeat;
+  }
+</style>
+
+<script>
+  (() => {
+    const section = document.getElementById('shopify-section-{{ section.id }}');
+    const formContainer = section?.querySelector('[data-contact-form]');
+    const form = formContainer?.querySelector('form');
+    if (!form || form.dataset.validationReady === 'true') return;
+
+    const success = form.querySelector('[data-contact-success]');
+    if (success) {
+      success.focus();
+      return;
+    }
+
+    form.dataset.validationReady = 'true';
+    form.noValidate = true;
+    const fields = {
+      name: form.querySelector('[name="contact[name]"]'),
+      email: form.querySelector('[name="contact[email]"]'),
+      message: form.querySelector('[name="contact[body]"]')
+    };
+    const errors = {
+      name: 'Enter your full name.',
+      email: 'Enter a valid email address.',
+      message: 'Enter a message of at least 10 characters.'
+    };
+
+    const validate = (name) => {
+      const field = fields[name];
+      const value = field.value.trim();
+      const error = name === 'email'
+        ? (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? errors[name] : '')
+        : (name === 'message' ? (value.length < 10 ? errors[name] : '') : (value.length < 2 ? errors[name] : ''));
+      const message = form.querySelector(`[data-field-error="${name}"]`);
+
+      field.setAttribute('aria-invalid', error ? 'true' : 'false');
+      field.classList.toggle('border-[#c64036]', Boolean(error));
+      field.classList.toggle('border-pecan-brown', !error && Boolean(value));
+      field.classList.toggle('border-toasted-almond', !error && !value);
+      message.textContent = error;
+      message.hidden = !error;
+      message.classList.toggle('hidden', !error);
+      return !error;
+    };
+
+    Object.entries(fields).forEach(([name, field]) => {
+      field.addEventListener('blur', () => validate(name));
+      field.addEventListener('input', () => {
+        if (field.dataset.touched === 'true' || form.dataset.submitted === 'true') validate(name);
+      });
+      field.addEventListener('blur', () => { field.dataset.touched = 'true'; });
+    });
+
+    const validateForm = () => {
+      form.dataset.submitted = 'true';
+      const firstInvalid = Object.keys(fields).find((name) => !validate(name));
+      if (firstInvalid) {
+        fields[firstInvalid].focus();
+        return false;
+      }
+      return true;
+    };
+
+    form.querySelector('[data-contact-submit]').addEventListener('click', () => {
+      if (!validateForm()) return;
+      form.dataset.allowSubmit = 'true';
+      form.requestSubmit();
+    });
+
+    form.addEventListener('submit', (event) => {
+      if (form.dataset.allowSubmit === 'true') return;
+      event.preventDefault();
+      validateForm();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Contact us",
+  "tag": "section",
+  "class": "contact-us-section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Contact Us" },
+    { "type": "textarea", "id": "intro", "label": "Introduction", "default": "We invite you to reach out for bespoke inquiries, collection details, or private appointments. Our team is dedicated to providing an unparalleled luxury experience." },
+    { "type": "text", "id": "name_label", "label": "Name field label", "default": "Full Name" },
+    { "type": "text", "id": "email_label", "label": "Email field label", "default": "Email Address" },
+    { "type": "text", "id": "message_label", "label": "Message field label", "default": "Message..." },
+    { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Send Message" },
+    { "type": "text", "id": "success_heading", "label": "Success heading", "default": "Message sent" },
+    { "type": "text", "id": "success_message", "label": "Success message", "default": "Thank you for reaching out. We’ll be in touch shortly." },
+    { "type": "header", "content": "Atelier" },
+    { "type": "text", "id": "atelier_heading", "label": "Heading", "default": "Our Atelier" },
+    { "type": "text", "id": "atelier_name", "label": "Name", "default": "Amaari House" },
+    { "type": "text", "id": "address_line_1", "label": "Address line 1", "default": "1248 Oakwood Avenue" },
+    { "type": "text", "id": "address_line_2", "label": "Address line 2", "default": "Apartment 4B" },
+    { "type": "text", "id": "address_line_3", "label": "Address line 3", "default": "Los Angeles, CA 90024" },
+    { "type": "header", "content": "Inquiries" },
+    { "type": "text", "id": "inquiries_heading", "label": "Heading", "default": "Inquiries" },
+    { "type": "text", "id": "email", "label": "Email", "default": "hello@amaari.com" },
+    { "type": "text", "id": "phone", "label": "Phone", "default": "+1 (212) 555-0198" },
+    { "type": "header", "content": "Hours" },
+    { "type": "text", "id": "hours_heading", "label": "Heading", "default": "Hours" },
+    { "type": "text", "id": "hours_weekday", "label": "Weekday hours", "default": "Mon — Fri: 10am - 6pm" },
+    { "type": "text", "id": "hours_weekend", "label": "Weekend hours", "default": "Sat: By Appointment" },
+    { "type": "header", "content": "Social links" },
+    { "type": "text", "id": "social_heading", "label": "Heading", "default": "Follow Our Journey" },
+    { "type": "url", "id": "social_url_1", "label": "Instagram URL" },
+    { "type": "url", "id": "social_url_2", "label": "Facebook URL" },
+    { "type": "url", "id": "social_url_3", "label": "Twitter URL" }
+  ],
+  "presets": [{ "name": "Contact us" }]
+}
+{% endschema %}
