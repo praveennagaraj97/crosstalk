@@ -1,0 +1,193 @@
+{% comment %} Component: FAQ page {% endcomment %}
+<section id="FaqPage-{{ section.id }}" class="bg-background pb-16 pt-8 sm:pb-20 sm:pt-10 lg:pb-20 lg:pt-10" aria-labelledby="FaqPageHeading-{{ section.id }}">
+  <div class="container mx-auto px-4 lg:px-15">
+    {% comment %} Component: Intro {% endcomment %}
+    <header class="border-b border-toasted-almond/70 pb-10 sm:pb-12" data-reveal-group>
+      {% if section.settings.heading != blank %}
+        <h1 id="FaqPageHeading-{{ section.id }}" class="font-display text-[2.125rem] leading-[1.24] font-normal text-text-brown sm:text-5xl">
+          {{ section.settings.heading | escape }}
+        </h1>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <p class="mt-2 max-w-171 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+          {{ section.settings.description | escape | newline_to_br }}
+        </p>
+      {% endif %}
+    </header>
+
+    {% comment %} Component: Category tabs {% endcomment %}
+    <nav class="overflow-x-auto border-b border-toasted-almond/70" aria-label="{{ section.settings.tabs_label | escape }}">
+      <ul class="flex min-w-max gap-8 sm:gap-12">
+        {% for index in (1..4) %}
+          {% liquid
+            assign tab_label_key = 'tab_' | append: index | append: '_label'
+            assign tab_anchor_key = 'tab_' | append: index | append: '_anchor'
+            assign tab_label = section.settings[tab_label_key]
+            assign tab_anchor = section.settings[tab_anchor_key]
+          %}
+          {% if tab_label != blank and tab_anchor != blank %}
+            <li>
+              <a class="{% if forloop.first %}border-b-2 border-bitter-chocolate bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-transparent{% else %}border-b-2 border-transparent text-pecan-brown hover:border-toasted-almond{% endif %} block py-4 text-xs leading-5 font-bold tracking-[1.4px] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="#{{ tab_anchor | handleize }}">{{ tab_label | escape }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+
+    {% comment %} Component: Categorized questions {% endcomment %}
+    <div class="space-y-16 pt-10 sm:space-y-20 sm:pt-12" data-reveal-group>
+      {% assign faq_categories = 'Shipping & Delivery|Products & Craft|Returns & Exchanges' | split: '|' %}
+      {% for category in faq_categories %}
+        {% assign category_id = category | handleize %}
+        <section id="{{ category_id }}" aria-labelledby="FaqCategory-{{ section.id }}-{{ category_id }}">
+          <h2 id="FaqCategory-{{ section.id }}-{{ category_id }}" class="flex items-center gap-4 text-xs leading-5 font-bold tracking-[3px] text-bitter-chocolate uppercase">
+            <span class="h-px w-8 shrink-0 bg-toasted-almond" aria-hidden="true"></span>
+            <span>{{ category }}</span>
+          </h2>
+          <div class="mt-8">
+            {% for block in section.blocks %}
+              {% if block.settings.category == category %}
+                <details class="group border-b border-toasted-almond/80 first:border-t"{% if block.settings.open and section.settings.open_first %} open{% endif %} {{ block.shopify_attributes }}>
+                  <summary class="flex min-h-19 items-center justify-between gap-6 py-6 text-left text-lg leading-7 font-semibold tracking-[0.4px] text-text-brown outline-none transition-colors hover:text-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate [&::-webkit-details-marker]:hidden">
+                    <span>{{ block.settings.question | escape }}</span>
+                    <img class="h-2 w-3 shrink-0 transition-transform duration-300 group-open:rotate-180" src="{{ 'faq-chevron.svg' | asset_url }}" width="12" height="8" alt="">
+                  </summary>
+                  <div class="support-faq__answer">
+                    <div>
+                      <p class="max-w-192 pb-6 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+                        {{ block.settings.answer | escape | newline_to_br }}
+                      </p>
+                    </div>
+                  </div>
+                </details>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+
+    {% comment %} Component: Contact support card {% endcomment %}
+    {% liquid
+      assign contact_url = section.settings.contact_url
+      if contact_url == blank
+        assign contact_url = routes.root_url
+      endif
+    %}
+    <aside class="mt-16 flex flex-col items-start justify-between gap-6 rounded-xl bg-[#f5ebe1] px-6 py-8 sm:flex-row sm:items-center sm:px-12 sm:py-10" aria-label="{{ section.settings.contact_heading | escape }}" data-reveal-group>
+      <div>
+        <h2 class="text-lg leading-7 font-bold tracking-[0.4px] text-text-brown">{{ section.settings.contact_heading | escape }}</h2>
+        <p class="mt-2 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ section.settings.contact_text | escape }}</p>
+      </div>
+      <a class="chrome-action relative inline-flex min-h-10.5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-6 py-3 text-center text-sm leading-4.5 font-semibold tracking-[0.4px] text-[#f4dfb8] shadow-[0_4px_6px_-1px_rgb(166_114_105/30%),inset_0_1px_1px_1px_rgb(255_255_255/40%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ contact_url }}">
+        <span class="relative z-10">{{ section.settings.contact_label | escape }}</span>
+      </a>
+    </aside>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.getElementById('FaqPage-{{ section.id }}');
+    if (!section || section.dataset.accordionReady === 'true') return;
+
+    section.dataset.accordionReady = 'true';
+
+    section.querySelectorAll('details').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const answer = details.querySelector('.support-faq__answer');
+      let animation;
+      let closing = false;
+
+      summary.addEventListener('click', (event) => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        event.preventDefault();
+        animation?.cancel();
+
+        const startHeight = `${details.offsetHeight}px`;
+        const shouldClose = details.open && !closing;
+
+        if (!shouldClose) {
+          closing = false;
+          details.open = true;
+        } else {
+          closing = true;
+        }
+
+        const endHeight = shouldClose ? `${summary.offsetHeight}px` : `${summary.offsetHeight + answer.scrollHeight}px`;
+
+        details.style.overflow = 'hidden';
+        animation = details.animate(
+          { height: [startHeight, endHeight] },
+          { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+
+        animation.onfinish = () => {
+          if (shouldClose) details.open = false;
+          closing = false;
+          details.style.height = '';
+          details.style.overflow = '';
+          animation = undefined;
+        };
+
+        animation.oncancel = () => {
+          details.style.height = '';
+          details.style.overflow = '';
+        };
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ page",
+  "tag": "section",
+  "class": "faq-page-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently Asked Questions" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Curated answers for our sophisticated community. Explore everything\nfrom our artisanal processes to global delivery logistics." },
+    { "type": "text", "id": "tabs_label", "label": "Tabs label", "default": "FAQ categories" },
+    { "type": "text", "id": "tab_1_label", "label": "Tab 1 label", "default": "All Topics" },
+    { "type": "text", "id": "tab_1_anchor", "label": "Tab 1 anchor", "default": "shipping-delivery" },
+    { "type": "text", "id": "tab_2_label", "label": "Tab 2 label", "default": "Shipping" },
+    { "type": "text", "id": "tab_2_anchor", "label": "Tab 2 anchor", "default": "shipping-delivery" },
+    { "type": "text", "id": "tab_3_label", "label": "Tab 3 label", "default": "Products" },
+    { "type": "text", "id": "tab_3_anchor", "label": "Tab 3 anchor", "default": "products-craft" },
+    { "type": "text", "id": "tab_4_label", "label": "Tab 4 label", "default": "Returns" },
+    { "type": "text", "id": "tab_4_anchor", "label": "Tab 4 anchor", "default": "returns-exchanges" },
+    { "type": "checkbox", "id": "open_first", "label": "Open first question", "default": true },
+    { "type": "text", "id": "contact_heading", "label": "Contact heading", "default": "Still have questions?" },
+    { "type": "text", "id": "contact_text", "label": "Contact text", "default": "Our concierge team is available 24/7 to assist you." },
+    { "type": "text", "id": "contact_label", "label": "Contact button label", "default": "Contact Us" },
+    { "type": "url", "id": "contact_url", "label": "Contact link" }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "select", "id": "category", "label": "Category", "options": [{ "value": "Shipping & Delivery", "label": "Shipping & Delivery" }, { "value": "Products & Craft", "label": "Products & Craft" }, { "value": "Returns & Exchanges", "label": "Returns & Exchanges" }], "default": "Shipping & Delivery" },
+        { "type": "text", "id": "question", "label": "Question", "default": "What is your question?" },
+        { "type": "textarea", "id": "answer", "label": "Answer", "default": "Add the answer here." },
+        { "type": "checkbox", "id": "open", "label": "Open this question", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ page",
+      "blocks": [
+        { "type": "question", "settings": { "category": "Shipping & Delivery", "question": "How long does international shipping take?", "answer": "Our standard international shipping typically takes 7-14 business days depending on your location and customs processing. We partner with premium couriers to ensure your Amaari pieces arrive in pristine condition, regardless of distance.", "open": true } },
+        { "type": "question", "settings": { "category": "Shipping & Delivery", "question": "Can I track my order in real-time?", "answer": "Yes. Once your order ships, you will receive a tracking link by email." } },
+        { "type": "question", "settings": { "category": "Shipping & Delivery", "question": "What are the shipping costs for small orders?", "answer": "Shipping costs are calculated at checkout based on your destination and selected delivery speed." } },
+        { "type": "question", "settings": { "category": "Products & Craft", "question": "Where are Amaari products manufactured?", "answer": "Our products are crafted with carefully sourced ingredients and produced with trusted manufacturing partners." } },
+        { "type": "question", "settings": { "category": "Products & Craft", "question": "How should I care for my items?", "answer": "Store your products in a cool, dry place away from direct sunlight and close each package after use." } },
+        { "type": "question", "settings": { "category": "Returns & Exchanges", "question": "What is your return policy?", "answer": "Contact our support team to begin a return and receive the next steps." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
