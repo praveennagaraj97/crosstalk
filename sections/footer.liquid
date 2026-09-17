@@ -20,7 +20,7 @@
           <img class="h-7.25 w-29 object-contain" src="{{ 'I198-7726-518-7057.svg' | asset_url }}" width="116" height="29" loading="lazy" alt="{{ shop.name | escape }}">
         {% endif %}
 
-        <p class="mt-4 max-w-111 font-display text-xl leading-7 font-normal">{{ section.settings.tagline | escape }}</p>
+        <p class="mt-4 max-w-111 font-display text-xl leading-7 font-normal italic">{{ section.settings.tagline | escape }}</p>
 
         {% comment %} Component: Social links {% endcomment %}
         <div class="mt-4 flex gap-3">
@@ -50,7 +50,7 @@
 
         {% comment %} Component: Marketplaces {% endcomment %}
         <div class="mt-4">
-          <p class="mb-2 font-display text-xl leading-7 font-normal">{{ section.settings.availability_heading | escape }}</p>
+          <p class="mb-2 font-display text-xl leading-7 font-normal italic">{{ section.settings.availability_heading | escape }}</p>
           <div class="flex items-center gap-3">
             {% for index in (1..4) %}
               {% liquid
