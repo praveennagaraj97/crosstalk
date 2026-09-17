@@ -5,6 +5,22 @@
 @source "../snippets";
 @source "../templates";
 
+@font-face {
+  font-family: 'Romie';
+  src: url('./Romie-Regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Romie';
+  src: url('./Romie-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
 @theme {
   --color-white: #ffffff;
   --color-background: #f8f7f6;
@@ -14,8 +30,8 @@
   --color-bitter-chocolate: #5a2e2c;
   --color-text-brown: #3e2619;
 
-  --font-sans: Montserrat, Arial, sans-serif;
-  --font-display: Romie, 'Cormorant Garamond', Georgia, serif;
+  --font-sans: Inter, Arial, sans-serif;
+  --font-display: 'Cormorant Garamond', Romie, Georgia, serif;
 
   --animate-marquee-scroll: marquee-scroll var(--hero-marquee-duration, 30s)
     linear infinite;
