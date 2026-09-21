@@ -11,7 +11,55 @@
   "sections": {
     "main": {
       "type": "faq-page",
-      "settings": {}
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "description": "Curated answers for our sophisticated community.\nExplore everything from our artisanal processes to global delivery logistics.",
+        "tabs_label": "FAQ categories",
+        "tab_1_label": "All Topics",
+        "tab_1_anchor": "shipping-delivery",
+        "tab_2_label": "Shipping",
+        "tab_2_anchor": "shipping-delivery",
+        "tab_3_label": "Products",
+        "tab_3_anchor": "products-craft",
+        "tab_4_label": "Returns",
+        "tab_4_anchor": "returns-exchanges",
+        "open_first": true,
+        "contact_heading": "Still have questions?",
+        "contact_text": "Our concierge team is available 24/7 to assist you.",
+        "contact_label": "Contact Us",
+        "contact_url": "/pages/contact-us"
+      },
+      "blocks": {
+        "b1": {
+          "type": "question",
+          "settings": { "category": "Shipping & Delivery", "question": "How long does international shipping take?", "answer": "Standard international delivery usually takes 7–14 business days depending on the destination and local customs processing. We partner with premium logistics providers to ensure your Amaari pieces arrive in pristine condition, regardless of distance.", "open": true }
+        },
+        "b2": {
+          "type": "question",
+          "settings": { "category": "Shipping & Delivery", "question": "Can I track my order in real-time?", "answer": "Yes. Once your order ships, you will receive a tracking link by email with live updates until delivery is confirmed." }
+        },
+        "b3": {
+          "type": "question",
+          "settings": { "category": "Shipping & Delivery", "question": "What are the shipping costs for small orders?", "answer": "Shipping fees are calculated at checkout based on your destination, selected delivery speed, and package weight." }
+        },
+        "b4": {
+          "type": "question",
+          "settings": { "category": "Products & Craft", "question": "Where are Amaari products manufactured?", "answer": "Our formulations are produced with trusted manufacturing partners who follow strict quality, sustainability, and ethical sourcing standards." }
+        },
+        "b5": {
+          "type": "question",
+          "settings": { "category": "Products & Craft", "question": "How should I care for my items?", "answer": "Keep products in a cool, dry place away from direct sunlight. Close packaging tightly after each use to preserve formula integrity." }
+        },
+        "b6": {
+          "type": "question",
+          "settings": { "category": "Returns & Exchanges", "question": "What is your return policy?", "answer": "Contact our concierge team within 30 days to initiate a return. We will guide you through the process and issue a refund once the item is received." }
+        },
+        "b7": {
+          "type": "question",
+          "settings": { "category": "Returns & Exchanges", "question": "Can I exchange for a different size?", "answer": "Yes, exchanges are available if the product is unused and in its original packaging. Reach out to support to confirm availability." }
+        }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7"]
     },
     "marketplaces": {
       "type": "faq-marketplaces",
