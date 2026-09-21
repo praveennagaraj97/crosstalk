@@ -1,6 +1,4 @@
 {% liquid
-  assign fallback_badges = 'nykaa-logo.svg|tira-logo.webp|amazon-logo.png|purplle-logo.svg' | split: '|'
-  assign badge_names = 'Nykaa|Tira|Amazon|Purplle' | split: '|'
   assign fallback_social_icons = 'I198-7726-285-3709.svg|I198-7726-285-3524.svg|I198-7726-285-3577.svg' | split: '|'
   assign social_names = 'Instagram|Facebook|Twitter' | split: '|'
   assign legal_labels = section.settings.legal_label_1 | append: '|' | append: section.settings.legal_label_2 | append: '|' | append: section.settings.legal_label_3 | split: '|'
@@ -50,35 +48,28 @@
 
         {% comment %} Component: Marketplaces {% endcomment %}
         {% unless request.page_type == 'page' and page.template_suffix == 'faq' %}
+        {% if section.blocks.size > 0 %}
         <div class="mt-4">
           <p class="mb-2 font-display text-xl leading-7 font-normal italic">{{ section.settings.availability_heading | escape }}</p>
           <div class="flex items-center gap-3">
-            {% for index in (1..4) %}
+            {% for block in section.blocks %}
               {% liquid
-                assign image_key = 'badge_' | append: index | append: '_image'
-                assign url_key = 'badge_' | append: index | append: '_url'
-                assign badge_image = section.settings[image_key]
-                assign badge_url = section.settings[url_key]
-                case index
+                assign badge_image = block.settings.image
+                assign badge_url = block.settings.url
+                case forloop.index
                   when 1
-                    assign badge_width = 80
                     assign badge_classes = 'grid h-10 w-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-[linear-gradient(135deg,#e82831,#e84232_60%,#f49b5e)] px-2.5 py-1.75 [&>img]:brightness-0 [&>img]:invert'
                   when 2
-                    assign badge_width = 40
                     assign badge_classes = 'grid size-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f9dcd4] px-1.25 py-2 [&>img]:mix-blend-multiply'
                   when 3
-                    assign badge_width = 50
                     assign badge_classes = 'grid h-10 w-12.5 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.5'
                   else
-                    assign badge_width = 65
                     assign badge_classes = 'grid h-10 w-16.25 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.25'
                 endcase
               %}
               {% capture badge_content %}
                 {% if badge_image != blank %}
                   {{ badge_image | image_url: height: 80 | image_tag: class: 'h-full w-full object-contain', widths: '80, 160', loading: 'lazy', alt: '' }}
-                {% else %}
-                  <img class="h-full w-full object-contain" src="{{ fallback_badges[forloop.index0] | asset_url }}" width="{{ badge_width }}" height="40" loading="lazy" alt="{{ badge_names[forloop.index0] }}">
                 {% endif %}
               {% endcapture %}
               {% if badge_url != blank %}
@@ -89,6 +80,7 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
         {% endunless %}
       </div>
 
@@ -167,14 +159,6 @@
     { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
     { "type": "url", "id": "twitter_url", "label": "Twitter URL" },
     { "type": "text", "id": "availability_heading", "label": "Availability heading", "default": "Also Available on" },
-    { "type": "image_picker", "id": "badge_1_image", "label": "Badge 1 image" },
-    { "type": "url", "id": "badge_1_url", "label": "Badge 1 URL" },
-    { "type": "image_picker", "id": "badge_2_image", "label": "Badge 2 image" },
-    { "type": "url", "id": "badge_2_url", "label": "Badge 2 URL" },
-    { "type": "image_picker", "id": "badge_3_image", "label": "Badge 3 image" },
-    { "type": "url", "id": "badge_3_url", "label": "Badge 3 URL" },
-    { "type": "image_picker", "id": "badge_4_image", "label": "Badge 4 image" },
-    { "type": "url", "id": "badge_4_url", "label": "Badge 4 URL" },
     { "type": "text", "id": "menu_heading", "label": "Menu heading", "default": "Discover" },
     { "type": "link_list", "id": "discover_menu", "label": "Discover menu" },
     { "type": "text", "id": "menu_label_1", "label": "Menu item 1 label", "default": "Shop All" },
@@ -195,6 +179,21 @@
     { "type": "text", "id": "legal_label_3", "label": "Legal item 3 label", "default": "Shipping & Returns" },
     { "type": "url", "id": "legal_url_3", "label": "Legal item 3 URL" },
     { "type": "text", "id": "copyright", "label": "Copyright text", "default": "Amaari Collective. All Rights Reserved." }
-  ]
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Logo" },
+        { "type": "url", "id": "url", "label": "Link URL" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Footer",
+    "blocks": []
+  }]
 }
 {% endschema %}
