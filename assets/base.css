@@ -117,6 +117,7 @@
 @layer base {
   html {
     background: var(--color-background);
+    scroll-behavior: smooth;
   }
 
   body {

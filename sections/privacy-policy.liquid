@@ -1,47 +1,87 @@
 {% comment %} Component: Privacy Policy Page {% endcomment %}
-<section id="PrivacyPolicy-{{ section.id }}" class="bg-background pb-16 pt-8 sm:pb-20 sm:pt-10 lg:pb-20 lg:pt-10" aria-labelledby="PrivacyPolicyHeading-{{ section.id }}">
+<section id="PrivacyPolicy-{{ section.id }}" class="bg-background pb-20 pt-10 sm:pt-14 lg:pb-28 lg:pt-16" aria-labelledby="PrivacyPolicyHeading-{{ section.id }}">
   <div class="container mx-auto px-4 lg:px-15">
-    {% comment %} Component: Header {% endcomment %}
-    <header class="border-b border-toasted-almond/70 pb-10 sm:pb-12" data-reveal-group>
-      {% if section.settings.title != blank %}
-        <h1 id="PrivacyPolicyHeading-{{ section.id }}" class="font-display text-[2.125rem] leading-[1.24] font-normal text-text-brown sm:text-5xl">
-          {{ section.settings.title | escape }}
-        </h1>
-      {% endif %}
-      {% if section.settings.description != blank %}
-        <p class="mt-2 max-w-171 text-base leading-6 tracking-[0.4px] text-pecan-brown">
-          {{ section.settings.description | escape | newline_to_br }}
-        </p>
-      {% endif %}
-    </header>
+    <div class="lg:grid lg:grid-cols-[15rem_minmax(0,52rem)] lg:justify-center lg:gap-x-24">
+      {% comment %} Component: Policy navigation {% endcomment %}
+      <aside class="order-2 mb-12 lg:order-1 lg:sticky lg:top-32 lg:mb-0 lg:self-start" aria-label="Policy sections">
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-pecan-brown">Policy sections</p>
+        <nav>
+          <ol class="grid gap-1.5 text-sm text-pecan-brown">
+            {% for block in section.blocks %}
+              <li><a href="#PrivacyBlock-{{ section.id }}-{{ block.id }}" class="group flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:bg-toasted-almond/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate {% if forloop.first %}bg-toasted-almond/25{% endif %}"><span class="text-[0.62rem] text-pecan-brown/75" aria-hidden="true">{% case forloop.index %}{% when 1 %}◉{% when 2 %}◌{% when 3 %}✣{% when 4 %}♧{% when 5 %}♡{% else %}◍{% endcase %}</span><span>{{ block.settings.label | escape }}</span></a></li>
+            {% endfor %}
+          </ol>
+        </nav>
+        <div class="mt-8 rounded-md bg-toasted-almond/25 px-4 py-5 text-sm leading-5 text-pecan-brown">
+          <p class="mb-2 font-semibold text-bitter-chocolate">Need help?</p>
+          <p>If you have any questions regarding your privacy, contact our DPO.</p>
+          {% if section.settings.contact_url != blank %}<a class="mt-3 inline-block font-semibold underline underline-offset-2 hover:text-bitter-chocolate focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ section.settings.contact_url }}">{{ section.settings.contact_label | escape }}</a>{% endif %}
+        </div>
+      </aside>
 
-    {% comment %} Component: Privacy sections (N sections, unlimited) {% endcomment %}
-    <div class="space-y-10 sm:space-y-12" data-reveal-group>
-      {% for block in section.blocks %}
-        <section class="border-b border-toasted-almond/70 last:border-b-0" {{ block.shopify_attributes }}>
-          <h2 id="PrivacyBlock-{{ section.id }}-{{ block.id }}" class="py-5 text-xl leading-7 font-bold tracking-[0.4px] text-bitter-chocolate scroll-mt-12">
-            {{ block.settings.label | escape }}
-          </h2>
-          <div class="pb-8">
-            {% if block.settings.body != blank %}
-              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
-                {{ block.settings.body | escape | newline_to_br }}
-              </div>
-            {% elsif block.settings.content != blank %}
-              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
-                {{ block.settings.content | escape | newline_to_br }}
-              </div>
-            {% else %}
-              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
-                {{ block.settings.text | escape | newline_to_br }}
-              </div>
-            {% endif %}
-          </div>
-        </section>
-      {% endfor %}
+      {% comment %} Component: Policy content {% endcomment %}
+      <div class="order-1 lg:order-2">
+        <header class="mb-12" data-reveal-group>
+          {% if section.settings.title != blank %}<h1 id="PrivacyPolicyHeading-{{ section.id }}" class="font-display text-[2.125rem] font-normal leading-10.5 text-text-brown sm:text-5xl">{{ section.settings.title | escape }}</h1>{% endif %}
+          <p class="mt-2 text-sm leading-5 tracking-[0.02em] text-toasted-almond">Last updated: October 24, 2023</p>
+          {% if section.settings.description != blank %}<p class="mt-7 max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ section.settings.description | escape | newline_to_br }}</p>{% endif %}
+        </header>
+
+        <div class="grid gap-16 sm:gap-20" data-reveal-group>
+          {% for block in section.blocks %}
+            <section id="PrivacyBlock-{{ section.id }}-{{ block.id }}" class="scroll-mt-32 lg:scroll-mt-40" {{ block.shopify_attributes }}>
+              <h2 class="mb-5 flex items-baseline gap-2 font-sans text-sm font-semibold uppercase tracking-[1.4px] text-bitter-chocolate"><span class="font-display text-lg font-normal text-toasted-almond">0{{ forloop.index }}.</span><span>{{ block.settings.label | escape }}</span></h2>
+              {% if forloop.index == 2 %}
+                <p class="mb-4 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</p>
+                <ul class="grid gap-3 text-sm leading-5 tracking-[0.2px] text-pecan-brown">
+                  <li class="flex gap-3"><span class="text-toasted-almond" aria-hidden="true">◉</span><span><strong class="font-semibold text-bitter-chocolate">Identity Data</strong><br>Includes first name, maiden name, last name, username or similar identifier, marital status, title, date of birth and gender.</span></li>
+                  <li class="flex gap-3"><span class="text-toasted-almond" aria-hidden="true">◉</span><span><strong class="font-semibold text-bitter-chocolate">Contact Data</strong><br>Includes billing address, delivery address, email address and telephone numbers.</span></li>
+                  <li class="flex gap-3"><span class="text-toasted-almond" aria-hidden="true">◉</span><span><strong class="font-semibold text-bitter-chocolate">Financial Data</strong><br>Includes bank account and payment card details.</span></li>
+                </ul>
+              {% elsif forloop.index == 3 %}
+                <p class="mb-4 text-base leading-6 tracking-[0.4px] text-pecan-brown">We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:</p>
+                <blockquote class="rounded-r-md border-l-2 border-bitter-chocolate bg-toasted-almond/25 px-5 py-5 text-sm italic leading-5 tracking-[0.2px] text-pecan-brown">“To provide you with information, products or services that you request from us or which we feel may interest you, where you have consented to be contacted for such purposes.”</blockquote>
+                <p class="mt-4 text-base leading-6 tracking-[0.4px] text-pecan-brown">We use your information to manage your account, process your orders, and, if you agree, to email you about other products and services we think may be of interest to you.</p>
+              {% elsif forloop.index == 4 %}
+                <p class="mb-5 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</p>
+                <div class="grid gap-2 sm:grid-cols-2">
+                  <div class="bg-white px-5 py-5"><span class="text-sm text-pecan-brown" aria-hidden="true">♧</span><h3 class="mt-2 text-sm font-semibold text-bitter-chocolate">SSL Encryption</h3><p class="mt-1 text-sm leading-5 text-pecan-brown">All data transmitted is encrypted using industry-standard SSL technology.</p></div>
+                  <div class="bg-white px-5 py-5"><span class="text-sm text-pecan-brown" aria-hidden="true">◌</span><h3 class="mt-2 text-sm font-semibold text-bitter-chocolate">Access Control</h3><p class="mt-1 text-sm leading-5 text-pecan-brown">Strict internal protocols for data access and storage management.</p></div>
+                </div>
+              {% elsif forloop.index == 5 %}
+                <p class="mb-3 text-base leading-6 tracking-[0.4px] text-pecan-brown">Under certain circumstances, you have rights under data protection laws in relation to your personal data:</p>
+                <ul class="grid list-disc gap-2 pl-5 text-sm leading-5 tracking-[0.2px] text-pecan-brown marker:text-toasted-almond"><li>Request access to your personal data</li><li>Request correction of your personal data</li><li>Request erasure of your personal data</li><li>Object to processing of your personal data</li><li>Request restriction of processing your personal data</li><li>Request transfer of your personal data</li><li>Right to withdraw consent</li></ul>
+              {% else %}
+                <div class="text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</div>
+              {% endif %}
+            </section>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  (() => {
+    const scrollToHash = () => {
+      const id = window.location.hash.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      document.querySelectorAll('#PrivacyPolicy-{{ section.id }} [data-reveal-group]').forEach((group) => {
+        group.classList.add('is-revealed');
+      });
+      target.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start'
+      });
+    };
+
+    window.addEventListener('hashchange', scrollToHash);
+    window.addEventListener('load', () => window.setTimeout(scrollToHash, 0), { once: true });
+  })();
+</script>
 
 {% schema %}
 {

@@ -17,18 +17,17 @@
         "data_processing": true,
         "cookie_pref": true,
         "third_party": "Google Analytics, Shopify Store",
-        "contact": "Contact Support"
+        "contact_label": "privacy@amaari.com"
       },
       "blocks": {
-        "b1": { "type": "paragraph", "settings": { "label": "Introduction", "default": "This Privacy Policy explains how we collect, use, and protect your personal information when you visit our site." } },
-        "b2": { "type": "heading", "settings": { "label": "Data Collection", "default": "We collect information you provide us directly and information we gather automatically through your use of our services." } },
-        "b3": { "type": "paragraph", "settings": { "label": "What We Collect", "default": "• Personal information (name, email, address)\n• Payment information (credit card, billing details)\n• Usage data (browsing behavior, IP address, device info)\n• Cookies and similar technologies" } },
-        "b4": { "type": "paragraph", "settings": { "label": "How We Use Information", "default": "• To provide and maintain our services\n• To communicate with you about your account and orders\n• To improve our website and products\n• To comply with legal obligations" } },
-        "b5": { "type": "paragraph", "settings": { "label": "Sharing Information", "default": "• With service providers to deliver and maintain our services\n• As required by law\n• For marketing purposes (with consent)\n• In cases of legal obligation" } },
-        "b6": { "type": "paragraph", "settings": { "label": "Data Retention", "default": "We retain personal information for as long as necessary to fulfill our commitments, typically up to 24 months or as required by law." } },
-        "b7": { "type": "paragraph", "settings": { "label": "Security", "default": "We implement industry-standard security measures to protect your data, including encryption and regular security audits." } }
+        "b1": { "type": "section", "settings": { "label": "Introduction", "body": "This Privacy Policy explains how we collect, use, and protect your personal information when you visit our site." } },
+        "b2": { "type": "section", "settings": { "label": "Data Collection", "body": "We collect information you provide us directly and information we gather automatically through your use of our services." } },
+        "b3": { "type": "section", "settings": { "label": "Usage of Information", "body": "We will only use your personal data when the law allows us to." } },
+        "b4": { "type": "section", "settings": { "label": "Data Security", "body": "We have put in place appropriate security measures to protect your personal data." } },
+        "b5": { "type": "section", "settings": { "label": "Your Rights", "body": "Under certain circumstances, you have rights under data protection laws." } },
+        "b6": { "type": "section", "settings": { "label": "Cookies Policy", "body": "You can set your browser to refuse all or some browser cookies, or to alert you when websites set or access cookies." } }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7"]
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
     }
   },
   "order": ["main"]
