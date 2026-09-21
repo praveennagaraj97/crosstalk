@@ -8,7 +8,69 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {},
+  "current": {
+    "sections": {
+      "storefront-header": {
+        "type": "storefront-header",
+        "settings": {
+          "menu": "",
+          "ingredients_page": "",
+          "contact_page": "",
+          "contact_link_label": "Contact",
+          "products": [],
+          "shop_label": "Shop All",
+          "navigation_search_placeholder": "Find your glow",
+          "show_marquee": true,
+          "announcement_text": "New product drop in 6hrs\nSuitable for all skin types\nFirst time users get 10% OFF\nPromo code FIRST10",
+          "marquee_speed": 30,
+          "default_background": "#f8f7f6",
+          "product_background": "#f5ebe1",
+          "ingredients_background": "#f8f7f6",
+          "featured_background": "#7d8060"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "tagline": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare.",
+          "instagram_url": "",
+          "facebook_url": "",
+          "twitter_url": "",
+          "availability_heading": "Also Available on",
+          "menu_heading": "Discover",
+          "discover_menu": "footer",
+          "legal_menu": "",
+          "legal_label_1": "Privacy Policy",
+          "legal_url_1": "",
+          "legal_label_2": "Terms of Service",
+          "legal_url_2": "",
+          "legal_label_3": "Shipping & Returns",
+          "legal_url_3": "",
+          "copyright": "Amaari Collective. All Rights Reserved."
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "heading": "Your Cart",
+          "close_label": "Close cart",
+          "remove_label": "Remove",
+          "subtotal_label": "Subtotal",
+          "shipping_label": "Shipping",
+          "shipping_value": "Calculated at checkout",
+          "total_label": "Total",
+          "view_cart_label": "View Cart",
+          "checkout_label": "Checkout",
+          "shipping_note": "Shipping and returns are calculated at checkout.",
+          "empty_heading": "Your ritual bag is currently empty",
+          "empty_copy": "Start your journey to glowing skin by discovering our curated botanical collections.",
+          "continue_label": "Start Shopping",
+          "error_message": "We couldn't update your cart. Please try again."
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
     "Default": {}
   }
