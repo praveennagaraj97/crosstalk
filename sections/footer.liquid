@@ -56,16 +56,7 @@
               {% liquid
                 assign badge_image = block.settings.image
                 assign badge_url = block.settings.url
-                case forloop.index
-                  when 1
-                    assign badge_classes = 'grid h-10 w-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-[linear-gradient(135deg,#e82831,#e84232_60%,#f49b5e)] px-2.5 py-1.75 [&>img]:brightness-0 [&>img]:invert'
-                  when 2
-                    assign badge_classes = 'grid size-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f9dcd4] px-1.25 py-2 [&>img]:mix-blend-multiply'
-                  when 3
-                    assign badge_classes = 'grid h-10 w-12.5 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.5'
-                  else
-                    assign badge_classes = 'grid h-10 w-16.25 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-1.25 py-2.25'
-                endcase
+                assign badge_classes = 'grid h-10 w-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-2 py-2 [&>img]:brightness-0'
               %}
               {% capture badge_content %}
                 {% if badge_image != blank %}
@@ -91,26 +82,6 @@
           <ul class="grid list-none gap-1.5 p-0">
             {% for link in section.settings.discover_menu.links %}
               <li><a class="footer-link-interactive font-sans text-sm leading-5 font-light no-underline lg:text-base lg:leading-6" href="{{ link.url }}">{{ link.title | escape }}</a></li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <ul class="grid list-none gap-1.5 p-0">
-            {% for index in (1..5) %}
-              {% liquid
-                assign label_key = 'menu_label_' | append: index
-                assign url_key = 'menu_url_' | append: index
-                assign menu_label = section.settings[label_key]
-                assign menu_url = section.settings[url_key]
-              %}
-              {% if menu_label != blank %}
-                <li>
-                  {% if menu_url != blank %}
-                    <a class="footer-link-interactive font-sans text-sm leading-5 font-light no-underline lg:text-base lg:leading-6" href="{{ menu_url }}">{{ menu_label | escape }}</a>
-                  {% else %}
-                    <span class="footer-link-interactive font-sans text-sm leading-5 font-light lg:text-base lg:leading-6">{{ menu_label | escape }}</span>
-                  {% endif %}
-                </li>
-              {% endif %}
             {% endfor %}
           </ul>
         {% endif %}
@@ -161,16 +132,6 @@
     { "type": "text", "id": "availability_heading", "label": "Availability heading", "default": "Also Available on" },
     { "type": "text", "id": "menu_heading", "label": "Menu heading", "default": "Discover" },
     { "type": "link_list", "id": "discover_menu", "label": "Discover menu" },
-    { "type": "text", "id": "menu_label_1", "label": "Menu item 1 label", "default": "Shop All" },
-    { "type": "url", "id": "menu_url_1", "label": "Menu item 1 URL" },
-    { "type": "text", "id": "menu_label_2", "label": "Menu item 2 label", "default": "Our Story" },
-    { "type": "url", "id": "menu_url_2", "label": "Menu item 2 URL" },
-    { "type": "text", "id": "menu_label_3", "label": "Menu item 3 label", "default": "Journal" },
-    { "type": "url", "id": "menu_url_3", "label": "Menu item 3 URL" },
-    { "type": "text", "id": "menu_label_4", "label": "Menu item 4 label", "default": "Contact" },
-    { "type": "url", "id": "menu_url_4", "label": "Menu item 4 URL" },
-    { "type": "text", "id": "menu_label_5", "label": "Menu item 5 label", "default": "FAQs" },
-    { "type": "url", "id": "menu_url_5", "label": "Menu item 5 URL" },
     { "type": "link_list", "id": "legal_menu", "label": "Legal menu" },
     { "type": "text", "id": "legal_label_1", "label": "Legal item 1 label", "default": "Privacy Policy" },
     { "type": "url", "id": "legal_url_1", "label": "Legal item 1 URL" },
