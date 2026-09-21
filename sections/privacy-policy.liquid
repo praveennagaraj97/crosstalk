@@ -1,0 +1,92 @@
+{% comment %} Component: Privacy Policy Page {% endcomment %}
+<section id="PrivacyPolicy-{{ section.id }}" class="bg-background pb-16 pt-8 sm:pb-20 sm:pt-10 lg:pb-20 lg:pt-10" aria-labelledby="PrivacyPolicyHeading-{{ section.id }}">
+  <div class="container mx-auto px-4 lg:px-15">
+    {% comment %} Component: Header {% endcomment %}
+    <header class="border-b border-toasted-almond/70 pb-10 sm:pb-12" data-reveal-group>
+      {% if section.settings.title != blank %}
+        <h1 id="PrivacyPolicyHeading-{{ section.id }}" class="font-display text-[2.125rem] leading-[1.24] font-normal text-text-brown sm:text-5xl">
+          {{ section.settings.title | escape }}
+        </h1>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <p class="mt-2 max-w-171 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+          {{ section.settings.description | escape | newline_to_br }}
+        </p>
+      {% endif %}
+    </header>
+
+    {% comment %} Component: Privacy sections (N sections, unlimited) {% endcomment %}
+    <div class="space-y-10 sm:space-y-12" data-reveal-group>
+      {% for block in section.blocks %}
+        <section class="border-b border-toasted-almond/70 last:border-b-0" {{ block.shopify_attributes }}>
+          <h2 id="PrivacyBlock-{{ section.id }}-{{ block.id }}" class="py-5 text-xl leading-7 font-bold tracking-[0.4px] text-bitter-chocolate scroll-mt-12">
+            {{ block.settings.label | escape }}
+          </h2>
+          <div class="pb-8">
+            {% if block.settings.body != blank %}
+              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+                {{ block.settings.body | escape | newline_to_br }}
+              </div>
+            {% elsif block.settings.content != blank %}
+              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+                {{ block.settings.content | escape | newline_to_br }}
+              </div>
+            {% else %}
+              <div class="max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">
+                {{ block.settings.text | escape | newline_to_br }}
+              </div>
+            {% endif %}
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Privacy Policy",
+  "tag": "section",
+  "class": "privacy-policy-section",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "header", "content": "Privacy Policy Settings" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Privacy Policy" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "We respect your privacy and are committed to protecting your personal information." },
+    { "type": "header", "content": "Data Settings" },
+    { "type": "checkbox", "id": "data_processing", "label": "Enable Data Processing", "default": true },
+    { "type": "checkbox", "id": "cookie_pref", "label": "Enable Cookie Preferences", "default": true },
+    { "type": "text", "id": "third_party", "label": "Third Party Services", "default": "Google Analytics, Shopify Store" },
+    { "type": "link_list", "id": "partners", "label": "Partners" },
+    { "type": "header", "content": "Contact" },
+    { "type": "text", "id": "contact_label", "label": "Contact button label", "default": "Contact Support" },
+    { "type": "url", "id": "contact_url", "label": "Contact link" }
+  ],
+  "blocks": [
+    {
+      "type": "section",
+      "name": "Section",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Section label", "default": "Introduction" },
+        { "type": "textarea", "id": "body", "label": "Body content" },
+        { "type": "textarea", "id": "content", "label": "Alternative content" },
+        { "type": "textarea", "id": "text", "label": "Plain text content" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Privacy Policy",
+      "blocks": [
+        { "type": "section", "settings": { "label": "Introduction", "body": "This Privacy Policy explains how we collect, use, and protect your personal information when you visit our site." } },
+        { "type": "section", "settings": { "label": "Data Collection", "body": "We collect information you provide us directly and information we gather automatically through your use of our services." } },
+        { "type": "section", "settings": { "label": "What We Collect", "body": "• Personal information (name, email, address)\n• Payment information (credit card, billing details)\n• Usage data (browsing behavior, IP address, device info)\n• Cookies and similar technologies" } },
+        { "type": "section", "settings": { "label": "How We Use Information", "body": "• To provide and maintain our services\n• To communicate with you about your account and orders\n• To improve our website and products\n• To comply with legal obligations" } },
+        { "type": "section", "settings": { "label": "Sharing Information", "body": "• With service providers to deliver and maintain our services\n• As required by law\n• For marketing purposes (with consent)\n• In cases of legal obligation" } },
+        { "type": "section", "settings": { "label": "Data Retention", "body": "We retain personal information for as long as necessary to fulfill our commitments, typically up to 24 months or as required by law." } },
+        { "type": "section", "settings": { "label": "Security", "body": "We implement industry-standard security measures to protect your data, including encryption and regular security audits." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

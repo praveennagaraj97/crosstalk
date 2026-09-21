@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "privacy-policy",
+      "settings": {
+        "title": "Privacy Policy",
+        "description": "We respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and protect your data when you visit our site.",
+        "data_processing": true,
+        "cookie_pref": true,
+        "third_party": "Google Analytics, Shopify Store",
+        "contact": "Contact Support"
+      },
+      "blocks": {
+        "b1": { "type": "paragraph", "settings": { "label": "Introduction", "default": "This Privacy Policy explains how we collect, use, and protect your personal information when you visit our site." } },
+        "b2": { "type": "heading", "settings": { "label": "Data Collection", "default": "We collect information you provide us directly and information we gather automatically through your use of our services." } },
+        "b3": { "type": "paragraph", "settings": { "label": "What We Collect", "default": "• Personal information (name, email, address)\n• Payment information (credit card, billing details)\n• Usage data (browsing behavior, IP address, device info)\n• Cookies and similar technologies" } },
+        "b4": { "type": "paragraph", "settings": { "label": "How We Use Information", "default": "• To provide and maintain our services\n• To communicate with you about your account and orders\n• To improve our website and products\n• To comply with legal obligations" } },
+        "b5": { "type": "paragraph", "settings": { "label": "Sharing Information", "default": "• With service providers to deliver and maintain our services\n• As required by law\n• For marketing purposes (with consent)\n• In cases of legal obligation" } },
+        "b6": { "type": "paragraph", "settings": { "label": "Data Retention", "default": "We retain personal information for as long as necessary to fulfill our commitments, typically up to 24 months or as required by law." } },
+        "b7": { "type": "paragraph", "settings": { "label": "Security", "default": "We implement industry-standard security measures to protect your data, including encryption and regular security audits." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7"]
+    }
+  },
+  "order": ["main"]
+}
