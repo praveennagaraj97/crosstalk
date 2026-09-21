@@ -20,9 +20,9 @@
           {% endif %}
         {% endcapture %}
         {% if logo_url != blank %}
-          <a href="{{ logo_url }}" class="footer-tile-interactive {{ logo_classes }}" rel="noopener noreferrer" target="_blank" {{ block.shopify_attributes }}>{{ logo_content }}</a>
+          <a href="{{ logo_url }}" class="{{ logo_classes }} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" rel="noopener noreferrer" target="_blank" {{ block.shopify_attributes }}>{{ logo_content }}</a>
         {% else %}
-          <span class="footer-tile-interactive {{ logo_classes }}" {{ block.shopify_attributes }}>{{ logo_content }}</span>
+          <span class="{{ logo_classes }}" {{ block.shopify_attributes }}>{{ logo_content }}</span>
         {% endif %}
       {% endfor %}
     </div>
