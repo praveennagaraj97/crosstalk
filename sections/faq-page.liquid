@@ -27,7 +27,7 @@
           %}
           {% if tab_label != blank and tab_anchor != blank %}
             <li>
-              <a class="{% if forloop.first %}border-b-2 border-bitter-chocolate bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-transparent{% else %}border-b-2 border-transparent text-pecan-brown hover:border-toasted-almond{% endif %} block py-4 text-xs leading-5 font-bold tracking-[1.4px] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="#{{ tab_anchor | handleize }}">{{ tab_label | escape }}</a>
+              <a class="{% if forloop.first %}border-b-2 border-bitter-chocolate bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] bg-clip-text text-transparent{% else %}border-b-2 border-transparent text-pecan-brown hover:border-toasted-almond{% endif %} block py-4 text-xs leading-5 font-bold tracking-[1.4px] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{% if forloop.first %}{{ request.path }}{% else %}#{{ tab_anchor | handleize }}{% endif %}">{{ tab_label | escape }}</a>
             </li>
           {% endif %}
         {% endfor %}
@@ -155,6 +155,26 @@
         };
       });
     });
+  })();
+</script>
+
+<script>
+  (() => {
+    function scrollToCenter() {
+      const id = window.location.hash.replace('#', '');
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const scrollTop = window.scrollY + rect.top - (window.innerHeight / 2) + (rect.height / 2) - 80;
+      window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
+    }
+    window.addEventListener('hashchange', scrollToCenter);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scrollToCenter);
+    } else {
+      setTimeout(scrollToCenter, 50);
+    }
   })();
 </script>
 
