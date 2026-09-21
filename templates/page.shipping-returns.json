@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "shipping-returns",
+      "settings": {
+        "title": "Shipping & Returns",
+        "intro": "We strive to ensure your Amaari experience is as seamless as our designs. Below you'll find everything you need to know about our shipping and exchange process.",
+        "support_title": "Need more assistance?",
+        "support_text": "Our concierge team is available Monday through Friday, 9am to 6pm, to help with any shipping or return queries.",
+        "support_label": "Contact Support"
+      },
+      "blocks": {
+        "benefit_shipping": { "type": "benefit", "settings": { "icon": "⌁", "title": "Free Global Shipping", "body": "Complimentary express shipping on all orders over $200. Fully insured and tracked to your doorstep." } },
+        "benefit_returns": { "type": "benefit", "settings": { "icon": "↶", "title": "30-Day Returns", "body": "Changed your mind? Return your unused items within 30 days for a full refund or exchange." } },
+        "benefit_packaging": { "type": "benefit", "settings": { "icon": "♡", "title": "Secure Packaging", "body": "Every Amaari piece arrives in signature velvet-lined packaging, protected by discreet outer packaging." } },
+        "faq_domestic": { "type": "faq", "settings": { "question": "Domestic Shipping Rates & Times", "answer": "Orders are processed within 1–2 business days. Shipping times are estimated from the date of dispatch.\n\nStandard Shipping: 3–5 business days ($10 or FREE over $150)\nNext Day Delivery: Next business day for orders before 12pm ($25)", "open": true } },
+        "faq_international": { "type": "faq", "settings": { "question": "International Delivery Information", "answer": "International delivery times and duties vary by destination. Our concierge team will provide tracking details when your order ships." } },
+        "faq_return": { "type": "faq", "settings": { "question": "How to Start a Return", "answer": "Contact our concierge team within 30 days of delivery. Items must be unused and in their original packaging." } },
+        "faq_exchange": { "type": "faq", "settings": { "question": "Exchanges & Custom Orders", "answer": "For exchanges or custom orders, contact our team and we will guide you through the available options." } }
+      },
+      "block_order": ["benefit_shipping", "benefit_returns", "benefit_packaging", "faq_domestic", "faq_international", "faq_return", "faq_exchange"]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,161 @@
+{% comment %} Component: Shipping and Returns Page {% endcomment %}
+<section id="ShippingReturns-{{ section.id }}" class="bg-background pb-20 pt-10 sm:pt-14 lg:pb-28 lg:pt-16" aria-labelledby="ShippingReturnsHeading-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    {% comment %} Component: Shipping hero {% endcomment %}
+    <header class="rounded-xl bg-[#f5ebe1] px-5 py-12 text-center sm:px-12 sm:py-16" data-reveal-group>
+      <h1 id="ShippingReturnsHeading-{{ section.id }}" class="font-display text-[2.125rem] font-normal leading-10.5 text-text-brown sm:text-5xl">{{ section.settings.title | escape }}</h1>
+      <p class="mx-auto mt-4 max-w-171 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ section.settings.intro | escape | newline_to_br }}</p>
+    </header>
+
+    {% comment %} Component: Shipping promises {% endcomment %}
+    <div class="relative z-10 -mt-5 grid gap-3 px-4 sm:grid-cols-3 lg:px-10" data-reveal-group>
+      {% for block in section.blocks %}
+        {% if block.type == 'benefit' %}
+          <article class="rounded-lg bg-white px-5 py-6 text-center shadow-[0_8px_20px_rgb(62_38_25/10%)]" {{ block.shopify_attributes }}>
+            <span class="mx-auto grid size-8 place-items-center rounded-full bg-background text-sm text-pecan-brown" aria-hidden="true">{{ block.settings.icon }}</span>
+            <h2 class="mt-3 text-sm font-semibold text-bitter-chocolate">{{ block.settings.title | escape }}</h2>
+            <p class="mt-2 text-sm leading-5 text-pecan-brown">{{ block.settings.body | escape }}</p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% comment %} Component: Shipping FAQ {% endcomment %}
+    <div class="mx-auto mt-16 max-w-192 sm:mt-20" data-reveal-group>
+      <h2 class="font-display text-3xl font-normal leading-9 text-text-brown sm:text-4xl">Frequently Asked Questions</h2>
+      <div class="mt-8 grid gap-2">
+        {% for block in section.blocks %}
+          {% if block.type == 'faq' %}
+            <details class="group rounded-sm bg-white px-4 sm:px-5" data-shipping-faq{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+              <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-sm font-semibold text-bitter-chocolate outline-none transition-colors hover:text-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate [&::-webkit-details-marker]:hidden">
+                <span>{{ block.settings.question | escape }}</span>
+                <span class="text-xs text-pecan-brown transition-transform duration-300 group-open:rotate-180" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="shipping-faq__panel border-t border-toasted-almond/30 pb-5 pt-4 text-sm leading-5 text-pecan-brown">
+                {{ block.settings.answer | escape | newline_to_br }}
+              </div>
+            </details>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% comment %} Component: Contact support card {% endcomment %}
+    <aside class="mx-auto mt-16 max-w-192 bg-[#f5ebe1]/60 px-6 py-8 text-center sm:mt-20 sm:px-12 sm:py-10" aria-label="Shipping support" data-reveal-group>
+      <h2 class="text-base font-semibold text-text-brown">{{ section.settings.support_title | escape }}</h2>
+      <p class="mx-auto mt-2 max-w-140 text-sm leading-5 text-pecan-brown">{{ section.settings.support_text | escape }}</p>
+      {% if section.settings.support_url != blank %}
+        <a class="chrome-action mt-5 inline-flex min-h-10.5 items-center justify-center rounded-full bg-[linear-gradient(143deg,#2d1f1e,#9b685b_50%,#4e3b37)] px-7 py-3 text-sm font-semibold text-[#f4dfb8] shadow-[0_4px_6px_-1px_rgb(166_114_105/30%),inset_0_1px_1px_1px_rgb(255_255_255/40%)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ section.settings.support_url }}">{{ section.settings.support_label | escape }}</a>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.getElementById('ShippingReturns-{{ section.id }}');
+    if (!section || section.dataset.faqAnimationReady === 'true') return;
+
+    section.dataset.faqAnimationReady = 'true';
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    section.querySelectorAll('[data-shipping-faq]').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const panel = details.querySelector('.shipping-faq__panel');
+      if (!summary || !panel || reduceMotion) return;
+
+      let animation;
+      let closing = false;
+
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+        animation?.cancel();
+
+        const startHeight = details.offsetHeight + 'px';
+        const shouldClose = details.open && !closing;
+
+        if (shouldClose) {
+          closing = true;
+        } else {
+          closing = false;
+          details.open = true;
+          void details.offsetHeight;
+        }
+
+        const endHeight = shouldClose
+          ? summary.offsetHeight + 'px'
+          : summary.offsetHeight + panel.scrollHeight + 'px';
+
+        details.style.overflow = 'hidden';
+        animation = details.animate(
+          { height: [startHeight, endHeight] },
+          { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+
+        animation.onfinish = () => {
+          if (shouldClose) details.open = false;
+          details.style.height = '';
+          details.style.overflow = '';
+          animation = undefined;
+          closing = false;
+        };
+
+        animation.oncancel = () => {
+          details.style.height = '';
+          details.style.overflow = '';
+        };
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shipping and Returns",
+  "tag": "section",
+  "class": "shipping-returns-section",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Shipping & Returns" },
+    { "type": "textarea", "id": "intro", "label": "Introduction", "default": "We strive to ensure your Amaari experience is as seamless as our designs. Below you'll find everything you need to know about our shipping and exchange process." },
+    { "type": "text", "id": "support_title", "label": "Support heading", "default": "Need more assistance?" },
+    { "type": "textarea", "id": "support_text", "label": "Support text", "default": "Our concierge team is available Monday through Friday, 9am to 6pm, to help with any shipping or return queries." },
+    { "type": "text", "id": "support_label", "label": "Support button label", "default": "Contact Support" },
+    { "type": "url", "id": "support_url", "label": "Support link" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Shipping promise",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon", "default": "⌁" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free Global Shipping" },
+        { "type": "textarea", "id": "body", "label": "Description", "default": "Complimentary express shipping on all orders over $200. Fully insured and tracked to your doorstep." }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Shipping FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "Domestic Shipping Rates & Times" },
+        { "type": "textarea", "id": "answer", "label": "Answer", "default": "Orders are processed within 1–2 business days. Standard shipping takes 3–5 business days." },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping and Returns",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "⌁", "title": "Free Global Shipping", "body": "Complimentary express shipping on all orders over $200. Fully insured and tracked to your doorstep." } },
+        { "type": "benefit", "settings": { "icon": "↶", "title": "30-Day Returns", "body": "Changed your mind? Return your unused items within 30 days for a full refund or exchange." } },
+        { "type": "benefit", "settings": { "icon": "♡", "title": "Secure Packaging", "body": "Every Amaari piece arrives in signature velvet-lined packaging, protected by discreet outer packaging." } },
+        { "type": "faq", "settings": { "question": "Domestic Shipping Rates & Times", "answer": "Orders are processed within 1–2 business days. Shipping times are estimated from the date of dispatch.\n\nStandard Shipping: 3–5 business days ($10 or FREE over $150)\nNext Day Delivery: Next business day for orders before 12pm ($25)", "open": true } },
+        { "type": "faq", "settings": { "question": "International Delivery Information", "answer": "International delivery times and duties vary by destination. Our concierge team will provide tracking details when your order ships." } },
+        { "type": "faq", "settings": { "question": "How to Start a Return", "answer": "Contact our concierge team within 30 days of delivery. Items must be unused and in their original packaging." } },
+        { "type": "faq", "settings": { "question": "Exchanges & Custom Orders", "answer": "For exchanges or custom orders, contact our team and we will guide you through the available options." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
