@@ -40,11 +40,11 @@
           "discover_menu": "footer",
           "legal_menu": "",
           "legal_label_1": "Privacy Policy",
-          "legal_url_1": "",
+          "legal_url_1": "shopify://pages/privacy-policy",
           "legal_label_2": "Terms of Service",
-          "legal_url_2": "",
+          "legal_url_2": "shopify://pages/terms-and-conditions",
           "legal_label_3": "Shipping & Returns",
-          "legal_url_3": "",
+          "legal_url_3": "shopify://pages/shipping-returns",
           "copyright": "Amaari Collective. All Rights Reserved."
         }
       },
