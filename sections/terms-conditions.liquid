@@ -1,0 +1,103 @@
+{% comment %} Component: Terms and Conditions Page {% endcomment %}
+<section id="TermsConditions-{{ section.id }}" class="bg-background pb-20 pt-10 sm:pt-14 lg:pb-28 lg:pt-16" aria-labelledby="TermsConditionsHeading-{{ section.id }}">
+  <div class="container mx-auto px-4 lg:px-15">
+    <div class="lg:grid lg:grid-cols-[15rem_minmax(0,52rem)] lg:justify-center lg:gap-x-24">
+      {% comment %} Component: Terms navigation {% endcomment %}
+      <aside class="order-2 mb-12 lg:order-1 lg:sticky lg:top-48 lg:mb-0 lg:self-start" aria-label="Terms sections">
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-pecan-brown">Terms sections</p>
+        <nav>
+          <ol class="grid gap-1.5 text-sm text-pecan-brown">
+            {% for block in section.blocks %}
+              <li><a href="#TermsBlock-{{ section.id }}-{{ block.id }}" class="group flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:bg-toasted-almond/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate {% if forloop.first %}bg-toasted-almond/25{% endif %}"><span class="text-[0.62rem] text-pecan-brown/75" aria-hidden="true">{% case forloop.index %}{% when 1 %}◉{% when 2 %}◌{% when 3 %}✣{% when 4 %}♡{% else %}◍{% endcase %}</span><span>{{ block.settings.label | escape }}</span></a></li>
+            {% endfor %}
+          </ol>
+        </nav>
+        <div class="mt-8 rounded-md bg-toasted-almond/25 px-4 py-5 text-sm leading-5 text-pecan-brown">
+          <p class="mb-2 font-semibold text-bitter-chocolate">Need more assistance?</p>
+          <p>If you have any questions regarding these terms, contact our team.</p>
+          {% if section.settings.contact_url != blank %}<a class="mt-3 inline-block font-semibold underline underline-offset-2 hover:text-bitter-chocolate focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ section.settings.contact_url }}">{{ section.settings.contact_label | escape }}</a>{% endif %}
+        </div>
+      </aside>
+
+      {% comment %} Component: Terms content {% endcomment %}
+      <div class="order-1 lg:order-2">
+        <header class="mb-12" data-reveal-group>
+          {% if section.settings.title != blank %}<h1 id="TermsConditionsHeading-{{ section.id }}" class="font-display text-[2.125rem] font-normal leading-10.5 text-text-brown sm:text-5xl">{{ section.settings.title | escape }}</h1>{% endif %}
+          <p class="mt-2 text-sm leading-5 tracking-[0.02em] text-toasted-almond">Last updated: October 24, 2023</p>
+          {% if section.settings.description != blank %}<p class="mt-7 max-w-192 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ section.settings.description | escape | newline_to_br }}</p>{% endif %}
+        </header>
+
+        <div class="grid gap-16 sm:gap-20" data-reveal-group>
+          {% for block in section.blocks %}
+            <section id="TermsBlock-{{ section.id }}-{{ block.id }}" class="scroll-mt-32 lg:scroll-mt-40" {{ block.shopify_attributes }}>
+              <h2 class="mb-5 flex items-baseline gap-2 font-sans text-sm font-semibold uppercase tracking-[1.4px] text-bitter-chocolate"><span class="font-display text-lg font-normal text-toasted-almond">0{{ forloop.index }}.</span><span>{{ block.settings.label | escape }}</span></h2>
+              {% if forloop.index == 3 %}
+                <p class="mb-4 text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</p>
+                <ul class="grid list-disc gap-2 pl-5 text-sm leading-5 tracking-[0.2px] text-pecan-brown marker:text-toasted-almond">
+                  <li>Using our services for any unlawful purpose</li><li>Attempting to gain unauthorised access to our systems</li><li>Using our materials in a way that infringes our rights</li><li>Transmitting malicious or harmful code</li><li>Impersonating another person or entity</li>
+                </ul>
+              {% elsif forloop.index == 5 %}
+                <p class="text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</p>
+                <div class="mt-6 rounded-md bg-toasted-almond/25 px-5 py-5 text-sm leading-5 text-pecan-brown">
+                  <p class="font-semibold text-bitter-chocolate">Still have questions?</p>
+                  <p class="mt-1">Our team is here to help clarify any part of these terms.</p>
+                  {% if section.settings.contact_url != blank %}<a class="mt-4 inline-flex rounded-full bg-bitter-chocolate px-5 py-2 text-xs font-semibold text-white transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ section.settings.contact_url }}">{{ section.settings.contact_label | escape }}</a>{% endif %}
+                </div>
+              {% else %}
+                <div class="text-base leading-6 tracking-[0.4px] text-pecan-brown">{{ block.settings.body | escape | newline_to_br }}</div>
+              {% endif %}
+            </section>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const scrollToHash = () => {
+      const id = window.location.hash.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      document.querySelectorAll('#TermsConditions-{{ section.id }} [data-reveal-group]').forEach((group) => group.classList.add('is-revealed'));
+      target.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start'
+      });
+    };
+    window.addEventListener('hashchange', scrollToHash);
+    window.addEventListener('load', () => window.setTimeout(scrollToHash, 0), { once: true });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Terms and Conditions",
+  "tag": "section",
+  "class": "terms-conditions-section",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Terms and Conditions" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Please read these terms and conditions carefully before using our website." },
+    { "type": "text", "id": "contact_label", "label": "Contact label", "default": "Contact Support" },
+    { "type": "url", "id": "contact_url", "label": "Contact link" }
+  ],
+  "blocks": [
+    { "type": "section", "name": "Section", "settings": [
+      { "type": "text", "id": "label", "label": "Section label", "default": "Agreement to Terms" },
+      { "type": "textarea", "id": "body", "label": "Body content" }
+    ] }
+  ],
+  "presets": [
+    { "name": "Terms and Conditions", "blocks": [
+      { "type": "section", "settings": { "label": "Agreement to Terms", "body": "These terms and conditions outline the rules and regulations for the use of Amaari's website. By accessing this website, we assume you accept these terms and conditions in full." } },
+      { "type": "section", "settings": { "label": "Intellectual Property Rights", "body": "Unless otherwise stated, Amaari and its licensors own the intellectual property rights for all material on this website. All intellectual property rights are reserved." } },
+      { "type": "section", "settings": { "label": "Restrictions", "body": "You are specifically restricted from all of the following:" } },
+      { "type": "section", "settings": { "label": "Your Privacy", "body": "Please read our Privacy Policy, which explains how we collect, use and protect your personal information when you use our services." } },
+      { "type": "section", "settings": { "label": "Limitation of Liability", "body": "To the maximum extent permitted by applicable law, Amaari excludes all representations, warranties and conditions relating to our website and the use of this website." } }
+    ] }
+  ]
+}
+{% endschema %}
