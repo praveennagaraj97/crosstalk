@@ -46,31 +46,6 @@
           {% endfor %}
         </div>
 
-        {% comment %} Component: Marketplaces {% endcomment %}
-        {% if section.blocks.size > 0 %}
-        <div class="mt-4">
-          <p class="mb-2 font-display text-xl leading-7 font-normal italic">{{ section.settings.availability_heading | escape }}</p>
-          <div class="flex items-center gap-3">
-            {% for block in section.blocks %}
-              {% liquid
-                assign badge_image = block.settings.image
-                assign badge_url = block.settings.url
-                assign badge_classes = 'grid h-10 w-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-white px-2 py-2 [&>img]:brightness-0'
-              %}
-              {% capture badge_content %}
-                {% if badge_image != blank %}
-                  {{ badge_image | image_url: height: 80 | image_tag: class: 'h-full w-full object-contain', widths: '80, 160', loading: 'lazy', alt: '' }}
-                {% endif %}
-              {% endcapture %}
-              {% if badge_url != blank %}
-                <a href="{{ badge_url }}" class="footer-tile-interactive {{ badge_classes }}" rel="noopener noreferrer" target="_blank">{{ badge_content }}</a>
-              {% else %}
-                <span class="footer-tile-interactive {{ badge_classes }}">{{ badge_content }}</span>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
       </div>
 
       {% comment %} Component: Navigation {% endcomment %}
@@ -127,7 +102,6 @@
     { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
     { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
     { "type": "url", "id": "twitter_url", "label": "Twitter URL" },
-    { "type": "text", "id": "availability_heading", "label": "Availability heading", "default": "Also Available on" },
     { "type": "text", "id": "menu_heading", "label": "Menu heading", "default": "Discover" },
     { "type": "link_list", "id": "discover_menu", "label": "Discover menu" },
     { "type": "link_list", "id": "legal_menu", "label": "Legal menu" },
@@ -139,20 +113,6 @@
     { "type": "url", "id": "legal_url_3", "label": "Legal item 3 URL" },
     { "type": "text", "id": "copyright", "label": "Copyright text", "default": "Amaari Collective. All Rights Reserved." }
   ],
-  "max_blocks": 4,
-  "blocks": [
-    {
-      "type": "badge",
-      "name": "Badge",
-      "settings": [
-        { "type": "image_picker", "id": "image", "label": "Logo" },
-        { "type": "url", "id": "url", "label": "Link URL" }
-      ]
-    }
-  ],
-  "presets": [{
-    "name": "Footer",
-    "blocks": []
-  }]
+  "presets": [{ "name": "Footer" }]
 }
 {% endschema %}

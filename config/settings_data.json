@@ -31,40 +31,11 @@
       },
       "footer": {
         "type": "footer",
-        "blocks": {
-          "badge_arYj7W": {
-            "type": "badge",
-            "settings": {
-              "image": "shopify://shop_images/amazon-logo.png",
-              "url": "https://www.amazon.in/"
-            }
-          },
-          "badge_dRz8Wm": {
-            "type": "badge",
-            "settings": {
-              "image": "shopify://shop_images/hYc6RZXKO-KFwOOQ0oY-Tira.avif",
-              "url": "https://www.tirabeauty.com/"
-            }
-          },
-          "badge_iEciNb": {
-            "type": "badge",
-            "settings": {
-              "image": "shopify://shop_images/nykaa-logo.svg",
-              "url": "https://www.nykaafashion.com/"
-            }
-          }
-        },
-        "block_order": [
-          "badge_arYj7W",
-          "badge_dRz8Wm",
-          "badge_iEciNb"
-        ],
         "settings": {
           "tagline": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare.",
           "instagram_url": "",
           "facebook_url": "",
           "twitter_url": "",
-          "availability_heading": "Also Available on",
           "menu_heading": "Discover",
           "discover_menu": "footer",
           "legal_menu": "",
@@ -75,6 +46,52 @@
           "legal_label_3": "Shipping & Returns",
           "legal_url_3": "",
           "copyright": "Amaari Collective. All Rights Reserved."
+        }
+      },
+      "available-on": {
+        "type": "available-on",
+        "blocks": {
+          "marketplace_amazon": {
+            "type": "marketplace",
+            "settings": {
+              "name": "Amazon",
+              "asset_filename": "amazon-logo.png",
+              "url": "https://www.amazon.in/"
+            }
+          },
+          "marketplace_tira": {
+            "type": "marketplace",
+            "settings": {
+              "name": "Tira",
+              "asset_filename": "tira-logo.webp",
+              "url": "https://www.tirabeauty.com/"
+            }
+          },
+          "marketplace_nykaa": {
+            "type": "marketplace",
+            "settings": {
+              "name": "Nykaa",
+              "asset_filename": "nykaa-logo.svg",
+              "url": "https://www.nykaafashion.com/"
+            }
+          },
+          "marketplace_purplle": {
+            "type": "marketplace",
+            "settings": {
+              "name": "Purplle",
+              "asset_filename": "purplle-logo.svg",
+              "url": "https://www.purplle.com/"
+            }
+          }
+        },
+        "block_order": [
+          "marketplace_amazon",
+          "marketplace_tira",
+          "marketplace_nykaa",
+          "marketplace_purplle"
+        ],
+        "settings": {
+          "heading": "Also available on"
         }
       },
       "cart-drawer": {
