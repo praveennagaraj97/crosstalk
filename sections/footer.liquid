@@ -47,7 +47,6 @@
         </div>
 
         {% comment %} Component: Marketplaces {% endcomment %}
-        {% unless request.page_type == 'page' and page.template_suffix == 'faq' %}
         {% if section.blocks.size > 0 %}
         <div class="mt-4">
           <p class="mb-2 font-display text-xl leading-7 font-normal italic">{{ section.settings.availability_heading | escape }}</p>
@@ -72,7 +71,6 @@
           </div>
         </div>
         {% endif %}
-        {% endunless %}
       </div>
 
       {% comment %} Component: Navigation {% endcomment %}
