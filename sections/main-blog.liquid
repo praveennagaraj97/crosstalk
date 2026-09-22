@@ -1,0 +1,93 @@
+{% comment %} Component: Journal / Blog listing {% endcomment %}
+{% assign journal_blog = blog %}
+<section class="bg-background pb-20 pt-8 sm:pb-24 sm:pt-10 lg:pb-28 lg:pt-12" aria-labelledby="JournalHeading-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    {% if journal_blog.articles_count > 0 %}
+      {% assign featured_article = journal_blog.articles.first %}
+      {% for article in journal_blog.articles %}
+        {% if article.title contains 'Art of Conscious Radiance' %}{% assign featured_article = article %}{% break %}{% endif %}
+      {% endfor %}
+      {% assign featured_image = featured_article.image %}
+      <article class="relative overflow-hidden rounded-xl bg-[#66742d] text-white" data-reveal-group>
+        {% if featured_image != blank %}
+          {{ featured_image | image_url: width: 1800 | image_tag: class: 'absolute inset-0 size-full object-cover opacity-80', widths: '720, 1200, 1800', loading: 'eager', alt: featured_article.title }}
+        {% else %}
+          <img class="absolute inset-0 size-full object-cover opacity-80" src="{{ 'brand-story-botanical.png' | asset_url }}" width="1440" height="700" loading="eager" alt="">
+        {% endif %}
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgb(25_45_15/78%),rgb(76_95_30/20%))]" aria-hidden="true"></div>
+        <div class="relative flex min-h-[22rem] flex-col justify-end px-6 py-10 sm:min-h-[28rem] sm:px-12 sm:py-14 lg:min-h-[32rem] lg:px-20 lg:py-20">
+          <p class="text-xs font-semibold uppercase tracking-[2px] text-[#f0d8a4]">{{ section.settings.featured_label | escape }}</p>
+          <h1 id="JournalHeading-{{ section.id }}" class="mt-3 max-w-150 font-display text-4xl leading-none sm:text-6xl">{{ featured_article.title | escape }}</h1>
+          <p class="mt-4 max-w-140 text-sm leading-6 text-white/85 sm:text-base">{{ featured_article.excerpt_or_content | strip_html | truncatewords: 28 }}</p>
+          <a class="mt-6 inline-flex w-fit rounded-full bg-[#f0d8a4] px-6 py-3 text-sm font-semibold text-bitter-chocolate transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="{{ featured_article.url }}">{{ section.settings.featured_cta | escape }}</a>
+        </div>
+      </article>
+
+      {% comment %} Component: Journal filters {% endcomment %}
+      {% assign journal_categories = section.settings.category_labels | split: '|' %}
+      <nav class="mt-8 overflow-x-auto border-b border-toasted-almond/60" aria-label="Journal categories">
+        <ul class="flex min-w-max gap-8">
+          {% for category in journal_categories %}
+            <li><a class="block border-b-2 {% if forloop.first %}border-bitter-chocolate text-bitter-chocolate{% else %}border-transparent text-pecan-brown{% endif %} py-4 text-xs font-semibold uppercase tracking-[1.2px] transition-colors hover:border-toasted-almond hover:text-bitter-chocolate focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ journal_blog.url }}#journal-articles">{{ category | escape }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      {% comment %} Component: Article grid {% endcomment %}
+      <div id="journal-articles" class="mt-10 grid gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-7 lg:gap-y-16" data-reveal-group>
+        {% for article in journal_blog.articles %}
+          {% assign card_image = article.image %}
+          {% unless card_image != blank %}
+            {% assign fallback_index = forloop.index0 | modulo: 6 %}
+            {% case fallback_index %}
+              {% when 0 %}{% assign fallback_asset = 'instagram-feed-01.png' %}
+              {% when 1 %}{% assign fallback_asset = 'instagram-feed-02.png' %}
+              {% when 2 %}{% assign fallback_asset = 'instagram-feed-03.png' %}
+              {% when 3 %}{% assign fallback_asset = 'instagram-feed-04.png' %}
+              {% when 4 %}{% assign fallback_asset = 'instagram-feed-05.png' %}
+              {% else %}{% assign fallback_asset = 'instagram-feed-06.png' %}
+            {% endcase %}
+          {% endunless %}
+          <article class="group" data-reveal-item>
+            <a class="block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ article.url }}">
+              <div class="aspect-[1.18] overflow-hidden rounded-lg bg-[#f1ddcc]">
+                {% if card_image != blank %}
+                  {{ card_image | image_url: width: 900 | image_tag: class: 'size-full object-cover', widths: '450, 700, 900', loading: 'lazy', alt: article.title }}
+                {% else %}
+                  <img class="size-full object-cover" src="{{ fallback_asset | asset_url }}" width="900" height="760" loading="lazy" alt="">
+                {% endif %}
+              </div>
+              <p class="mt-4 text-xs uppercase tracking-[1.2px] text-pecan-brown">{{ article.published_at | date: '%B %d, %Y' }}</p>
+              <h2 class="mt-2 font-display text-2xl leading-7 text-text-brown">{{ article.title | escape }}</h2>
+              <p class="mt-2 text-sm leading-5 text-pecan-brown">{{ article.excerpt_or_content | strip_html | truncatewords: 20 }}</p>
+              <span class="mt-4 inline-block text-xs font-semibold uppercase tracking-[1.2px] text-bitter-chocolate underline decoration-toasted-almond underline-offset-4">{{ section.settings.read_more_label | escape }}</span>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="rounded-xl bg-[#f5ebe1] px-6 py-20 text-center">
+        <h1 id="JournalHeading-{{ section.id }}" class="font-display text-5xl text-text-brown">{{ section.settings.empty_heading | escape }}</h1>
+        <p class="mx-auto mt-4 max-w-120 text-base leading-6 text-pecan-brown">{{ section.settings.empty_text | escape }}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal listing",
+  "tag": "section",
+  "class": "journal-listing-section",
+  "settings": [
+    { "type": "text", "id": "featured_label", "label": "Featured label", "default": "Featured journal" },
+    { "type": "text", "id": "featured_cta", "label": "Featured button", "default": "Read the story" },
+    { "type": "text", "id": "read_more_label", "label": "Article link label", "default": "Read more" },
+    { "type": "text", "id": "category_labels", "label": "Category labels (separate with |)", "default": "Latest|Rituals|Science|Ingredients|Skin" },
+    { "type": "text", "id": "empty_heading", "label": "Empty heading", "default": "The journal is opening soon" },
+    { "type": "textarea", "id": "empty_text", "label": "Empty text", "default": "Come back soon for stories from the world of Amaari." }
+  ],
+  "presets": [{ "name": "Journal listing" }]
+}
+{% endschema %}

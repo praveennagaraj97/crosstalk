@@ -18,6 +18,17 @@
   endif
   assign contact_url = contact_page.url
 
+  assign journal_url = blank
+  if nav_settings.journal_blog != blank
+    assign journal_blog = blogs[nav_settings.journal_blog]
+    if journal_blog != blank
+      assign journal_url = journal_blog.url
+    endif
+  endif
+  if journal_url == blank
+    assign journal_url = routes.root_url | append: 'blogs/journal'
+  endif
+
   assign navigation_product_source = nav_products
   if navigation_product_source == blank
     assign navigation_product_source = collections.all.products
@@ -100,9 +111,11 @@
             assign navigation_link_url = link.url
             if link.title == nav_settings.contact_link_label and contact_url != blank
               assign navigation_link_url = contact_url
+            elsif link.title == 'Journal' and journal_url != blank
+              assign navigation_link_url = journal_url
             endif
           %}
-          {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current or page.url == navigation_link_url %}is-active{% endif %}" href="{{ navigation_link_url }}" data-navigation-item {% if link.current or page.url == navigation_link_url %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
+          {% unless link.title == 'Ingredients' %}<a class="storefront-nav-link z-10 px-3 py-2 {% if link.current or page.url == navigation_link_url or link.title == 'Journal' and active_nav == 'journal' %}is-active{% endif %}" href="{{ navigation_link_url }}" data-navigation-item {% if link.current or page.url == navigation_link_url or link.title == 'Journal' and active_nav == 'journal' %}data-navigation-active aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endunless %}
         {% endfor %}
       {% else %}
         {% assign fallback_labels = 'Our Story|Journal|Contact' | split: '|' %}
@@ -111,7 +124,8 @@
           {% assign fallback_handle = fallback_handles[forloop.index0] %}
           {% assign fallback_url = routes.root_url | append: 'pages/' | append: fallback_handle %}
           {% if fallback_label == nav_settings.contact_link_label and contact_url != blank %}{% assign fallback_url = contact_url %}{% endif %}
-          <a class="storefront-nav-link z-10 px-3 py-2 {% if page.url == fallback_url %}is-active{% endif %}" href="{{ fallback_url }}" data-navigation-item {% if page.url == fallback_url %}data-navigation-active aria-current="page"{% endif %}>{{ fallback_label }}</a>
+          {% if fallback_label == 'Journal' and journal_url != blank %}{% assign fallback_url = journal_url %}{% endif %}
+          <a class="storefront-nav-link z-10 px-3 py-2 {% if page.url == fallback_url or fallback_label == 'Journal' and active_nav == 'journal' %}is-active{% endif %}" href="{{ fallback_url }}" data-navigation-item {% if page.url == fallback_url or fallback_label == 'Journal' and active_nav == 'journal' %}data-navigation-active aria-current="page"{% endif %}>{{ fallback_label }}</a>
         {% endfor %}
       {% endif %}
     </nav>
@@ -150,9 +164,11 @@
                 assign navigation_link_url = link.url
                 if link.title == nav_settings.contact_link_label and contact_url != blank
                   assign navigation_link_url = contact_url
+                elsif link.title == 'Journal' and journal_url != blank
+                  assign navigation_link_url = journal_url
                 endif
               %}
-              {% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current or page.url == navigation_link_url %}is-active{% endif %}" href="{{ navigation_link_url }}">{{ link.title | escape }}</a></li>{% endunless %}
+              {% unless link.title == 'Ingredients' %}<li><a class="storefront-nav-link block rounded-xl px-3 py-2.5 {% if link.current or page.url == navigation_link_url or link.title == 'Journal' and active_nav == 'journal' %}is-active{% endif %}" href="{{ navigation_link_url }}">{{ link.title | escape }}</a></li>{% endunless %}
             {% endfor %}
           {% endif %}
           <li class="mt-1 border-t border-current/15 pt-1"><a class="storefront-nav-link block rounded-xl px-3 py-2.5" href="{{ routes.search_url }}">Search</a></li>

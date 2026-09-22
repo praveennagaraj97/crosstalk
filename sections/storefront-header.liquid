@@ -15,6 +15,8 @@
     assign header_background = section.settings.product_background
   elsif request.page_type == 'collection' and collection.handle == 'all'
     assign active_nav = 'shop'
+  elsif request.page_type == 'blog' or request.page_type == 'article'
+    assign active_nav = 'journal'
   elsif request.page_type == 'index'
     assign surface = 'dark'
     assign header_background = section.settings.featured_background
@@ -62,6 +64,7 @@
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
     { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
     { "type": "page", "id": "contact_page", "label": "Contact page" },
+    { "type": "blog", "id": "journal_blog", "label": "Journal blog" },
     { "type": "text", "id": "contact_link_label", "label": "Contact navigation label", "default": "Contact" },
     { "type": "product_list", "id": "products", "label": "Product menu", "limit": 24 },
     { "type": "text", "id": "shop_label", "label": "Product menu label", "default": "Shop All" },

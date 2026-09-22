@@ -13,7 +13,8 @@
       "storefront-header": {
         "type": "storefront-header",
         "settings": {
-          "menu": "",
+        "menu": "",
+        "journal_blog": "journal",
           "ingredients_page": "",
           "contact_page": "",
           "contact_link_label": "Contact",

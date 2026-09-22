@@ -1,0 +1,42 @@
+{% comment %} Component: Journal article detail {% endcomment %}
+<article class="bg-background pb-20 pt-8 sm:pb-24 sm:pt-10 lg:pb-28 lg:pt-12" aria-labelledby="ArticleHeading-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    <a class="inline-flex text-xs font-semibold uppercase tracking-[1.2px] text-pecan-brown underline decoration-toasted-almond underline-offset-4 hover:text-bitter-chocolate focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ blog.url }}">← {{ section.settings.back_label | escape }}</a>
+    <header class="mx-auto mt-10 max-w-192 text-center" data-reveal-group>
+      <p class="text-xs font-semibold uppercase tracking-[1.5px] text-pecan-brown">{{ article.published_at | date: '%B %d, %Y' }}</p>
+      <h1 id="ArticleHeading-{{ section.id }}" class="mt-4 font-display text-4xl leading-none text-text-brown sm:text-6xl">{{ article.title | escape }}</h1>
+      {% if article.excerpt != blank %}<p class="mx-auto mt-5 max-w-150 text-base leading-6 text-pecan-brown">{{ article.excerpt | strip_html }}</p>{% endif %}
+    </header>
+
+    <div class="mx-auto mt-10 max-w-240 overflow-hidden rounded-xl bg-[#f1ddcc]" data-reveal-group>
+      {% if article.image != blank %}
+        {{ article.image | image_url: width: 1800 | image_tag: class: 'aspect-[1.8] w-full object-cover', widths: '900, 1400, 1800', loading: 'eager', alt: article.title }}
+      {% else %}
+        <img class="aspect-[1.8] w-full object-cover" src="{{ 'brand-story-botanical.png' | asset_url }}" width="1440" height="800" loading="eager" alt="">
+      {% endif %}
+    </div>
+
+    <div class="mx-auto mt-12 max-w-171 text-bitter-chocolate" data-reveal-group>
+      <div class="journal-rte text-base leading-7 tracking-[0.2px]">
+        {{ article.content }}
+      </div>
+      {% if article.tags.size > 0 %}
+        <div class="mt-12 flex flex-wrap gap-2 border-t border-toasted-almond/50 pt-6">
+          {% for tag in article.tags %}<a class="rounded-full border border-toasted-almond px-3 py-1 text-xs text-pecan-brown hover:border-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ blog.url }}/tagged/{{ tag | handleize }}">{{ tag | escape }}</a>{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Journal article",
+  "tag": "section",
+  "class": "journal-article-section",
+  "settings": [
+    { "type": "text", "id": "back_label", "label": "Back link label", "default": "Back to journal" }
+  ],
+  "presets": [{ "name": "Journal article" }]
+}
+{% endschema %}

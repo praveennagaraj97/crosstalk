@@ -162,6 +162,54 @@
     animation-play-state: paused;
   }
 
+  .journal-rte > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .journal-rte h2,
+  .journal-rte h3 {
+    color: var(--color-text-brown);
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  .journal-rte h2 {
+    font-size: 2rem;
+  }
+
+  .journal-rte h3 {
+    font-size: 1.5rem;
+  }
+
+  .journal-rte a {
+    color: var(--color-pecan-brown);
+    text-decoration: underline;
+    text-decoration-color: var(--color-toasted-almond);
+    text-underline-offset: 0.25rem;
+  }
+
+  .journal-rte ul,
+  .journal-rte ol {
+    padding-left: 1.5rem;
+  }
+
+  .journal-rte ul {
+    list-style: disc;
+  }
+
+  .journal-rte ol {
+    list-style: decimal;
+  }
+
+  .journal-rte blockquote {
+    border-left: 2px solid var(--color-bitter-chocolate);
+    background: rgb(210 180 156 / 25%);
+    padding: 1.25rem;
+    color: var(--color-pecan-brown);
+    font-style: italic;
+  }
+
   .js [data-reveal-group] > * {
     opacity: 0;
     transform: translateY(14px);
