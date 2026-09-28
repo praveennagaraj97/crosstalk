@@ -8,3 +8,5 @@ npm-debug.log*
 /Amaari-*/
 .tmp
 .vscode
+
+.tmp-figma-assets
