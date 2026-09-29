@@ -1,11 +1,11 @@
-# Amaari Shopify Theme
+# Crosstalk Shopify Theme
 
 A blank Shopify Online Store 2.0 theme foundation. It intentionally contains
 no storefront sections, Figma screens, demo content, or Dawn code.
 
 Before distributing the theme outside development, replace the reserved
 `example.com` documentation and support-email values in
-`config/settings_schema.json` with Amaari's real support details.
+`config/settings_schema.json` with Crosstalk's real support details.
 
 ## Requirements
 

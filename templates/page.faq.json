@@ -32,7 +32,7 @@
       "blocks": {
         "b1": {
           "type": "question",
-          "settings": { "category": "Shipping & Delivery", "question": "How long does international shipping take?", "answer": "Standard international delivery usually takes 7–14 business days depending on the destination and local customs processing. We partner with premium logistics providers to ensure your Amaari pieces arrive in pristine condition, regardless of distance.", "open": true }
+          "settings": { "category": "Shipping & Delivery", "question": "How long does international shipping take?", "answer": "Standard international delivery usually takes 7–14 business days depending on the destination and local customs processing. We partner with premium logistics providers to ensure your Crosstalk pieces arrive in pristine condition, regardless of distance.", "open": true }
         },
         "b2": {
           "type": "question",
@@ -44,7 +44,7 @@
         },
         "b4": {
           "type": "question",
-          "settings": { "category": "Products & Craft", "question": "Where are Amaari products manufactured?", "answer": "Our formulations are produced with trusted manufacturing partners who follow strict quality, sustainability, and ethical sourcing standards." }
+          "settings": { "category": "Products & Craft", "question": "Where are Crosstalk products manufactured?", "answer": "Our formulations are produced with trusted manufacturing partners who follow strict quality, sustainability, and ethical sourcing standards." }
         },
         "b5": {
           "type": "question",

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add a polished Shopify storefront search page that helps shoppers find products and matches Amaari's warm, editorial visual style.
+Add a polished Shopify storefront search page that helps shoppers find products and matches Crosstalk's warm, editorial visual style.
 
 ## Scope
 

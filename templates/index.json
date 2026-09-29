@@ -80,10 +80,10 @@
         "thermal_activation"
       ],
       "settings": {
-        "product_artwork_alt": "Amaari volcanic mineral infusion bottle",
+        "product_artwork_alt": "Crosstalk volcanic mineral infusion bottle",
         "eyebrow": "Technical Innovation",
         "heading": "Volcanic Mineral\nInfusion",
-        "description": "Most skincare sits on the surface—Amaari penetrates deep. Powered by VIACAP® Technology for 17x faster absorption."
+        "description": "Most skincare sits on the surface—Crosstalk penetrates deep. Powered by VIACAP® Technology for 17x faster absorption."
       }
     },
     "instagram_feed": {
@@ -93,42 +93,42 @@
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         },
         "journal_image_2": {
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         },
         "journal_image_3": {
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         },
         "journal_image_4": {
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         },
         "journal_image_5": {
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         },
         "journal_image_6": {
           "type": "image",
           "settings": {
             "alt_text": "",
-            "accessible_label": "View Amaari on Instagram"
+            "accessible_label": "View Crosstalk on Instagram"
           }
         }
       },
@@ -142,7 +142,7 @@
       ],
       "settings": {
         "eyebrow": "On the Journal",
-        "heading": "@AmaariSkincare",
+        "heading": "@CrosstalkSkincare",
         "instagram_url": "",
         "open_new_tab": true
       }
@@ -154,7 +154,7 @@
         "heading_line_2": "Science",
         "heading_line_3": "Rooted in",
         "heading_line_4": "Nature",
-        "paragraph_1": "We don't believe in more. We believe in better. Amaari was born from the need to simplify the noise of the modern beauty industry.",
+        "paragraph_1": "We don't believe in more. We believe in better. Crosstalk was born from the need to simplify the noise of the modern beauty industry.",
         "paragraph_2": "By combining high-potency bio-actives with cold-pressed botanicals, we’ve created a system that respects your skin’s microbiome and the planet.",
         "link_label": "Our Full Philosophy",
         "link_url": "",
@@ -167,12 +167,12 @@
       "type": "newsletter",
       "settings": {
         "eyebrow": "Newsletter",
-        "heading": "Join the Amaari Ritual",
+        "heading": "Join the Crosstalk Ritual",
         "text": "Subscribe for early access to rituals, seasonal edits, and botanical stories.",
         "email_label": "Email address",
         "email_placeholder": "your@email.com",
         "button_label": "Subscribe",
-        "success_message": "Welcome to the Amaari ritual.",
+        "success_message": "Welcome to the Crosstalk ritual.",
         "privacy_text": "By subscribing, you agree to our privacy policy.",
         "privacy_link": ""
       }

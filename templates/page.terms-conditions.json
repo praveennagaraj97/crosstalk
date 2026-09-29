@@ -13,11 +13,11 @@
         "contact_label": "Contact Support"
       },
       "blocks": {
-        "b1": { "type": "section", "settings": { "label": "Agreement to Terms", "body": "These terms and conditions outline the rules and regulations for the use of Amaari's website. By accessing this website, we assume you accept these terms and conditions in full." } },
-        "b2": { "type": "section", "settings": { "label": "Intellectual Property Rights", "body": "Unless otherwise stated, Amaari and its licensors own the intellectual property rights for all material on this website. All intellectual property rights are reserved." } },
+        "b1": { "type": "section", "settings": { "label": "Agreement to Terms", "body": "These terms and conditions outline the rules and regulations for the use of Crosstalk's website. By accessing this website, we assume you accept these terms and conditions in full." } },
+        "b2": { "type": "section", "settings": { "label": "Intellectual Property Rights", "body": "Unless otherwise stated, Crosstalk and its licensors own the intellectual property rights for all material on this website. All intellectual property rights are reserved." } },
         "b3": { "type": "section", "settings": { "label": "Restrictions", "body": "You are specifically restricted from all of the following:" } },
         "b4": { "type": "section", "settings": { "label": "Your Privacy", "body": "Please read our Privacy Policy, which explains how we collect, use and protect your personal information when you use our services." } },
-        "b5": { "type": "section", "settings": { "label": "Limitation of Liability", "body": "To the maximum extent permitted by applicable law, Amaari excludes all representations, warranties and conditions relating to our website and the use of this website." } }
+        "b5": { "type": "section", "settings": { "label": "Limitation of Liability", "body": "To the maximum extent permitted by applicable law, Crosstalk excludes all representations, warranties and conditions relating to our website and the use of this website." } }
       },
       "block_order": ["b1", "b2", "b3", "b4", "b5"]
     }
