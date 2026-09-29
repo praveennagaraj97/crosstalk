@@ -9,6 +9,7 @@
   assign context_product = blank
   assign surface = 'light'
   assign header_background = section.settings.default_background
+  assign logo_variant = section.settings.default_logo_variant
 
   if request.page_type == 'product'
     assign context_product = product
@@ -20,6 +21,7 @@
   elsif request.page_type == 'index'
     assign surface = 'dark'
     assign header_background = section.settings.featured_background
+    assign logo_variant = section.settings.home_logo_variant
   elsif request.page_type == 'page'
     assign active_nav = page.handle
     if page.template_suffix == 'ingredients'
@@ -29,6 +31,15 @@
       assign surface = 'dark'
       assign header_background = section.settings.featured_background
     endif
+  endif
+
+  if request.page_type == 'page'
+    for block in section.blocks
+      if block.type == 'page_logo_override' and block.settings.page != blank and block.settings.page.handle == page.handle
+        assign logo_variant = block.settings.logo_variant
+        break
+      endif
+    endfor
   endif
 %}
 
@@ -52,7 +63,7 @@
 
 {% comment %} Component: Sticky glass navigation {% endcomment %}
 <section class="global-storefront-header-shell {% if surface == 'dark' %}global-storefront-header-shell--overlay{% endif %} pb-3 lg:pb-4" data-global-storefront-header>
-  {% render 'storefront-navigation', nav_settings: section.settings, nav_products: navigation_products, active_nav: active_nav, surface: surface, context_product: context_product, ingredient_page: ingredients_page %}
+  {% render 'storefront-navigation', nav_settings: section.settings, nav_products: navigation_products, active_nav: active_nav, surface: surface, context_product: context_product, ingredient_page: ingredients_page, logo_variant: logo_variant %}
 </section>
 
 {% schema %}
@@ -60,7 +71,10 @@
   "name": "Global storefront header",
   "class": "global-storefront-header-section",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Light logo" },
+    { "type": "image_picker", "id": "logo_dark", "label": "Dark logo", "info": "Used on inner pages by default. Falls back to the supplied dark logo asset." },
+    { "type": "select", "id": "home_logo_variant", "label": "Homepage logo variant", "default": "light", "options": [{ "value": "light", "label": "Light" }, { "value": "dark", "label": "Dark" }] },
+    { "type": "select", "id": "default_logo_variant", "label": "Other pages logo variant", "default": "dark", "options": [{ "value": "light", "label": "Light" }, { "value": "dark", "label": "Dark" }] },
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
     { "type": "page", "id": "ingredients_page", "label": "Ingredients page" },
     { "type": "page", "id": "contact_page", "label": "Contact page" },
@@ -78,6 +92,16 @@
     { "type": "color", "id": "product_background", "label": "Product page header", "default": "#f5ebe1" },
     { "type": "color", "id": "ingredients_background", "label": "Ingredients page header", "default": "#f8f7f6" },
     { "type": "color", "id": "featured_background", "label": "Featured page header", "default": "#7d8060" }
+  ],
+  "blocks": [
+    {
+      "type": "page_logo_override",
+      "name": "Page logo override",
+      "settings": [
+        { "type": "page", "id": "page", "label": "Page" },
+        { "type": "select", "id": "logo_variant", "label": "Logo variant", "default": "dark", "options": [{ "value": "light", "label": "Light" }, { "value": "dark", "label": "Dark" }] }
+      ]
+    }
   ]
 }
 {% endschema %}
