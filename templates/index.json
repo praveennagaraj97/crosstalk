@@ -12,7 +12,16 @@
     "featured_product_hero": {
       "type": "featured-product-hero",
       "settings": {
-        "featured_product": "radiance-volcanic-oil"
+        "show_image_overlay": true,
+        "image_overlay_color": "#000000",
+        "image_overlay_opacity": 15,
+        "eyebrow": "Introducing The Ritual",
+        "heading_line_1": "SMART",
+        "heading_line_2": "FORMULAS.",
+        "heading_line_3": "SIMPLE\nROUTINE.",
+        "description": "<p>Experience the storytelling rhythm of earthy-luxury skincare. Seeded in science, rooted in nature.</p>",
+        "featured_product": "radiance-volcanic-oil",
+        "cta_label": "Shop the Radiance Oil"
       }
     },
     "featured_product_deep_dive": {
@@ -33,9 +42,17 @@
           }
         }
       },
-      "block_order": ["bio_active", "deep_glow"],
+      "block_order": [
+        "bio_active",
+        "deep_glow"
+      ],
       "settings": {
-        "featured_product": "the-ritual-essence"
+        "featured_product": "the-ritual-essence",
+        "detail_image_alt": "",
+        "eyebrow": "Flagship Innovation",
+        "fallback_title": "Radiance Volcanic Oil",
+        "description": "An ethereal fusion of cold-pressed rare botanicals and mineral-rich volcanic ash extract. Designed to restore the skin barrier while delivering an immediate, luminous glow that lasts all day.",
+        "cta_label": "Shop the Radiance Oil"
       }
     },
     "technology_showcase": {
@@ -58,29 +75,107 @@
           }
         }
       },
-      "block_order": ["cellular_transport", "thermal_activation"],
-      "settings": {}
+      "block_order": [
+        "cellular_transport",
+        "thermal_activation"
+      ],
+      "settings": {
+        "product_artwork_alt": "Amaari volcanic mineral infusion bottle",
+        "eyebrow": "Technical Innovation",
+        "heading": "Volcanic Mineral\nInfusion",
+        "description": "Most skincare sits on the surface—Amaari penetrates deep. Powered by VIACAP® Technology for 17x faster absorption."
+      }
     },
     "instagram_feed": {
       "type": "instagram-feed",
       "blocks": {
-        "journal_image_1": { "type": "image", "settings": {} },
-        "journal_image_2": { "type": "image", "settings": {} },
-        "journal_image_3": { "type": "image", "settings": {} },
-        "journal_image_4": { "type": "image", "settings": {} },
-        "journal_image_5": { "type": "image", "settings": {} },
-        "journal_image_6": { "type": "image", "settings": {} }
+        "journal_image_1": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_2": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_3": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_4": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_5": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        },
+        "journal_image_6": {
+          "type": "image",
+          "settings": {
+            "alt_text": "",
+            "accessible_label": "View Amaari on Instagram"
+          }
+        }
       },
-      "block_order": ["journal_image_1", "journal_image_2", "journal_image_3", "journal_image_4", "journal_image_5", "journal_image_6"],
-      "settings": {}
+      "block_order": [
+        "journal_image_1",
+        "journal_image_2",
+        "journal_image_3",
+        "journal_image_4",
+        "journal_image_5",
+        "journal_image_6"
+      ],
+      "settings": {
+        "eyebrow": "On the Journal",
+        "heading": "@AmaariSkincare",
+        "instagram_url": "",
+        "open_new_tab": true
+      }
     },
     "brand_story_layered": {
       "type": "brand-story-layered",
-      "settings": {}
+      "settings": {
+        "heading_line_1": "Seeded in",
+        "heading_line_2": "Science",
+        "heading_line_3": "Rooted in",
+        "heading_line_4": "Nature",
+        "paragraph_1": "We don't believe in more. We believe in better. Amaari was born from the need to simplify the noise of the modern beauty industry.",
+        "paragraph_2": "By combining high-potency bio-actives with cold-pressed botanicals, we’ve created a system that respects your skin’s microbiome and the planet.",
+        "link_label": "Our Full Philosophy",
+        "link_url": "",
+        "background_color": "#5a2e2c",
+        "accent_color": "#d46c11",
+        "muted_color": "#b18a73"
+      }
     },
     "ritual_newsletter": {
       "type": "newsletter",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Newsletter",
+        "heading": "Join the Amaari Ritual",
+        "text": "Subscribe for early access to rituals, seasonal edits, and botanical stories.",
+        "email_label": "Email address",
+        "email_placeholder": "your@email.com",
+        "button_label": "Subscribe",
+        "success_message": "Welcome to the Amaari ritual.",
+        "privacy_text": "By subscribing, you agree to our privacy policy.",
+        "privacy_link": ""
+      }
     },
     "support_faq": {
       "type": "support-faq",
@@ -107,9 +202,29 @@
           }
         }
       },
-      "block_order": ["shipping", "international", "returns"],
-      "settings": {}
+      "block_order": [
+        "shipping",
+        "international",
+        "returns"
+      ],
+      "settings": {
+        "eyebrow": "Support",
+        "heading": "How can we help?",
+        "open_first": true,
+        "contact_heading": "Still have questions?",
+        "contact_text": "Our support team is available Monday—Friday, 9am to 6pm EST.",
+        "contact_label": "Contact Us",
+        "contact_url": "shopify://pages/contact"
+      }
     }
   },
-  "order": ["featured_product_hero", "featured_product_deep_dive", "technology_showcase", "instagram_feed", "brand_story_layered", "ritual_newsletter", "support_faq"]
+  "order": [
+    "featured_product_hero",
+    "featured_product_deep_dive",
+    "technology_showcase",
+    "instagram_feed",
+    "brand_story_layered",
+    "ritual_newsletter",
+    "support_faq"
+  ]
 }
