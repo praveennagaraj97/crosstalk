@@ -31,18 +31,31 @@
     const cartVariantIds = new Set(JSON.parse(section.querySelector('[data-cart-variant-ids]')?.textContent || '[]').map(String));
     const galleryStage = section.querySelector('[data-gallery-stage]');
     const galleryThumbs = [...section.querySelectorAll('[data-gallery-thumb]')];
+    let gallerySwapToken = 0;
     let quantity = 1;
     let currentVariant;
     let pointerStartX;
 
     const showMedia = (id) => {
       if (!id) return;
+      const nextMedia = [...section.querySelectorAll('[data-media-id]')].find((media) => String(media.dataset.mediaId) === String(id));
+      if (!nextMedia) return;
+      const currentMedia = section.querySelector('[data-media-id]:not([hidden])');
+      gallerySwapToken += 1;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       section.querySelectorAll('[data-media-id]').forEach((media) => {
-        const active = String(media.dataset.mediaId) === String(id);
+        media.getAnimations().forEach((animation) => animation.cancel());
+        const active = media === nextMedia;
         media.hidden = !active;
         media.classList.toggle('opacity-0', !active);
         media.classList.toggle('pointer-events-none', !active);
       });
+      if (currentMedia !== nextMedia && !prefersReducedMotion) {
+        nextMedia.classList.remove('pdp-media-enter');
+        void nextMedia.offsetWidth;
+        nextMedia.classList.add('pdp-media-enter');
+      }
       section.querySelectorAll('[data-gallery-thumb]').forEach((thumb) => {
         const active = String(thumb.dataset.galleryThumb) === String(id);
         thumb.setAttribute('aria-pressed', String(active));

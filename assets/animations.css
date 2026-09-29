@@ -14,6 +14,16 @@
   margin-bottom: -4.5rem;
 }
 
+/* Product gallery image change */
+.pdp-media-enter {
+  animation: pdp-media-enter 900ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes pdp-media-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Global cart drawer */
 .cart-drawer {
   position: fixed;
@@ -412,6 +422,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pdp-media-enter {
+    animation: none;
+  }
+
   .cart-drawer__backdrop,
   .cart-drawer__panel,
   .cart-drawer__close {
