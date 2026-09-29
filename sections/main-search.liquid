@@ -1,0 +1,103 @@
+{% comment %} Component: Search page {% endcomment %}
+<section class="bg-background pb-16 pt-8 sm:pb-20 sm:pt-10 lg:pb-24 lg:pt-12" aria-labelledby="SearchHeading-{{ section.id }}">
+  <div class="container mx-auto px-4">
+    <header class="mx-auto text-center" data-reveal-group>
+      <p class="text-xs font-semibold uppercase tracking-[1.8px] text-pecan-brown">{{ section.settings.eyebrow | escape }}</p>
+      <h1 id="SearchHeading-{{ section.id }}" class="mt-3 font-display text-4xl leading-none text-text-brown sm:text-5xl">{{ section.settings.heading | escape }}</h1>
+      <p class="mx-auto mt-4 max-w-120 text-sm leading-6 text-pecan-brown sm:text-base">{{ section.settings.intro | escape }}</p>
+
+      {% comment %} Component: Search form {% endcomment %}
+      <form class="mt-7 flex min-h-14 w-full items-center gap-3 rounded-full border border-toasted-almond bg-white px-4 py-2 shadow-[0_8px_30px_rgb(90_46_44/8%)] transition focus-within:border-bitter-chocolate focus-within:shadow-[0_8px_30px_rgb(90_46_44/14%)] sm:mx-auto sm:mt-8 sm:max-w-180 sm:px-6" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="SearchInput-{{ section.id }}">{{ section.settings.search_label | escape }}</label>
+        <svg class="size-5 shrink-0 text-pecan-brown" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <input id="SearchInput-{{ section.id }}" class="min-w-0 flex-1 border-0 bg-transparent py-2 text-sm text-text-brown outline-none placeholder:text-toasted-almond sm:text-base" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.placeholder | escape }}" autocapitalize="off" autocomplete="off">
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button class="min-h-10 shrink-0 rounded-full bg-bitter-chocolate px-5 text-xs font-semibold uppercase tracking-[1px] text-white transition-colors hover:bg-pecan-brown focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate sm:px-7" type="submit">{{ section.settings.button_label | escape }}</button>
+      </form>
+    </header>
+
+    {% if search.performed and search.terms != blank %}
+      {% paginate search.results by section.settings.products_per_page %}
+      {% assign product_result_count = 0 %}
+      {% for result in search.results %}{% if result.object_type == 'product' %}{% assign product_result_count = product_result_count | plus: 1 %}{% endif %}{% endfor %}
+      {% comment %} Component: Search results {% endcomment %}
+      <div class="mt-10 sm:mt-14">
+        <div class="flex flex-wrap items-end justify-between gap-3 border-b border-toasted-almond/60 pb-4">
+          <h2 class="font-display text-2xl text-text-brown sm:text-3xl">{{ section.settings.results_heading | escape }} “{{ search.terms | escape }}”</h2>
+          <p class="text-xs tracking-[.5px] text-pecan-brown">{{ product_result_count }} {% if product_result_count == 1 %}{{ section.settings.product_singular | escape }}{% else %}{{ section.settings.product_plural | escape }}{% endif %}</p>
+        </div>
+
+        {% if product_result_count > 0 %}
+          <div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-9 sm:mt-8 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4 lg:gap-x-8">
+            {% for result in search.results %}
+              {% if result.object_type == 'product' %}
+                <article class="group min-w-0" data-reveal-item>
+                  <a class="block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-bitter-chocolate" href="{{ result.url }}">
+                    <div class="aspect-[3/4] overflow-hidden rounded-xl bg-[#eee6df]">
+                      {% if result.featured_image != blank %}
+                        {{ result.featured_image | image_url: width: 800 | image_tag: class: 'size-full object-cover transition-transform duration-500 group-hover:scale-[1.035]', widths: '240, 360, 540, 800', sizes: '(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 46vw', loading: 'lazy', alt: result.featured_image.alt | default: result.title }}
+                      {% else %}
+                        <div class="grid size-full place-items-center text-pecan-brown/60">{{ 'product-1' | placeholder_svg_tag: 'size-2/3' }}</div>
+                      {% endif %}
+                    </div>
+                    <h3 class="mt-3 font-display text-lg leading-6 text-text-brown transition-colors group-hover:text-pecan-brown sm:mt-4 sm:text-xl">{{ result.title | escape }}</h3>
+                    <p class="mt-1 text-sm font-medium text-bitter-chocolate">{{ result.price | money }}</p>
+                  </a>
+                </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            {% comment %} Component: Search pagination {% endcomment %}
+            <nav class="mt-12 flex items-center justify-center gap-2 sm:mt-16" aria-label="{{ section.settings.pagination_label | escape }}">
+              {% if paginate.previous %}<a class="grid size-10 place-items-center rounded-full border border-toasted-almond text-sm text-bitter-chocolate transition-colors hover:bg-[#f5ebe1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ paginate.previous.url }}" aria-label="{{ section.settings.previous_label | escape }}">←</a>{% endif %}
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a class="grid size-10 place-items-center rounded-full border border-toasted-almond text-sm text-bitter-chocolate transition-colors hover:bg-[#f5ebe1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ part.url }}" aria-label="{{ section.settings.page_label | escape }} {{ part.title }}">{{ part.title }}</a>
+                {% else %}
+                  <span class="grid size-10 place-items-center rounded-full border border-bitter-chocolate bg-bitter-chocolate text-sm text-white" {% if part.title == paginate.current_page %}aria-current="page"{% endif %}>{{ part.title }}</span>
+                {% endif %}
+              {% endfor %}
+              {% if paginate.next %}<a class="grid size-10 place-items-center rounded-full border border-toasted-almond text-sm text-bitter-chocolate transition-colors hover:bg-[#f5ebe1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bitter-chocolate" href="{{ paginate.next.url }}" aria-label="{{ section.settings.next_label | escape }}">→</a>{% endif %}
+            </nav>
+          {% endif %}
+        {% else %}
+          {% comment %} Component: No search results {% endcomment %}
+          <div class="mt-8 rounded-2xl bg-[#f5ebe1] px-6 py-12 text-center sm:mt-10 sm:px-10 sm:py-16">
+            <span class="mx-auto grid size-12 place-items-center rounded-full bg-white text-pecan-brown" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+            <h3 class="mt-5 font-display text-3xl text-text-brown">{{ section.settings.empty_heading | escape }}</h3>
+            <p class="mx-auto mt-3 max-w-120 text-sm leading-6 text-pecan-brown">{{ section.settings.empty_copy | escape }}</p>
+          </div>
+        {% endif %}
+      </div>
+      {% endpaginate %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search page",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find your ritual" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Search Amaari" },
+    { "type": "textarea", "id": "intro", "label": "Introductory text", "default": "Discover thoughtful skincare, rooted in nature and made for your everyday glow." },
+    { "type": "text", "id": "search_label", "label": "Search field label", "default": "Search products" },
+    { "type": "text", "id": "placeholder", "label": "Search placeholder", "default": "What are you looking for?" },
+    { "type": "text", "id": "button_label", "label": "Search button label", "default": "Search" },
+    { "type": "text", "id": "results_heading", "label": "Results heading", "default": "Results for" },
+    { "type": "text", "id": "product_singular", "label": "Singular product count label", "default": "product found" },
+    { "type": "text", "id": "product_plural", "label": "Plural product count label", "default": "products found" },
+    { "type": "text", "id": "empty_heading", "label": "No results heading", "default": "No products found" },
+    { "type": "textarea", "id": "empty_copy", "label": "No results text", "default": "We couldn't find a match this time. Try a different keyword or search for an ingredient, product, or skin concern." },
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 4, "max": 24, "step": 4, "default": 12 },
+    { "type": "text", "id": "pagination_label", "label": "Pagination navigation label", "default": "Search result pages" },
+    { "type": "text", "id": "previous_label", "label": "Previous page label", "default": "Previous page" },
+    { "type": "text", "id": "next_label", "label": "Next page label", "default": "Next page" },
+    { "type": "text", "id": "page_label", "label": "Page link label", "default": "Page" }
+  ]
+}
+{% endschema %}
