@@ -15,7 +15,7 @@
         "settings": {
           "menu": "",
           "ingredients_page": "",
-          "contact_page": "",
+          "contact_page": "contact",
           "journal_blog": "journal",
           "contact_link_label": "Contact",
           "products": [],
