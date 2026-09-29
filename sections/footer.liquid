@@ -3,8 +3,7 @@
   assign social_names = 'Instagram|Facebook|Twitter' | split: '|'
   assign legal_labels = section.settings.legal_label_1 | append: '|' | append: section.settings.legal_label_2 | append: '|' | append: section.settings.legal_label_3 | split: '|'
   assign legal_urls = section.settings.legal_url_1 | append: '|' | append: section.settings.legal_url_2 | append: '|' | append: section.settings.legal_url_3 | split: '|'
-  assign footer_logo = section.settings.logo_dark | default: section.settings.logo
-  assign footer_logo = section.settings.logo_dark | default: section.settings.logo
+  assign footer_logo = section.settings.logo
 %}
 
 <footer class="overflow-hidden bg-bitter-chocolate py-8 text-white">
@@ -17,7 +16,7 @@
             {{ footer_logo | image_url: width: 232 | image_tag: class: 'h-7.25 w-29 object-contain', widths: '116, 232', loading: 'lazy', alt: shop.name }}
           </span>
         {% else %}
-          <img class="h-7.25 w-29 object-contain" src="{{ 'logo-dark.png' | asset_url }}" width="116" height="29" loading="lazy" alt="{{ shop.name | escape }}">
+          <img class="h-7.25 w-29 object-contain" src="{{ 'main-brand-logo.png' | asset_url }}" width="116" height="29" loading="lazy" alt="{{ shop.name | escape }}">
         {% endif %}
 
         <p class="mt-4 max-w-111 font-display text-xl leading-7 font-normal italic">{{ section.settings.tagline | escape }}</p>
@@ -104,7 +103,6 @@
   "name": "Footer",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Light logo (match header)" },
-    { "type": "image_picker", "id": "logo_dark", "label": "Dark logo (match header)" },
     { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare." },
     { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
     { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
