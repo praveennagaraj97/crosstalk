@@ -11,8 +11,43 @@
   "sections": {
     "main": {
       "type": "main-product",
+      "settings": {
+        "in_cart_label": "In Cart",
+        "select_label": "Select",
+        "add_label": "Add to Cart",
+        "sold_out_label": "Sold Out",
+        "in_stock_label": "In Stock",
+        "floating_checkout_label": "Checkout",
+        "ingredients_heading": "Earth-Derived Actives",
+        "standards_eyebrow": "Our Standards",
+        "standards_heading": "Certifications & Testing",
+        "efficacy_heading": "Proven Efficacy",
+        "before_label": "Day 0",
+        "after_label": "Day 28",
+        "timeline_heading": "Timeline of Transformation"
+      }
+    },
+    "179066143574320174": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_4xLGxU": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_4xLGxU"
+      ],
       "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "179066143574320174"
+  ]
 }
