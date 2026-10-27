@@ -13,6 +13,8 @@
       "storefront-header": {
         "type": "storefront-header",
         "settings": {
+          "home_logo_variant": "light",
+          "default_logo_variant": "dark",
           "menu": "",
           "ingredients_page": "",
           "contact_page": "contact",
@@ -32,6 +34,7 @@
       },
       "footer": {
         "type": "footer",
+        "custom_css": [],
         "settings": {
           "tagline": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare.",
           "instagram_url": "",
