@@ -34,7 +34,10 @@
       },
       "footer": {
         "type": "footer",
-        "custom_css": [],
+        "custom_css": [
+          "footer.bg-bitter-chocolate {background-color: #F4DFB8 !important;}",
+          "footer.bg-bitter-chocolate,footer.bg-bitter-chocolate * {color: #3E2619 !important; border-color: #3E2619 !important;}"
+        ],
         "settings": {
           "tagline": "Synthesizing nature and science to create a new standard of high-performance, sensory skincare.",
           "instagram_url": "",
